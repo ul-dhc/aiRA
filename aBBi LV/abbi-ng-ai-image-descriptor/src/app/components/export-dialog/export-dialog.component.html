@@ -1,0 +1,72 @@
+@let taskNoun = settings.taskNouns();
+
+<h2 mat-dialog-title>Saglabāt ģenerētos {{ taskNoun.pakuz }}</h2>
+
+<mat-dialog-content>
+
+  <label id="select-format-label">Izvēlies saglabāšanas formātu:</label>
+  <mat-radio-group
+    aria-labelledby="select-format-label"
+    class="export-format-radio-group"
+    [(ngModel)]="selectedFormatOption">
+    @for (opt of formatOptions; track opt.fileFormat) {
+	
+	@if( opt.label == "Word-document, table-formatted (*.docx)"){
+	<mat-radio-button [value]="opt">Word dokuments, sakārtots tabulā (*.doc)</mat-radio-button>
+	}
+
+	@if( opt.label == "Word-document, paragraph-formatted (*.docx)"){
+	<mat-radio-button [value]="opt">Word dokuments, sakārtots rindkopās (*.doc)</mat-radio-button>
+	}
+
+	@if( opt.label == "Plain text, single document (*.txt)"){
+	<mat-radio-button [value]="opt">Teksta dokuments, vienā datnē(*.txt)</mat-radio-button>
+	}	
+	
+	@if( opt.label == "Plain text, one document per image, zipped (*.zip)"){
+	<mat-radio-button [value]="opt">Vairākos teksa dokumentos (*.zip)</mat-radio-button>
+	}	
+	
+	@if( opt.label == "TEI XML-document (*.xml)"){
+	<mat-radio-button [value]="opt">TEI XML dokuments(*.xml)</mat-radio-button>
+	}	
+	
+	@if( opt.label == "TEI XML-document, with line beginning encoding (*.xml)"){
+	<mat-radio-button [value]="opt">TEI XML dokuments ar rindas sākumu iekodēšanu (*.xml)</mat-radio-button>
+	}	
+	
+	@if( opt.label == "Comma-separated values (*.csv)"){
+	<mat-radio-button [value]="opt">Ar komatiem atdalītās vērtībās (*.csv)</mat-radio-button>
+	}	
+	
+	@if( opt.label == "Tab-separated values (*.tab)"){
+	<mat-radio-button [value]="opt">Tabulāri dati (*.tab)</mat-radio-button>
+	}
+
+
+	      
+    }
+  </mat-radio-group>
+
+  <mat-form-field class="filename-input">
+    <mat-label>Datnes nosaukums</mat-label>
+    <input matInput [(ngModel)]="filename">
+    <span matTextSuffix>.{{ selectedFormatOption.fileExt }}</span>
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="{value: false}">Atcelt</button>
+  <button
+    matButton="filled"
+    [disabled]="filename | isEmptyString"
+    [mat-dialog-close]="{
+      value: true,
+      selectedExportFormat: selectedFormatOption.fileFormat,
+      filename
+    }"
+  >
+    Saglabāt
+  </button>
+</mat-dialog-actions>

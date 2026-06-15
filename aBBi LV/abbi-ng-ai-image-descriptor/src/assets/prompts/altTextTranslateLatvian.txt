@@ -1,0 +1,1 @@
+Pārtulko apakšējo tekstu uz latviešu valodu, ISO-639-1 kods oriģinālajai valodai ir `{{ORIG_LANG_CODE}}`. Atbildi tikai ar pārtulkoto tekstu.

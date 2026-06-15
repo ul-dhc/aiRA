@@ -1,0 +1,111 @@
+@let taskNoun = settings.taskNouns();
+
+<div class="content-wrapper">
+  <app-header></app-header>
+
+  <header class="app-title">
+    <h1>ABBi</h1>
+    <p>Attēlu atšifrēšana un aprakstu veidošana ar MI</p>
+  </header>
+
+
+  <div class="main-wrapper">
+    <section class="abbi-intro" aria-label="About aBBi">
+      <div class="intro-grid">
+        <div class="intro-card">
+          <h2>Iespējas</h2>
+          <ul>
+            <li>Veidot attēlu tekstuālo	alternatīvu <i>(alt text)</i></li>
+            <li>Izvilkt tekstu no attēliem</li>
+            <li>Iekodēt attēlu tekstu TEI XML kodā</li>
+          </ul>
+        </div>
+
+        <div class="intro-card">
+          <h2>Darbības soļi</h2>
+          <ol>
+            <li>Izvēlies uzdevumu un modeli</li>
+            <li>Pievieno API atslēgu</li>
+            <li>Pievieno attēlu</li>
+            <li>Izveido un pārskati rezultātu</li>
+          </ol>
+        </div>
+
+        <div class="intro-card intro-card--tips">
+          <h2>Modeļu ieteikumi</h2>
+          <ul>
+            <li><strong>Alt tekstam:</strong> GPT-4.1 vai Gemini 2.5</li>
+            <li><strong>Drukātam tekstam:</strong> Gemini 3.5 Flash</li>
+            <li><strong>Rokrakstam:</strong> Gemini 3.2 Pro</li>
+            <li><strong>TEI iekodēšanai:</strong> Gemini 3.1 Pro</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <mat-stepper [orientation]="(stepperOrientation | async)!" [linear]="true" #stepper>
+      <!-- Step 1: Configure settings -->
+      <mat-step label="Iestatījumi">
+        <h2>Iestatījumi</h2>
+        <settings-form></settings-form>
+        <div class="stepper-nav">
+          <button mat-button color="primary" matStepperNext>Tālāk</button>
+        </div>
+      </mat-step>
+
+      <!-- Step 2: Add API key -->
+      <mat-step [stepControl]="apiKeyFormGroup" label="Pievienot API atslēgu">
+        <h2>Pievieno savu {{ settings.selectedModel().provider }} API atslēgu</h2>
+        <api-key-form
+          (apiKeyValidated)="onApiKeyValidated($event)"
+          (formGroupOutput)="setApiKeyFormGroup($event)"
+        ></api-key-form>
+        <div class="stepper-nav">
+          <button mat-button color="primary" matStepperPrevious>Atpakaļ</button>
+          <button mat-button color="primary" matStepperNext>Tālāk</button>
+        </div>
+      </mat-step>
+
+      <!-- Step 3: Add images -->
+      <mat-step label="Pievienot attēlus" [completed]="((imageListService.imageList$ | async)?.length || false) && !addingImages()">
+        <h2>Pievieno attēlus</h2>
+        <!-- Defer loading the add-images component until the browser is idle -->
+        @defer (on idle) {
+          <add-images (addingImages)="setAddingImages($event)"></add-images>
+        } @loading (minimum 500ms) {
+          <p>Ielādē komponenti ...</p>
+        } @error {
+          <p>Radās kļūda, lādējot attēlu pievienošanas komponenti. Lūdzu, pārlādējiet lapu no jauna.</p>
+        }
+        <div class="stepper-nav">
+          <button mat-button color="primary" matStepperPrevious>Atpakaļ</button>
+          <button mat-button color="primary" matStepperNext>Tālāk</button>
+        </div>
+      </mat-step>
+
+      <!-- Step 4: Generate image descriptions -->
+      <mat-step [label]="`Ģenerēt ${taskNoun.pakuz}`">
+        <h2 id="generate-step-title">Ģenerēt {{ taskNoun.plural }}</h2>
+        <!-- Defer loading the generate-descriptions component until the API key in step 2 has validated -->
+        @defer (when isApiKeyFormValid) {
+          <generate-descriptions></generate-descriptions>
+        } @loading (minimum 500ms) {
+          <p>Loading component ...</p>
+        } @error {
+          <p>Radās kļūda lādējot komponenti {{ taskNoun.sakuz }} ģenerēšanai. Lūdzu, pārlādējiet lapu no jauna.</p>
+        }
+        <div class="stepper-nav">
+          <button mat-button color="primary" matStepperPrevious>Atpakaļ</button>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </div>
+</div>
+<div class="footer-wrapper">
+  <footer>
+    <p>
+      Jūsu dati ir drošībā, un tie netiks izmantoti MI modeļu apmācībā.<br>
+      Programmas versija: <a href="https://github.com/slsfi/abbi-ng-ai-image-descriptor/blob/main/CHANGELOG.md">{{ appVersion }}</a>.
+    </p>
+  </footer>
+</div>

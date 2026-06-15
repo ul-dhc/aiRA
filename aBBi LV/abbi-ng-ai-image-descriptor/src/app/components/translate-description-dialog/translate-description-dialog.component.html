@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Pārtulkot {{ settings.taskNouns().sakuz }}</h2>
+
+<mat-dialog-content>
+
+  <label id="radio-group-label">Izvēlies tulkojuma valodu:</label>
+  <mat-radio-group
+    aria-labelledby="radio-group-label"
+    class="lang-radio-group"
+    [(ngModel)]="selectedLanguageCode"
+  >
+    @for (langObj of translateLanguages; track langObj.languageCode) {
+      <mat-radio-button
+        class="lang-radio-button"
+        [value]="langObj.languageCode"
+      >
+        {{langObj.languageDisplayName}}
+      </mat-radio-button>
+    }
+  </mat-radio-group>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="''">Atcelt</button>
+  <button
+    matButton="filled"
+    [mat-dialog-close]="selectedLanguageCode"
+    cdkFocusInitial
+  >
+    Tulkot
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,30 @@
+<form [formGroup]="apiKeyFormGroup">
+  <mat-form-field appearance="outline">
+    <mat-label>{{ settings.selectedModel().provider }} API atslēga</mat-label>
+    <input matInput required
+          [type]="hideApiKey ? 'password' : 'text'"
+          formControlName="apiKeyFC"
+    >
+    <button matIconButton matSuffix (click)="hideApiKey = !hideApiKey" [attr.aria-label]="'Hide API key'" [attr.aria-pressed]="hideApiKey">
+      <mat-icon>{{hideApiKey ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+    @if (apiKeyFC?.hasError('required')) {
+      <mat-error>Jums jāpievieno API atslēgu</mat-error>
+    } @else if (apiKeyFC?.hasError('invalidApiKey')) {
+      <mat-error>Nederīga API atslēga</mat-error>
+    }
+    @if (apiKeyValidationMessage) {
+      <mat-hint [class.valid-api-key]="apiKeyFormGroup.valid">
+        @if (apiKeyFormGroup.valid) {
+          <mat-icon aria-hidden="true">check</mat-icon> }
+        {{ apiKeyValidationMessage }}
+      </mat-hint>
+    }
+  </mat-form-field>
+  <file-input
+        label="Ielādēt no datnes(TXT)"
+        acceptedFileTypes="text/plain"
+        appearence="stroked"
+        (filesSelected)="loadApiKeyFromFile($event)"
+  ></file-input>
+</form>

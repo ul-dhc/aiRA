@@ -1,0 +1,318 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body {
+  box-sizing: border-box;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: #FCFAF6;
+}
+
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+
+  &.mat-typography {
+    letter-spacing: .015625rem;
+
+    h2 {
+      font: 500 1.25rem/2rem Roboto, sans-serif;
+      letter-spacing: .0125em;
+      margin: 0 0 1rem;
+    }
+
+    h3 {
+      font: 500 1rem/1.75rem Roboto, sans-serif;
+      letter-spacing: .009375em;
+      margin: 0 0 1rem;
+    }
+  }
+}
+
+app-root {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.content-wrapper {
+  flex-grow: 1;
+}
+
+.footer-wrapper {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+footer {
+  color: #313131;
+  font-size: 0.875rem;
+  margin: 0 auto;
+  max-width: 1200px;
+  text-align: center;
+  width: 100%;
+}
+
+/*
+  Allows aligning buttons vertically on the same row as a select by setting the select's
+  "hint and error" area below the select to zero height.   
+*/
+.buttons-row {
+  .mat-mdc-form-field-subscript-wrapper {
+    height: 0;
+  }
+}
+
+/*
+  Sets the size of the edit description dialog.
+*/
+div.editDescriptionDialog.cdk-overlay-pane.mat-mdc-dialog-panel {
+  height: 100%;
+  max-height: 95vh;
+  max-width: 96vw !important;
+  width: 100%;
+}
+
+/* Snackbar styles. */
+.snackbar-success {
+  &.mat-mdc-snack-bar-container .mat-mdc-snackbar-surface {
+    background-color: #2A652C;
+  }
+}
+
+.snackbar-error {
+  &.mat-mdc-snack-bar-container .mat-mdc-snackbar-surface {
+    background-color: #A82424;
+  }
+}
+
+.snackbar-warning {
+  &.mat-mdc-snack-bar-container .mat-mdc-snackbar-surface {
+    background-color: #A86500;
+  }
+}
+
+.snackbar-error, .snackbar-success, .snackbar-warning {
+  .mat-mdc-button {
+    color: white !important;
+  }
+}
+
+/* Stepper colors */
+.mat-step-header .mat-step-icon-selected,
+.mat-step-header .mat-step-icon-state-edit,
+.mat-step-header .mat-step-icon-state-done {
+  background-color: #5B5A86  !important;
+  color: white !important;
+}
+
+/* Stepper line between circles */
+.mat-stepper-horizontal-line {
+  border-top-color: #1C1B2E   !important;
+}
+
+.mat-step-header .mat-step-icon {
+  background-color: #8F9298 ;
+  color: white;
+}
+
+.mat-step-header .mat-step-label {
+  color: #1C1B2E ;
+}
+
+.mat-step-header .mat-step-label-selected {
+  color: #5B5A86;
+}
+
+:root {
+  --mat-sys-primary: #5B5A86;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #e6e0ff;
+  --mat-sys-on-primary-container: #1d1740;
+}
+
+html,
+body {
+  color: #1C1B2E ;
+}
+
+.mat-mdc-tooltip .mdc-tooltip__surface {
+  background-color: #5B5A86  !important;
+  color: #ffffff !important;
+}
+
+html {
+  --warm-highlight: #f7cb75;
+}
+
+/* Never show hover/focus/active highlight on non-functional future steps */
+.mat-step-header[aria-disabled='true'],
+.mat-step-header[aria-disabled='true']:hover,
+.mat-step-header[aria-disabled='true']:focus,
+.mat-step-header[aria-disabled='true']:active,
+.mat-step-header[aria-disabled='true'].cdk-focused,
+.mat-step-header[aria-disabled='true'].cdk-keyboard-focused,
+.mat-step-header[aria-disabled='true'].cdk-program-focused {
+  background-color: transparent !important;
+  cursor: default !important;
+}
+
+/* Non-functional future steps: no highlight at all */
+.mat-step-header[aria-disabled='true'],
+.mat-step-header[aria-disabled='true']:hover,
+.mat-step-header[aria-disabled='true']:focus,
+.mat-step-header[aria-disabled='true']:active,
+.mat-step-header[aria-disabled='true'].cdk-focused,
+.mat-step-header[aria-disabled='true'].cdk-keyboard-focused,
+.mat-step-header[aria-disabled='true'].cdk-program-focused {
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  cursor: default !important;
+}
+
+/* Functional/selectable steps: hover highlight */
+.mat-step-header:not([aria-disabled='true']):hover {
+  background-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent) !important;
+  border-radius: 14px !important;
+  cursor: pointer;
+}
+
+/* Functional current/focused step */
+.mat-step-header:not([aria-disabled='true'])[aria-selected='true'],
+.mat-step-header:not([aria-disabled='true']).cdk-focused,
+.mat-step-header:not([aria-disabled='true']).cdk-keyboard-focused,
+.mat-step-header:not([aria-disabled='true']).cdk-program-focused {
+  background-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent) !important;
+  border-radius: 14px !important;
+}
+
+
+
+/* Text buttons, like "Tālāk" */
+.mat-mdc-button {
+  --mat-button-text-state-layer-color: var(--warm-highlight);
+  --mat-button-text-ripple-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+  --mat-button-text-hover-state-layer-opacity: 0.18;
+  --mat-button-text-focus-state-layer-opacity: 0.22;
+  --mat-button-text-pressed-state-layer-opacity: 0.26;
+}
+
+/* Icon buttons, like info icons */
+.mat-mdc-icon-button {
+  --mat-icon-button-state-layer-color: var(--warm-highlight);
+  --mat-icon-button-ripple-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+  --mat-icon-button-hover-state-layer-opacity: 0.18;
+  --mat-icon-button-focus-state-layer-opacity: 0.22;
+  --mat-icon-button-pressed-state-layer-opacity: 0.26;
+}
+
+/* Outlined / raised / filled buttons */
+.mat-mdc-outlined-button {
+  --mat-button-outlined-state-layer-color: var(--warm-highlight);
+  --mat-button-outlined-ripple-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+}
+
+.mat-mdc-raised-button {
+  --mat-button-protected-state-layer-color: var(--warm-highlight);
+  --mat-button-protected-ripple-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+}
+
+.mat-mdc-unelevated-button {
+  --mat-button-filled-state-layer-color: var(--warm-highlight);
+  --mat-button-filled-ripple-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+}
+
+/* Sliders */
+.mat-mdc-slider {
+  --mdc-slider-handle-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+  --mdc-slider-hover-handle-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+  --mdc-slider-focus-handle-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+  --mdc-slider-pressed-handle-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+
+  --mdc-slider-active-track-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+  --mdc-slider-inactive-track-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+
+  --mat-slider-ripple-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+  --mat-slider-hover-state-layer-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+  --mat-slider-focus-state-layer-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent);
+}
+
+/* Do not highlight disabled / non-clickable future steps */
+.mat-step-header[aria-disabled='true']:hover {
+  background-color: transparent !important;
+  cursor: default;
+}
+
+/* Only highlight selectable step headers */
+.mat-step-header:not([aria-disabled='true']):hover {
+  background-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent) !important;
+  cursor: pointer;
+}
+/* Current / selected step highlight */
+.mat-step-header[aria-selected='true'],
+.mat-step-header.cdk-focused,
+.mat-step-header.cdk-keyboard-focused,
+.mat-step-header.cdk-program-focused {
+  background-color: color-mix(in srgb, var(--warm-highlight) 18%, transparent) !important;
+}
+
+/* Fallback for MDC switch internals */
+.mat-mdc-slide-toggle .mdc-switch__ripple::before,
+.mat-mdc-slide-toggle .mdc-switch__ripple::after {
+  background-color: var(--warm-highlight) !important;
+}
+
+.mat-mdc-slide-toggle .mat-ripple-element {
+  background-color: color-mix(in srgb, var(--warm-highlight) 25%, transparent) !important;
+}
+/* Checked slide toggle thumb hover highlight */
+.mat-mdc-slide-toggle .mdc-switch:hover .mdc-switch__icons {
+  background-color: color-mix(in srgb, var(--warm-highlight) 22%, white) !important;
+  border-radius: 50%;
+}
+
+
+
+html {
+  --highlight: #5B5A86;
+  --off--highlight: #5B5A86;
+}
+
+/* ON switch hover */
+.mat-mdc-slide-toggle .mdc-switch.mdc-switch--selected:hover .mdc-switch__icons {
+  background-color: color-mix(in srgb, var(--highlight) 20%, white) !important;
+  border-radius: 50%;
+}
+
+/* OFF switch hover */
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected):hover .mdc-switch__icons {
+  background-color: color-mix(in srgb, var(--off--highlight) 80%, white) !important;
+  border-radius: 50%;
+}
+
+/* OFF slide toggle track fallback */
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__track {
+  background-color: #ffffff !important;
+}
+
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__track::before,
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__track::after {
+  background-color: #ffffff !important;
+}
+
+/* OFF slide toggle fallback */
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__track,
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__track::before,
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__track::after {
+  background-color: #ffffff !important;
+  border-color: #5B5A86 !important;
+}
+
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__handle::before,
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__handle::after,
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__handle {
+  background-color: #5B5A86 !important;
+}

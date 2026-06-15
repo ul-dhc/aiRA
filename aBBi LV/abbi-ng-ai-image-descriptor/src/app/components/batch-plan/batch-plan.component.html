@@ -1,0 +1,5 @@
+@let images = imageCount();
+@let batches = batchPlan().length;
+@let imagesPerBatch = settings.batchSize();
+
+<p>Atšifrēt un iekodēt ar TEI <strong>{{ images }} @if (images === 1) { {{ 'attēlu' }} } @else { {{ 'attēlus' }} } </strong> <strong>{{ batches }} @if (batches === 1) { {{ 'grupā' }} } @else { {{ 'grupās' }} }</strong> (Viena grupa sastāv līdz {{ imagesPerBatch }} @if (imagesPerBatch === 1) { {{ 'attēla' }}} @else { {{ 'attēliem' }}}).</p>

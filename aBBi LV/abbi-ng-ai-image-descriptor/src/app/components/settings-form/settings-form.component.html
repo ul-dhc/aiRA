@@ -1,0 +1,322 @@
+@let model = settings.selectedModel();
+@let selectedTaskConfigValue = settings.selectedTaskConfig();
+@let selectedTaskTypeValue = settings.selectedTaskType();
+@let selectedTaskVariants = settings.selectedTaskConfig().variants;
+@let reasoningEfforts = settings.availableReasoningEfforts();
+@let thinkingLevels = settings.availableThinkingLevels();
+@let tempSupported = settings.isTemperatureSupported();
+
+<div class="settings-column-wrapper">
+  <div class="parameters-wrapper">
+    <h3>
+      <span>a) Uzdevuma nosacījumi</span>
+      <button matIconButton
+            aria-label="Izvēlies MI darba uzdevumu."
+            matTooltip="Izvēlies MI darba uzdevumu."
+            matTooltipPosition="above"
+      >
+        <mat-icon>info</mat-icon>
+      </button>
+    </h3>
+
+    <div class="form-field-wrapper">
+      <mat-form-field appearance="outline" [subscriptSizing]="'dynamic'">
+        <mat-label>Uzdevuma veids</mat-label>
+        <mat-select
+              [value]="selectedTaskTypeValue"
+              (valueChange)="setTaskType($event)"
+              name="taskType"
+        >
+          @for (task of settings.taskConfigs(); track task.taskType) {
+            <mat-option [value]="task.taskType">{{ task.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    @if (selectedTaskConfigValue.taskDescription) {
+      <p class="model-description">{{ selectedTaskConfigValue.taskDescription }}</p>
+    }
+
+    @if (selectedTaskTypeValue === 'altText') {
+      <div class="form-field-wrapper include-filename">
+        <mat-slide-toggle
+              [checked]="settings.includeFilename()"
+              (change)="setIncludeFilename($event)"
+              matTooltip="Atzīmē, ja attēlanosaukums iekļauj noderīgu kontekstu, piemēram, vārdus, datumu. Datnes nosaukums tiks iekļauts MI uzvednē lai uzlabotu attēlu tekstuālās alternatīvas (alt text) kvalitāti."
+        >Iekļaut datnes nosaukumu kontekstā</mat-slide-toggle>
+      </div>
+    }
+  </div>
+
+  <div class="parameters-wrapper">
+    <h3>
+      <span>b) Izvades iestatījumi</span>
+      <button matIconButton
+            aria-label="Pielāgot rezultātu formatējumu."
+            matTooltip="Pielāgot rezultātu formatējumu."
+            matTooltipPosition="above"
+      >
+        <mat-icon>info</mat-icon>
+      </button>
+    </h3>
+
+    @if (selectedTaskTypeValue === 'altText') {
+      <div class="form-field-wrapper">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ settings.taskNouns().singular | upperFirstLetter }} valoda</mat-label>
+          <mat-select
+                [value]="settings.selectedVariantId()"
+                (valueChange)="setTaskVariant($event)"
+                name="language"
+          >
+            @for (variant of selectedTaskVariants; track variant.id) {
+              <mat-option [value]="variant.id">{{ variant.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    
+      <div class="form-field-wrapper">
+        <div class="slider-wrapper">
+          <div class="slider-label-wrapper">
+            <label id="len-slider-label" class="slider-label">Vēlamais garums:</label>
+            <label class="slider-value-label">{{descLengthSlider.value}} rakstzīmes</label>
+          </div>
+          <mat-slider
+              [min]="descLengthMin"
+              [max]="descLengthMax"
+              [step]="25"
+              [discrete]="true"
+              [showTickMarks]="true"
+              matTooltip="Vēlamaiss garums ģenerētajai attēlu tekstuālajai alternatīvai (alt text)."
+          >
+            <input matSliderThumb
+                  [value]="settings.selectedDescLength()"
+                  (valueChange)="setDescLength($event)"
+                  #descLengthSlider
+            >
+          </mat-slider>
+        </div>
+      </div>
+    }
+
+    @if (selectedTaskTypeValue === 'transcription') {
+      <div class="form-field-wrapper">
+        <mat-slide-toggle
+              [checked]="transcribeHeaders()"
+              (change)="setTranscribeHeaders($event)"
+              matTooltip="Izvēlies, lai iekļautu lapu galvenes, kājenes un lapaspušu numurus atšifrējumā."
+        >Atšifrējumā iekļaut arī galveni, kājeni un lapu numurus</mat-slide-toggle>
+      </div>
+
+      <div class="form-field-wrapper">
+        <mat-slide-toggle
+              [checked]="teiEncode()"
+              (change)="setTeiEncode($event)"
+              matTooltip="Izvēlies, lai TEI XML iekodētu katru atšifrēto lapu atsevišķi."
+        >TEI XML iekodēt katru lapu atšifrējumu atsevišķi</mat-slide-toggle>
+      </div>
+    }
+
+    @if (selectedTaskTypeValue === 'transcriptionBatchTei') {
+      <div class="form-field-wrapper">
+        <div class="slider-wrapper">
+          <div class="slider-label-wrapper">
+            <label id="batch-slider-label" class="slider-label">Bilžu grupējuma lielums:</label>
+            <label class="slider-value-label">{{batchSizeSlider.value}} bildes</label>
+          </div>
+          <mat-slider
+              [min]="settings.batchSizeMin()"
+              [max]="settings.batchSizeMax()"
+              [step]="1"
+              [discrete]="true"
+              [showTickMarks]="true"
+              matTooltip="Bilžu grupējuma lielums regulē cik daudz bildes MI apstrādā kopā. Ja bilžu skaits pārsniedz grupējuma lielumu, tad bildes tiks sadalītas vairākos grupējumos ar noteikto izmēru. Katru grupējumu MI uztver kā vienu ”vienību”."
+          >
+            <input matSliderThumb
+                  [value]="settings.batchSize()"
+                  (valueChange)="setBatchSize($event)"
+                  #batchSizeSlider>
+          </mat-slider>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="parameters-wrapper">
+    <h3>
+      <span>c) Modeļa iestatījumi</span>
+      <button matIconButton
+            aria-label="Iestatījumi attēlu apstrādei un interpretēšanai ar MI."
+            matTooltip="Iestatījumi attēlu apstrādei un interpretēšanai ar MI."
+            matTooltipPosition="above"
+      >
+        <mat-icon>info</mat-icon>
+      </button>
+    </h3>
+
+    <div class="form-field-wrapper">
+      <mat-form-field appearance="outline">
+        <mat-label>MI modelis</mat-label>
+        <mat-select
+              [value]="model"
+              (valueChange)="setModel($event)"
+              name="model"
+        >
+          @for (model of settings.availableModels(); track model.id) {
+            <mat-option [value]="model">{{model.provider}} {{model.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Paplašinātie modeļa iestatījumi
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      @if (reasoningEfforts.length > 0) {
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Domāšanas līmenis</mat-label>
+            <mat-select
+                  [value]="settings.selectedReasoningEffort()"
+                  (valueChange)="setReasoningEffort($event)"
+                  name="reasoningEffort"
+            >
+              @for (reasoningEffort of reasoningEfforts; track reasoningEffort) {
+
+                @if(reasoningEffort == "none"){
+                <mat-option [value]="reasoningEffort">Nekāds</mat-option>
+                }
+                @if(reasoningEffort == "minimal"){
+                <mat-option [value]="reasoningEffort">Minimāls</mat-option>
+                }
+                @if(reasoningEffort == "low"){
+                <mat-option [value]="reasoningEffort">Zems</mat-option>
+                }
+                @if(reasoningEffort == "medium"){
+                <mat-option [value]="reasoningEffort">Mērens</mat-option>
+                }
+                @if(reasoningEffort == "high"){
+                <mat-option [value]="reasoningEffort">Augsts</mat-option>
+                }
+                @if(reasoningEffort == "xhigh"){
+                <mat-option [value]="reasoningEffort">Ļoti augsts</mat-option>
+                }
+                
+              
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      }
+      
+      @if (thinkingLevels.length > 0) {
+        <div class="form-field-wrapper">
+          <mat-form-field appearance="outline">
+            <mat-label>Domāšanas līmenis</mat-label>
+            <mat-select
+                  [value]="settings.selectedThinkingLevel()"
+                  (valueChange)="setThinkingLevel($event)"
+                  name="thinkingLevel"
+            >
+              @for (thinkingLevel of thinkingLevels; track thinkingLevel) {
+                
+                @if(thinkingLevel == "minimal"){
+                <mat-option [value]="thinkingLevel">Minimāls</mat-option>
+                }
+                @if(thinkingLevel == "low"){
+                <mat-option [value]="thinkingLevel">Zems</mat-option>
+                }
+                @if(thinkingLevel == "medium"){
+                <mat-option [value]="thinkingLevel">Mērens</mat-option>
+                }
+                @if(thinkingLevel == "high"){
+                <mat-option [value]="thinkingLevel">Augsts</mat-option>
+                }
+                
+              } 
+            </mat-select>
+          </mat-form-field>
+        </div>
+      }
+      
+      <div class="form-field-wrapper top-margin">
+        @if (tempSupported) {
+          <div class="slider-wrapper">
+            <div class="slider-label-wrapper">
+              <label id="temp-slider-label" class="slider-label">Temperatūra:</label>
+              <label class="slider-value-label">{{temperatureSlider.value}}</label>
+            </div>
+            <mat-slider
+                  [max]="temperatureMax"
+                  [min]="temperatureMin"
+                  [step]="0.1"
+                  [discrete]="true"
+                  [showTickMarks]="true"
+                  matTooltip="Temperatūra nosaka, cik paredzamas vai daudzveidīgas ir MI atbildes.r Izvēloties zemāku temperatūru, atbildes būs vienveidīgākas, savukārt ar augstākām vērtībām tās būs radošākas un ar zemāku noteiktspēju. Teksta atšifrēšanai īpaši noder temperatūra ar vērtību 0.0, tomēr daudzi modeļi ir optimizēti vērtībai 1.0."
+            >
+              <input matSliderThumb
+                    [value]="settings.selectedTemperature()"
+                    (valueChange)="setTemperature($event)"
+                    #temperatureSlider
+              >
+            </mat-slider>
+          </div>
+        } @else {
+          <p class="slider-support-message">Modelis neatbalsta temperatūras regulēšanu, kad izvēlēts šis domāšanas līmenis.</p>
+        }
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Sīkāk par modeli
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="model-details-wrapper">
+        <h4>{{ model.name }} ({{ model.provider }})</h4>
+        @if (model.description) {
+          <p>{{ model.description }}</p>
+        }
+        <table>
+          <tbody>
+            <tr>
+              <th scope="row">ID:</th>
+              <td>{{ model.id }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Ievades cena:</th>
+              <td>
+                @for (line of model.inputPrice | pricePerMTokens; track $index) {
+                  <div>{{ line }}</div>
+                }
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Izvadnes cena:</th>
+              <td>
+                @for (line of model.outputPrice | pricePerMTokens; track $index) {
+                  <div>{{ line }}</div>
+                }
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Pieprasījumi minūtē:</th>
+              <td>{{ model.rpm }}</td>
+            </tr>
+            <tr>
+              <th scope="row">URL:</th>
+              <td><a [href]="model.url" target="_blank"><mat-icon>open_in_new</mat-icon></a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </mat-expansion-panel>
+  </div>
+</div>

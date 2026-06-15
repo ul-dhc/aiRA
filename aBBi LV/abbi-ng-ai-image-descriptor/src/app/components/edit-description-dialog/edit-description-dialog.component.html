@@ -1,0 +1,121 @@
+@let taskNoun = settings.taskNouns();
+@let aspectRatioValue = aspectRatio();
+@let imageIndex = activeImage();
+@let previewShownValue = previewShown();
+
+<mat-dialog-content>
+  <div class="container"
+        [class.wider-img-container]="aspectRatioValue > 1.25"
+        [class.narrower-img-container]="aspectRatioValue < 0.8"
+  >
+    <div class="img-container">
+      <div class="img-toolbar">
+        @if (dialogImages.length > 1) {
+          <div class="page-toolbar">
+            <button matIconButton
+                  (click)="previousImage()"
+                  aria-label="Iepriekšējais attēls"
+                  matTooltip="Iepriekšējais attēls"
+            >
+              <mat-icon>arrow_left_alt</mat-icon>
+            </button>
+            <span class="toolbar-label" aria-label="Image number">{{ imageIndex + 1 }} / {{ dialogImages.length }}</span>
+            <button matIconButton
+                  (click)="nextImage()"
+                  aria-label="Nākamais attēls"
+                  matTooltip="Nākamais attēls"
+            >
+              <mat-icon>arrow_right_alt</mat-icon>
+            </button>
+          </div>
+        }
+        <div class="zoom-toolbar">
+          <button matIconButton
+                (click)="zoomOut()"
+                [disabled]="zoom <= minZoom"
+                aria-label="Attālināt"
+                matTooltip="Attālināt"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+          <span class="toolbar-label" aria-label="Zoom level">{{ (zoom * 100) | number:'1.0-0' }}%</span>
+          <button matIconButton
+                (click)="zoomIn()"
+                [disabled]="zoom >= maxZoom"
+                aria-label="Pietuvināt"
+                matTooltip="Pietuvināt"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+          <button matIconButton
+                (click)="resetZoom()"
+                [disabled]="zoom === 1"
+                aria-label="Atiestatīt pietuvinājumu"
+                matTooltip="Atiestatīt pietuvinājumu"
+          >
+            <mat-icon>crop_free</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div
+        #imgViewport
+        class="img-viewport"
+        [class.zoomed]="isZoomed"
+        (pointerdown)="onPointerDown($event)"
+        (pointermove)="onPointerMove($event)"
+        (pointerup)="onPointerUp()"
+        (pointercancel)="onPointerUp()"
+        (wheel)="onWheel($event)"
+      >
+        <img
+          #imgEl
+          [src]="dialogImages[imageIndex].base64Image"
+          [height]="dialogImages[imageIndex].height"
+          [width]="dialogImages[imageIndex].width"
+          [style.transform]="imageTransform"
+          alt="Image"
+          draggable="false"
+        >
+      </div>
+    </div>
+    <div class="textarea-container" [class.tei-encoding]="teiEncoding">
+      <h2>Rediģē {{ taskNoun.sakuz }} @if (previewShownValue) { – preview mode }</h2>
+      @if (previewShownValue) {
+        <pre class="language-markup"><code
+              class="language-markup"
+              #codeElEditDialog
+              [textContent]="editedDescription"
+        ></code></pre>
+      } @else {
+        <mat-form-field appearance="outline">
+          <mat-label>{{ taskNoun.s | upperFirstLetter }}</mat-label>
+          <textarea matInput
+                [(ngModel)]="editedDescription"
+                #autosize="cdkTextareaAutosize"
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="30"
+          ></textarea>
+        </mat-form-field>
+      }
+      
+      <div class="dialog-actions">
+        @if (teiEncoding) {
+          <button matIconButton
+            class="toggle-preview-button"
+            (click)="togglePreview()"
+            [attr.aria-label]="previewShownValue ? 'Rediģēt atšifrējumu' : 'Parādīt atšifrējumu ar izceltu sintaksi'"
+            [matTooltip]="previewShownValue ? 'Rediģēt atšifrējumu' : 'Parādīt atšifrējumu ar izceltu sintaksi'"
+          >
+            <mat-icon>
+              {{ previewShownValue ? 'edit' : 'visibility' }}
+            </mat-icon>
+          </button>
+        }
+        <button matButton [mat-dialog-close]="null">Atcelt</button>
+        <button matButton="filled" [mat-dialog-close]="editedDescription">Saglabāt</button>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

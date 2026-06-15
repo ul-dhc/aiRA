@@ -1,0 +1,182 @@
+mat-dialog-content.mat-mdc-dialog-content {
+  display: flex;
+  justify-content: center;
+  max-height: 100%;
+}
+
+.container {
+  align-items: center;
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+
+  > div {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    width: 50%;
+
+    &.textarea-container {
+      flex-direction: column;
+    }
+  }
+
+  &.wider-img-container {
+    > div {
+      width: 66.6%;
+
+      &.textarea-container {
+        width: 33.4%;
+      }
+    }
+  }
+
+  &.narrower-img-container {
+    > div {
+      width: 40.0%;
+
+      &.textarea-container {
+        width: 60.0%;
+      }
+    }
+  }
+
+  .img-container {
+    flex-direction: column;
+    gap: .75rem;
+  }
+
+  .img-toolbar,
+  .zoom-toolbar,
+  .page-toolbar {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: center;
+  }
+
+  .img-toolbar {
+    column-gap: 5rem;
+    width: 100%;
+  }
+
+  .toolbar-label {
+    min-width: 64px;
+    text-align: center;
+  }
+
+  .img-viewport {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    max-height: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+
+    // Important for pointer-based panning (touch devices especially)
+    touch-action: none;
+
+    &.zoomed {
+      cursor: grab;
+
+      &:active {
+        cursor: grabbing;
+      }
+    }
+  }
+
+  img {
+    height: auto;
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+
+    transform-origin: center center;
+    will-change: transform;
+    user-select: none;
+  }
+  
+  .dialog-actions {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+
+    .toggle-preview-button {
+      margin-right: 24px;
+    }
+  }
+
+
+  h2,
+  mat-form-field,
+  .dialog-actions {
+    max-width: 700px;
+    width: 100%;
+  }
+
+  h2 {
+    margin-top: 1em;
+  }
+
+  .textarea-container.tei-encoding {
+    pre.language-markup {
+      background-color: #f7f7f9;
+      border: 1px solid #dbdbdb;
+      border-radius: 2px;
+      font-size: 1rem;
+      margin-bottom: 1em;
+      overflow: auto;
+      padding: 0.5em 0.75em;
+      max-width: 700px;
+
+      code {
+        font-family: "Fira Code", monospace !important;
+        font-weight: 400;
+        font-size: 0.9375em;
+        font-style: normal;
+      }
+    }
+
+    @media (min-width: 1900px) {
+      h2,
+      mat-form-field,
+      pre.language-markup,
+      .dialog-actions {
+        max-width: 1000px;
+      }
+    }
+
+    textarea {
+      font-family: "Fira Code", monospace;
+      font-optical-sizing: auto;
+      font-weight: 400;
+      font-size: 0.9375em;
+      font-style: normal;
+    }
+  }
+
+  @media (max-aspect-ratio: 1/1) {
+    flex-direction: column;
+
+    > div {
+      height: 66.6%;
+      width: 100% !important;
+
+      &.textarea-container {
+        height: 33.4%;
+      }
+    }
+
+    &.wider-img-container {
+      > div {
+        height: 50%;
+      }
+    }
+  }
+}

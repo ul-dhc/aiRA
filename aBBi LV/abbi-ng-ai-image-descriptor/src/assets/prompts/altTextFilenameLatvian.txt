@@ -1,0 +1,1 @@
+Bildes faila nosaukums ir {{FILENAME}}. Šis vārds var saturēt noderīgus vārdus, bet neaizmirsti, ka tā burti nesatur diakritiskās zīmes un faila nosaukums var saturēt nejēdzīgu informāciju, tai skaitā nesaistītu skaitļu virknes.
