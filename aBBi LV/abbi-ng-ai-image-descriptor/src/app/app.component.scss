@@ -74,6 +74,12 @@ mat-stepper {
   background-color: #FCFAF6; // lielā šūna
 }
 
+.app-title p {
+  margin: 0.35rem 0 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
 .app-title {
   display: flex;
   flex-direction: column;
