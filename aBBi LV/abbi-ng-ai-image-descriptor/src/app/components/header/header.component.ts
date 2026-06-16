@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -10,5 +10,5 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-
+  @Input() showLanguageButton = true;
 }
