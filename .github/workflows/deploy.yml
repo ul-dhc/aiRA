@@ -1,0 +1,74 @@
+name: Deploy Angular site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: "aBBi LV/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: "aBBi LV"
+        run: npm ci
+
+      - name: Build Angular app
+        working-directory: "aBBi LV"
+        run: npm run build -- --base-href=/aBBi/
+
+      - name: Find and prepare built site
+        run: |
+          echo "Looking for built index.html..."
+          INDEX_FILE=$(find "aBBi LV/dist" -name index.html | head -n 1)
+          echo "Found index.html at: $INDEX_FILE"
+
+          if [ -z "$INDEX_FILE" ]; then
+            echo "No index.html found in dist folder"
+            exit 1
+          fi
+
+          SITE_DIR=$(dirname "$INDEX_FILE")
+          echo "Site directory is: $SITE_DIR"
+
+          mkdir -p pages-dist
+          cp -r "$SITE_DIR"/* pages-dist/
+
+          echo "Prepared Pages artifact:"
+          find pages-dist -maxdepth 2 -type f | head -50
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages-dist
+
+  deploy:
+    environment:
+      name: github-pages
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
