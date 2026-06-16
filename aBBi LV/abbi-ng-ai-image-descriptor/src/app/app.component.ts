@@ -45,6 +45,7 @@ export class AppComponent implements OnInit {
 
   addingImages = signal<boolean>(false);
   apiKeyFormGroup!: FormGroup;
+  currentStepIndex = signal<number>(0);
   appVersion = APP_VERSION;
 
   // Observe viewport width so the stepper orientation can be changed
