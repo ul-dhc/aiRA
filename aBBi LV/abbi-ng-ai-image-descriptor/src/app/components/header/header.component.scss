@@ -127,3 +127,20 @@
     width: 100%;
   }
 }
+
+.header-brand,
+.brand-link,
+.logo-container {
+  flex: 0 0 auto;
+  min-width: max-content;
+}
+
+.brand-logo {
+  display: block;
+  width: 160px !important;
+  min-width: 160px !important;
+  max-width: 160px !important;
+  height: auto !important;
+  flex: 0 0 160px !important;
+  object-fit: contain;
+}
