@@ -36,7 +36,7 @@ jobs:
 
       - name: Build Angular app
         working-directory: "aBBi LV/abbi-ng-ai-image-descriptor"
-        run: npm run build -- --base-href=/aBBi/
+        run: npm run build -- --base-href=/aiRA/
 
       - name: Find and prepare built site
         run: |
