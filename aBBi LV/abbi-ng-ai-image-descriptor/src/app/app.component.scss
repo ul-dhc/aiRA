@@ -94,8 +94,10 @@ mat-stepper {
 
 .app-title {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  text-align: left;
 }
 
 .app-title-main {
@@ -106,12 +108,27 @@ mat-stepper {
 }
 
 .app-title-logo {
-  width: 64px;
-  height: 64px;
+  width: 76px;
+  height: 76px;
   object-fit: contain;
+  flex: 0 0 76px;
 }
 
 .app-title h1,
 .app-title p {
   margin: 0;
+}
+
+.app-title-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.app-title-text h1 {
+  margin: 0;
+  line-height: 1;
+}
+.app-title-text p {
+  margin: 0.2rem 0 0;
+  line-height: 1.2;
 }
