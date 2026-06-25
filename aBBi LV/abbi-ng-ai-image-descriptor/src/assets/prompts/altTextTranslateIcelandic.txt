@@ -1,1 +1,1 @@
-
+Þýddu textann hér að neðan yfir á íslensku. ISO-639-1-kóði frummálsins er `{{ORIG_LANG_CODE}}`. Svaraðu aðeins með þýdda textanum.
