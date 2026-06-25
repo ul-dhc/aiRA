@@ -1,1 +1,1 @@
-
+Billedets filnavn er {{FILENAME}}. Filnavnet kan indeholde nyttige navne eller nøgleord, men bemærk, at bogstaverne mangler diakritiske tegn, og at filnavnet kan indeholde irrelevante talrækker.
