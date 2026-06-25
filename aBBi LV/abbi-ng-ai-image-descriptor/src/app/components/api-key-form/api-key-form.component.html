@@ -11,7 +11,7 @@
     @if (apiKeyFC?.hasError('required')) {
       <mat-error>Jums jāpievieno API atslēgu</mat-error>
     } @else if (apiKeyFC?.hasError('invalidApiKey')) {
-      <mat-error>Nederīga API atslēga</mat-error>
+      <mat-error>Nederīga API atslēga. Vai iepriekšējā solī norādīji pareizo modeli?</mat-error>
     }
     @if (apiKeyValidationMessage) {
       <mat-hint [class.valid-api-key]="apiKeyFormGroup.valid">
