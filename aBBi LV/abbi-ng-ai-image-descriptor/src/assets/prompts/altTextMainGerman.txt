@@ -1,0 +1,8 @@
+Erstelle eine kurze Beschreibung, etwa {{DESC_LENGTH}} Zeichen lang, dessen, was das Bild zeigt. Die Beschreibung sollte so knapp wie möglich sein, aber zugleich so detailliert, wie es das Bild erfordert. Die Beschreibung wird als Alternativtext verwendet, auch bekannt als Alt-Text: ein mit einem Bild verknüpfter Text, der denselben Zweck erfüllt und dieselben wesentlichen Informationen wie das Bild vermittelt.
+
+Anweisungen:
+
+1. Antworte nur mit der eigentlichen Beschreibung, ohne Begründung oder Gespräch.
+2. Beginne nicht mit „Das Bild zeigt“ oder einer ähnlichen Formulierung, sondern mit der Art des Bildes, zum Beispiel ein Foto, ein Schwarz-Weiß-Foto, ein Gemälde, eine Zeichnung, eine Radierung usw.
+3. Die wichtigsten Details sollten in den ersten wenigen Wörtern erscheinen.
+4. Wenn das Bild im Bild einen Rahmen hat, ignoriere ihn.
