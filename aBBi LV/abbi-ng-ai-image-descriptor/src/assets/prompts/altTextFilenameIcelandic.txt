@@ -1,1 +1,1 @@
-
+Skráarheiti myndarinnar er {{FILENAME}}. Skráarheitið getur innihaldið gagnleg nöfn eða lykilorð, en athugaðu að stafina vantar stafmerki og skráarheitið getur innihaldið óviðkomandi talnaraðir.
