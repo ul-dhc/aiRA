@@ -1,1 +1,8 @@
+Koosta lühike, umbes {{DESC_LENGTH}} tähemärgi pikkune kirjeldus sellest, mida pilt kujutab. Kirjeldus peaks olema võimalikult lühike, kuid samas nii üksikasjalik, kui pilt nõuab. Kirjeldust kasutatakse alternatiivtekstina, mida tuntakse ka kui alt-teksti: pildiga seotud tekstina, mis täidab sama eesmärki ja edastab sama olulise teabe nagu pilt.
 
+Juhised:
+
+1. Vasta ainult tegeliku kirjeldusega, ilma põhjenduste või vestluseta.
+2. Ära alusta väljendiga „Pilt kujutab“ ega sarnase fraasiga, vaid sellega, mis tüüpi pildiga on tegu, näiteks foto, mustvalge foto, maal, joonistus, ofort jne.
+3. Olulised detailid peaksid ilmuma esimeste sõnade hulgas.
+4. Kui pildil oleval kujutisel on raam, ignoreeri seda.
