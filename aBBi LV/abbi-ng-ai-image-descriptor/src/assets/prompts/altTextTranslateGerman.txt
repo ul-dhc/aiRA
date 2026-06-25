@@ -1,0 +1,1 @@
+Übersetze den folgenden Text ins Deutsche. Der ISO-639-1-Code der Ausgangssprache ist `{{ORIG_LANG_CODE}}`. Antworte nur mit dem übersetzten Text.
