@@ -31,3 +31,4 @@ export class HeaderComponent {
       current === section ? null : section
     );
   }
+}
