@@ -23,4 +23,49 @@
       }
     </nav>
   </div>
+  @if (showInfoOverlay()) {
+  <div class="info-overlay" role="dialog" aria-modal="true" aria-labelledby="info-overlay-title">
+    <div class="info-overlay-panel">
+      <button
+        type="button"
+        class="info-overlay-close"
+        aria-label="Close information"
+        (click)="closeInfoOverlay()"
+      >
+        ×
+      </button>
+
+      <h1 id="info-overlay-title">About aiRA</h1>
+
+      <p>
+        aiRA is a tool for generating image descriptions, transcribing text from images,
+        and translating descriptions using artificial intelligence.
+      </p>
+
+      <h2>How it works</h2>
+      <p>
+        The user selects a task, chooses an AI provider and model, enters an API key,
+        uploads images, and then generates descriptions or transcriptions.
+      </p>
+
+      <h2>What you can do</h2>
+      <ul>
+        <li>Generate alt text for uploaded images.</li>
+        <li>Transcribe visible text from images.</li>
+        <li>Translate generated descriptions into another language.</li>
+        <li>Edit, review, and export the final results.</li>
+      </ul>
+
+      <h2>Privacy note</h2>
+      <p>
+        When generating results, uploaded images and prompts are sent to the selected AI provider.
+        Do not upload sensitive images unless this is allowed by your organization.
+      </p>
+
+      <button type="button" class="info-overlay-main-close" (click)="closeInfoOverlay()">
+        Close
+      </button>
+    </div>
+  </div>
+}
 </header>
