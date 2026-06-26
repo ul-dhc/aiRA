@@ -28,6 +28,119 @@
   @if (showInfoOverlay()) {
   <div class="info-overlay" role="dialog" aria-modal="true" aria-labelledby="info-overlay-title">
     <div class="info-overlay-panel">
+      <div class="info-overlay-panel">
+  <button
+    type="button"
+    class="info-overlay-close"
+    aria-label="Close information"
+    (click)="closeInfoOverlay()"
+  >
+    ×
+  </button>
+
+  <h1 id="info-overlay-title">About aiRA</h1>
+
+  <div class="info-accordion">
+    <section class="info-accordion-item">
+      <button
+        type="button"
+        class="info-accordion-header"
+        [class.is-open]="openInfoSection() === 'about'"
+        (click)="toggleInfoSection('about')"
+      >
+        <span>What is aiRA?</span>
+        <span class="info-accordion-icon">
+          {{ openInfoSection() === 'about' ? '−' : '+' }}
+        </span>
+      </button>
+
+      @if (openInfoSection() === 'about') {
+        <div class="info-accordion-content">
+          <p>
+            aiRA is a tool for generating image descriptions, transcribing text from images,
+            and translating descriptions using artificial intelligence.
+          </p>
+        </div>
+      }
+    </section>
+
+    <section class="info-accordion-item">
+      <button
+        type="button"
+        class="info-accordion-header"
+        [class.is-open]="openInfoSection() === 'how-it-works'"
+        (click)="toggleInfoSection('how-it-works')"
+      >
+        <span>How it works</span>
+        <span class="info-accordion-icon">
+          {{ openInfoSection() === 'how-it-works' ? '−' : '+' }}
+        </span>
+      </button>
+
+      @if (openInfoSection() === 'how-it-works') {
+        <div class="info-accordion-content">
+          <p>
+            The user selects a task, chooses an AI provider and model, enters an API key,
+            uploads images, and then generates descriptions or transcriptions.
+          </p>
+        </div>
+      }
+    </section>
+
+    <section class="info-accordion-item">
+      <button
+        type="button"
+        class="info-accordion-header"
+        [class.is-open]="openInfoSection() === 'features'"
+        (click)="toggleInfoSection('features')"
+      >
+        <span>What you can do</span>
+        <span class="info-accordion-icon">
+          {{ openInfoSection() === 'features' ? '−' : '+' }}
+        </span>
+      </button>
+
+      @if (openInfoSection() === 'features') {
+        <div class="info-accordion-content">
+          <ul>
+            <li>Generate alt text for uploaded images.</li>
+            <li>Transcribe visible text from images.</li>
+            <li>Translate generated descriptions into another language.</li>
+            <li>Edit, review, and export the final results.</li>
+          </ul>
+        </div>
+      }
+    </section>
+
+    <section class="info-accordion-item">
+      <button
+        type="button"
+        class="info-accordion-header"
+        [class.is-open]="openInfoSection() === 'privacy'"
+        (click)="toggleInfoSection('privacy')"
+      >
+        <span>Privacy note</span>
+        <span class="info-accordion-icon">
+          {{ openInfoSection() === 'privacy' ? '−' : '+' }}
+        </span>
+      </button>
+
+      @if (openInfoSection() === 'privacy') {
+        <div class="info-accordion-content">
+          <p>
+            When generating results, uploaded images and prompts are sent to the selected AI provider.
+            Do not upload sensitive images unless this is allowed by your organization.
+          </p>
+        </div>
+      }
+    </section>
+  </div>
+
+  <button type="button" class="info-overlay-main-close" (click)="closeInfoOverlay()">
+    Close
+  </button>
+</div>
+      <!--
       <button
         type="button"
         class="info-overlay-close"
@@ -69,6 +182,7 @@
       <button type="button" class="info-overlay-main-close" (click)="closeInfoOverlay()">
         Close
       </button>
+      -->
     </div>
   </div>
 }
