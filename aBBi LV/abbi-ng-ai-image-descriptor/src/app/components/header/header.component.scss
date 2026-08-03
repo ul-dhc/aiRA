@@ -254,7 +254,6 @@
   background: transparent;
   border-bottom: 0 !important;
   box-shadow: none !important;
-  min-height: 92px;
   z-index: 20;
 }
 
@@ -272,7 +271,6 @@
    so they sit in the top-right of the page body */
 .header-actions {
   position: absolute;
-  top: calc(100% + 0.75rem);
   right: 0;
   display: flex;
   flex-wrap: wrap;
