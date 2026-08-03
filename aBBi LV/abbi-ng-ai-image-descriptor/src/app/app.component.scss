@@ -225,3 +225,11 @@ mat-stepper {
     padding-top: 2rem;
   }
 }
+
+html.theme-light mat-stepper {
+  background: rgba(250, 254, 252, 0.96);
+}
+
+html.theme-light .intro-card {
+  background: rgba(250, 254, 252, 0.96);
+}
