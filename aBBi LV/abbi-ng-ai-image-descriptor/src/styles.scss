@@ -316,3 +316,227 @@ html {
 .mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__handle {
   background-color: #5B5A86 !important;
 }
+
+/* =========================================================
+   aiRA light and dark colour profiles
+   ========================================================= */
+
+:root,
+html.theme-light {
+  color-scheme: light;
+
+  --aira-accent: #ffc34d;
+  --aira-on-accent: #241a00;
+  --aira-accent-text: #7a4f00;
+  --aira-accent-hover: #e5a900;
+
+  --aira-background: #f6f3fc;
+  --aira-surface: #ffffff;
+  --aira-surface-raised: #ffffff;
+  --aira-surface-subtle: #f0ebf8;
+
+  --aira-text: #16152b;
+  --aira-text-muted: #605e7a;
+
+  --aira-border: #e4ddf6;
+  --aira-border-strong: #a99bc9;
+
+  --aira-focus: #7a4f00;
+  --aira-shadow: 0 16px 40px rgba(70, 60, 120, 0.12);
+
+  --warm-highlight: #ffc34d;
+  --highlight: #ffc34d;
+  --off--highlight: #7a4f00;
+
+  /* Angular Material system colours */
+  --mat-sys-background: var(--aira-background);
+  --mat-sys-on-background: var(--aira-text);
+
+  --mat-sys-surface: var(--aira-surface);
+  --mat-sys-surface-container-lowest: var(--aira-surface);
+  --mat-sys-surface-container-low: var(--aira-surface);
+  --mat-sys-surface-container: var(--aira-surface-subtle);
+  --mat-sys-surface-container-high: var(--aira-surface-subtle);
+  --mat-sys-surface-container-highest: var(--aira-surface-subtle);
+
+  --mat-sys-on-surface: var(--aira-text);
+  --mat-sys-on-surface-variant: var(--aira-text-muted);
+
+  --mat-sys-outline: var(--aira-border-strong);
+  --mat-sys-outline-variant: var(--aira-border);
+
+  /*
+   * Yellow is used as the container colour.
+   * Dark amber is used for accessible text on light surfaces.
+   */
+  --mat-sys-primary: var(--aira-accent-text);
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: var(--aira-accent);
+  --mat-sys-on-primary-container: var(--aira-on-accent);
+}
+
+html.theme-dark {
+  color-scheme: dark;
+
+  --aira-accent: #ffc34d;
+  --aira-on-accent: #241a00;
+  --aira-accent-text: #ffc34d;
+  --aira-accent-hover: #ffd57d;
+
+  --aira-background: #090c1e;
+  --aira-surface: #10142c;
+  --aira-surface-raised: #131834;
+  --aira-surface-subtle: #1a1f3e;
+
+  --aira-text: #f5f4ff;
+  --aira-text-muted: #b4b6d0;
+
+  --aira-border: #252b52;
+  --aira-border-strong: #656b91;
+
+  --aira-focus: #ffc34d;
+  --aira-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+
+  --warm-highlight: #ffc34d;
+  --highlight: #ffc34d;
+  --off--highlight: #ffc34d;
+
+  --mat-sys-background: var(--aira-background);
+  --mat-sys-on-background: var(--aira-text);
+
+  --mat-sys-surface: var(--aira-surface);
+  --mat-sys-surface-container-lowest: var(--aira-background);
+  --mat-sys-surface-container-low: var(--aira-surface);
+  --mat-sys-surface-container: var(--aira-surface-raised);
+  --mat-sys-surface-container-high: var(--aira-surface-subtle);
+  --mat-sys-surface-container-highest: var(--aira-surface-subtle);
+
+  --mat-sys-on-surface: var(--aira-text);
+  --mat-sys-on-surface-variant: var(--aira-text-muted);
+
+  --mat-sys-outline: var(--aira-border-strong);
+  --mat-sys-outline-variant: var(--aira-border);
+
+  --mat-sys-primary: var(--aira-accent);
+  --mat-sys-on-primary: var(--aira-on-accent);
+  --mat-sys-primary-container: var(--aira-accent);
+  --mat-sys-on-primary-container: var(--aira-on-accent);
+}
+
+html,
+body {
+  background-color: var(--aira-background);
+  color: var(--aira-text);
+}
+
+body,
+app-root,
+.content-wrapper,
+.footer-wrapper {
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease;
+}
+
+footer {
+  color: var(--aira-text-muted);
+}
+
+a {
+  color: var(--aira-accent-text);
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+button,
+a,
+input,
+select,
+textarea,
+.mat-mdc-button,
+.mat-mdc-icon-button,
+.mat-mdc-slide-toggle {
+  &:focus-visible {
+    outline: 3px solid var(--aira-focus);
+    outline-offset: 3px;
+  }
+}
+
+/* Tooltips */
+.mat-mdc-tooltip .mdc-tooltip__surface {
+  background-color: var(--aira-text) !important;
+  color: var(--aira-background) !important;
+}
+
+/* Stepper */
+.mat-step-header .mat-step-icon-selected,
+.mat-step-header .mat-step-icon-state-edit,
+.mat-step-header .mat-step-icon-state-done {
+  background-color: var(--aira-accent) !important;
+  color: var(--aira-on-accent) !important;
+}
+
+.mat-step-header .mat-step-icon {
+  background-color: var(--aira-border-strong);
+  color: var(--aira-surface);
+}
+
+.mat-step-header .mat-step-label {
+  color: var(--aira-text);
+}
+
+.mat-step-header .mat-step-label-selected {
+  color: var(--aira-accent-text);
+}
+
+.mat-stepper-horizontal-line {
+  border-top-color: var(--aira-border-strong) !important;
+}
+
+.mat-step-header:not([aria-disabled='true']):hover,
+.mat-step-header:not([aria-disabled='true'])[aria-selected='true'],
+.mat-step-header:not([aria-disabled='true']).cdk-keyboard-focused {
+  background-color:
+    color-mix(in srgb, var(--aira-accent) 20%, transparent) !important;
+}
+
+/* Slide toggles */
+.mat-mdc-slide-toggle
+  .mdc-switch:not(.mdc-switch--selected)
+  .mdc-switch__track,
+.mat-mdc-slide-toggle
+  .mdc-switch:not(.mdc-switch--selected)
+  .mdc-switch__track::before,
+.mat-mdc-slide-toggle
+  .mdc-switch:not(.mdc-switch--selected)
+  .mdc-switch__track::after {
+  background-color: var(--aira-surface) !important;
+  border-color: var(--aira-accent-text) !important;
+}
+
+.mat-mdc-slide-toggle
+  .mdc-switch:not(.mdc-switch--selected)
+  .mdc-switch__handle,
+.mat-mdc-slide-toggle
+  .mdc-switch:not(.mdc-switch--selected)
+  .mdc-switch__handle::before,
+.mat-mdc-slide-toggle
+  .mdc-switch:not(.mdc-switch--selected)
+  .mdc-switch__handle::after {
+  background-color: var(--aira-accent-text) !important;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
