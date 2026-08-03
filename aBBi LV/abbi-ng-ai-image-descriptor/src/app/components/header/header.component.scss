@@ -355,10 +355,19 @@
 
 @media (max-width: 1080px) {
   .header-actions {
-    position: static;
-    margin-top: 1rem;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    justify-content: flex-end;
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+@media (max-width: 720px) {
+  .header-actions {
+    left: 1rem;
+    right: 1rem;
     justify-content: flex-start;
-    max-width: 100%;
   }
 }
 
