@@ -230,3 +230,21 @@ html.theme-light mat-stepper {
 html.theme-light .intro-card {
   background: rgba(250, 254, 252, 0.96);
 }
+
+
+.app-title {
+  padding-right: 34rem;
+}
+
+@media (max-width: 1100px) {
+  .app-title {
+    padding-right: 0;
+    padding-top: 4.75rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-title {
+    padding-top: 8rem;
+  }
+}
