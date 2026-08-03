@@ -499,7 +499,25 @@ body::before {
       #d7ebe1 100%
     );
 }
-
+html.theme-dark body::before {
+  background:
+    radial-gradient(
+      circle at 14% 16%,
+      rgba(58, 183, 144, 0.12),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 86% 22%,
+      rgba(94, 213, 172, 0.08),
+      transparent 22%
+    ),
+    linear-gradient(
+      145deg,
+      #071720 0%,
+      #06111a 48%,
+      #081d25 100%
+    );
+}
 html.theme-dark body::after {
   content: '';
   position: fixed;
