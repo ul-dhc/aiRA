@@ -65,11 +65,27 @@ export class HeaderComponent {
   }
 
   toggleTheme(): void {
-    const newTheme: ColorTheme =
-      this.isDarkTheme() ? 'light' : 'dark';
+  const newTheme: ColorTheme =
+    this.isDarkTheme() ? 'light' : 'dark';
 
+  const root = this.document.documentElement;
+  const browserWindow = this.document.defaultView;
+
+  if (!browserWindow) {
     this.applyTheme(newTheme);
+    return;
   }
+
+  root.classList.add('theme-transition');
+
+  browserWindow.requestAnimationFrame(() => {
+    this.applyTheme(newTheme);
+
+    browserWindow.setTimeout(() => {
+      root.classList.remove('theme-transition');
+    }, 380);
+  });
+}
 
   openInfoOverlay(event: Event): void {
     event.preventDefault();
