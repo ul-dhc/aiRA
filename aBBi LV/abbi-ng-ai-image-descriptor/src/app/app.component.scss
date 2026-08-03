@@ -179,7 +179,7 @@ mat-stepper {
    ========================================================= */
 
 .content-wrapper {
-  padding-top: 6rem;
+  padding-top: 0;
 }
 
 /* If your app uses a different main wrapper, apply the same
@@ -219,11 +219,8 @@ mat-stepper {
     border-top-color: var(--aira-border);
   }
 }
-
-@media (max-width: 1080px) {
-  .content-wrapper {
-    padding-top: 2rem;
-  }
+.content-wrapper {
+  padding-top: 0;
 }
 
 html.theme-light mat-stepper {
