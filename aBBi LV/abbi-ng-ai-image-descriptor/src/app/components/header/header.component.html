@@ -10,10 +10,31 @@
     </a>
   
     <nav class="header-actions" aria-label="Galvenes darbības">
-      <a class="header-action" aria-label="Palīdzība" (click)="openInfoOverlay($event)">
-        <mat-icon>info_outline</mat-icon>
+      <a
+        class="header-action"
+        href="#"
+        aria-label="Palīdzība"
+        (click)="openInfoOverlay($event)"
+      >
+        <mat-icon aria-hidden="true">info_outline</mat-icon>
         <span>Info</span>
       </a>
+      
+      <button
+        type="button"
+        class="header-action theme-button"
+        [attr.aria-label]="themeActionLabel()"
+        [attr.title]="themeActionLabel()"
+        (click)="toggleTheme()"
+      >
+        <mat-icon aria-hidden="true">
+          {{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}
+        </mat-icon>
+      
+        <span>
+          {{ isDarkTheme() ? 'Gaišs' : 'Tumšs' }}
+        </span>
+      </button>
       
       @if (showLanguageButton) {
         <a class="language-button" href="https://ul-dhc.github.io/aiRA-en/" aria-label="Mainīt valodu">
