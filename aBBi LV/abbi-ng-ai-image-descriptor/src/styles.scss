@@ -325,35 +325,46 @@ html {
 html.theme-light {
   color-scheme: light;
 
+  --aira-background: #eaf4ef;
+  --aira-background-soft: #dcece4;
+
+  --aira-surface: rgba(249, 253, 251, 0.94);
+  --aira-surface-raised: rgba(255, 255, 255, 0.97);
+  --aira-surface-subtle: #e1efe8;
+
+  --aira-text: #142720;
+  --aira-text-muted: #536b62;
+
+  --aira-border: #bed6cc;
+  --aira-border-strong: #91b9aa;
+
+  --aira-primary: #0b725d;
+  --aira-primary-hover: #075b4a;
+  --aira-primary-soft: #cde8dc;
+  --aira-on-primary: #ffffff;
+
   --aira-accent: #ffc34d;
-  --aira-on-accent: #241a00;
-  --aira-accent-text: #7a4f00;
-  --aira-accent-hover: #e5a900;
+  --aira-accent-hover: #e8aa2e;
+  --aira-accent-text: #694600;
+  --aira-on-accent: #2c2208;
+  --aira-focus: #c17b00;
 
-  --aira-background: #f6f3fc;
-  --aira-surface: #ffffff;
-  --aira-surface-raised: #ffffff;
-  --aira-surface-subtle: #f0ebf8;
+  --aira-toolbar-bg: rgba(247, 252, 249, 0.9);
+  --aira-toolbar-hover: rgba(222, 241, 231, 0.96);
 
-  --aira-text: #16152b;
-  --aira-text-muted: #605e7a;
-
-  --aira-border: #e4ddf6;
-  --aira-border-strong: #a99bc9;
-
-  --aira-focus: #7a4f00;
-  --aira-shadow: 0 16px 40px rgba(70, 60, 120, 0.12);
+  --aira-shadow:
+    0 1px 2px rgba(13, 77, 61, 0.04),
+    0 16px 38px rgba(13, 77, 61, 0.1);
 
   --warm-highlight: #ffc34d;
-  --highlight: #ffc34d;
-  --off--highlight: #7a4f00;
+  --highlight: #0b725d;
+  --off--highlight: #0b725d;
 
-  /* Angular Material system colours */
   --mat-sys-background: var(--aira-background);
   --mat-sys-on-background: var(--aira-text);
 
   --mat-sys-surface: var(--aira-surface);
-  --mat-sys-surface-container-lowest: var(--aira-surface);
+  --mat-sys-surface-container-lowest: var(--aira-surface-raised);
   --mat-sys-surface-container-low: var(--aira-surface);
   --mat-sys-surface-container: var(--aira-surface-subtle);
   --mat-sys-surface-container-high: var(--aira-surface-subtle);
@@ -365,16 +376,14 @@ html.theme-light {
   --mat-sys-outline: var(--aira-border-strong);
   --mat-sys-outline-variant: var(--aira-border);
 
-  /*
-   * Yellow is used as the container colour.
-   * Dark amber is used for accessible text on light surfaces.
-   */
-  --mat-sys-primary: var(--aira-accent-text);
-  --mat-sys-on-primary: #ffffff;
-  --mat-sys-primary-container: var(--aira-accent);
-  --mat-sys-on-primary-container: var(--aira-on-accent);
-}
+  --mat-sys-primary: var(--aira-primary);
+  --mat-sys-on-primary: var(--aira-on-primary);
+  --mat-sys-primary-container: var(--aira-primary-soft);
+  --mat-sys-on-primary-container: var(--aira-primary);
 
+  --mat-sys-secondary: var(--aira-accent);
+  --mat-sys-on-secondary: var(--aira-on-accent);
+}
 html.theme-dark {
   color-scheme: dark;
 
