@@ -146,3 +146,31 @@ mat-stepper {
   margin: 0.2rem 0 0;
   line-height: 1.2;
 }
+
+/* Theme-aware page surfaces */
+
+.intro-card {
+  background: var(--aira-surface-raised);
+  border-color: var(--aira-border-strong);
+  color: var(--aira-text);
+  box-shadow: var(--aira-shadow);
+}
+
+mat-stepper {
+  background-color: var(--aira-surface);
+  border-color: var(--aira-border-strong);
+  color: var(--aira-text);
+  box-shadow: var(--aira-shadow);
+
+  .stepper-nav {
+    border-top-color: var(--aira-border);
+  }
+}
+
+.app-title {
+  color: var(--aira-text);
+}
+
+.app-title p {
+  color: var(--aira-text-muted);
+}
