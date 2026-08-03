@@ -10,17 +10,46 @@
 }
 
 mat-expansion-panel.mat-expansion-panel {
+  --mat-expansion-container-background-color:
+    var(--aira-surface-raised);
+
+  --mat-expansion-container-text-color:
+    var(--aira-text);
+
+  --mat-expansion-header-text-color:
+    var(--aira-text);
+
+  --mat-expansion-header-description-color:
+    var(--aira-text-muted);
+
+  --mat-expansion-header-indicator-color:
+    var(--aira-text-muted);
+
+  background-color: var(--aira-surface-raised);
+  border: 1px solid var(--aira-border);
+  border-radius: 14px;
   box-shadow: none;
-  background-color: #FCFAF6;
+  color: var(--aira-text);
+  overflow: hidden;
 }
 
 mat-expansion-panel-header.mat-expansion-panel-header {
-  background-color: #FCFAF6;
+  background-color: transparent;
+  color: var(--aira-text);
+}
+
+mat-expansion-panel-header.mat-expansion-panel-header:hover {
+  background-color: var(--aira-primary-soft) !important;
+}
+
+mat-expansion-panel-header.mat-expanded {
+  background-color: var(--aira-primary-soft);
 }
 
 .mat-expansion-panel-content,
 .mat-expansion-panel-body {
-  background-color: #FCFAF6;
+  background-color: transparent;
+  color: var(--aira-text);
 }
 
 mat-slide-toggle.mat-mdc-slide-toggle {
