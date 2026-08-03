@@ -305,3 +305,141 @@
   background: var(--aira-accent-hover);
   opacity: 1;
 }
+
+/* =========================================================
+   Header – concept-style layout
+   This removes the top bars and places the controls visually
+   in the top-right body area instead of inside the header bar.
+   ========================================================= */
+
+.site-header-top-line,
+.site-header-bright-line {
+  display: none !important;
+}
+
+.site-header {
+  position: relative;
+  background: transparent;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+  min-height: 92px;
+  z-index: 20;
+}
+
+.site-header-inner {
+  position: relative;
+  align-items: flex-start;
+}
+
+.brand {
+  color: var(--aira-text);
+}
+
+/* This is the important part:
+   the controls are visually moved below the header
+   so they sit in the top-right of the page body */
+.header-actions {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  z-index: 50;
+  max-width: min(100%, 44rem);
+}
+
+.header-action,
+.language-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.9rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--aira-border);
+  border-radius: 14px;
+  background: var(--aira-toolbar-bg);
+  color: var(--aira-text);
+  box-shadow: var(--aira-shadow);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.header-action:hover,
+.language-button:hover {
+  background: var(--aira-toolbar-hover);
+  border-color: var(--aira-border-strong);
+  color: var(--aira-text);
+  transform: translateY(-1px);
+}
+
+.header-action mat-icon,
+.language-button mat-icon {
+  color: var(--aira-primary);
+}
+
+.theme-button {
+  min-width: 7rem;
+  justify-content: center;
+}
+
+.header-action:focus-visible,
+.language-button:focus-visible,
+.info-overlay-close:focus-visible,
+.info-overlay-main-close:focus-visible {
+  outline: 3px solid var(--aira-focus);
+  outline-offset: 3px;
+}
+
+/* Overlay restyle so it matches the darker / softer concepts */
+.info-overlay-panel {
+  background: var(--aira-surface-raised);
+  border: 1px solid var(--aira-border);
+  color: var(--aira-text);
+  box-shadow: var(--aira-shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.info-overlay-backdrop {
+  background: rgba(3, 9, 16, 0.55);
+}
+
+.info-overlay-main-close {
+  background: var(--aira-primary);
+  color: var(--aira-on-primary);
+  border: 0;
+}
+
+.info-overlay-main-close:hover {
+  background: var(--aira-primary-hover);
+  opacity: 1;
+}
+
+@media (max-width: 1080px) {
+  .header-actions {
+    position: static;
+    margin-top: 1rem;
+    justify-content: flex-start;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  .header-actions {
+    gap: 0.5rem;
+  }
+
+  .header-action,
+  .language-button {
+    min-height: 2.7rem;
+    padding: 0.6rem 0.85rem;
+  }
+}
