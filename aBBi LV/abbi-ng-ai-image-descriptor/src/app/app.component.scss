@@ -174,3 +174,54 @@ mat-stepper {
 .app-title p {
   color: var(--aira-text-muted);
 }
+/* =========================================================
+   Page spacing and surface styling
+   ========================================================= */
+
+.content-wrapper {
+  padding-top: 6rem;
+}
+
+/* If your app uses a different main wrapper, apply the same
+   top padding to that wrapper instead. */
+
+.app-title,
+.intro-card,
+mat-stepper {
+  position: relative;
+  z-index: 1;
+}
+
+.app-title {
+  color: var(--aira-text);
+}
+
+.app-title p {
+  color: var(--aira-text-muted);
+}
+
+.intro-card {
+  background: var(--aira-surface-raised);
+  border: 1px solid var(--aira-border);
+  color: var(--aira-text);
+  box-shadow: var(--aira-shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+mat-stepper {
+  background: var(--aira-surface);
+  border: 1px solid var(--aira-border);
+  color: var(--aira-text);
+  box-shadow: var(--aira-shadow);
+
+  .stepper-nav {
+    border-top-color: var(--aira-border);
+  }
+}
+
+@media (max-width: 1080px) {
+  .content-wrapper {
+    padding-top: 2rem;
+  }
+}
