@@ -1,5 +1,25 @@
 <!doctype html>
 <html lang="lv">
+  <script>
+    (() => {
+      try {
+        const savedTheme = localStorage.getItem('aira-theme');
+  
+        const theme =
+          savedTheme === 'light' || savedTheme === 'dark'
+            ? savedTheme
+            : window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+  
+        document.documentElement.classList.add(`theme-${theme}`);
+        document.documentElement.style.colorScheme = theme;
+      } catch {
+        document.documentElement.classList.add('theme-light');
+        document.documentElement.style.colorScheme = 'light';
+      }
+    })();
+  </script>
   <head>
     <meta charset="utf-8">
     <title>aiRA</title>
