@@ -1,0 +1,195 @@
+@let taskNoun = settings.taskNouns();
+@let selectedTaskType = settings.selectedTaskType();
+
+@if ({ imageList: imageListService.imageList$ | async }; as o) {
+  @if (!o.imageList?.length) {
+    <p class="no-images">{{ locale.locale() === 'lv' ? 'Trūkst attēlu. Ej atpakaļ uz iepriekšējo soli un pievieno tos!' : 'No images. Go back to the previous step and add some.' }}</p>
+  } @else {
+    @if (selectedTaskType === 'transcriptionBatchTei') {
+
+      <batch-plan [imageCount]="o.imageList?.length ?? 0"></batch-plan>
+      <div class="generate-desc-wrapper">
+        <div class="buttons-row">
+          <button matButton="filled"
+            (click)="generateAll()"
+            [disabled]="generating || !o.imageList?.length"
+          >{{ locale.locale() === 'lv' ? 'Ģenerēt TEI atšifrējumu' : 'Generate TEI transcription' }} ({{ o.imageList?.length ?? 0 }})</button>
+
+          <div class="cost right-aligned">
+            {{ locale.locale() === 'lv' ? 'Kopējās izmaksas' : 'Total cost' }}: ${{ this.costService.cumulativeCost() | number }}
+          </div>
+        </div>
+
+        <div class="buttons-row">
+          <button matButton="outlined"
+            [disabled]="generating || !o.imageList?.length || !batchResults.hasResults() || exporting"
+            (click)="exportTeiTranscriptions()"
+          >
+            @if (exporting) { {{ locale.locale() === 'lv' ? 'Saglabā TEI atšifrējumus…' : 'Saving TEI transcriptions…' }} } @else { {{ locale.locale() === 'lv' ? 'Saglabāt TEI atšifrējumus' : 'Save TEI transcriptions' }} }
+          </button>
+
+          <button matButton="outlined"
+            class="right-aligned warn-button"
+            [disabled]="generating"
+            (click)="removeAllImages()"
+          >{{ locale.t('images.removeAll') }}</button>
+        </div>
+        <batch-results
+              (generateBatch)="transcribeAndTeiEncodeBatch($event)"
+              (cancelBatch)="cancelBatch($event)"
+        ></batch-results>
+      </div>
+
+    } @else {
+      <div class="generate-desc-wrapper" [class.hide]="!o.imageList?.length">
+        <div class="buttons-row">
+          <button matButton="filled"
+            (click)="generateAll()"
+            [disabled]="generating || !o.imageList?.length"
+          >{{ locale.locale() === 'lv' ? 'Ģenerēt visiem attēliem' : 'Generate all' }} ({{ o.imageList?.length ?? 0 }})</button>
+          <div class="cost right-aligned">{{ locale.locale() === 'lv' ? 'Kopējās izmaksas' : 'Total cost' }}: ${{ this.costService.cumulativeCost() | number }}</div>
+        </div>
+        <div class="buttons-row">
+          <button matButton="outlined"
+            [disabled]="generating || !o.imageList?.length || exporting"
+            (click)="export()"
+          >
+            @if (exporting) { Saglabāt {{ taskNoun.s }}... } @else { Saglabāt {{ taskNoun.pakuz }} }
+          </button>
+          <button matButton="outlined"
+            class="right-aligned warn-button"
+            [disabled]="generating || !o.imageList?.length"
+            (click)="removeAllImages()"
+          >{{ locale.t('images.removeAll') }}</button>
+        </div>
+        <div class="table-wrapper">
+          <table mat-table [dataSource]="matTableDataSource" class="mat-elevation-z8 main-table">
+            <!-- Image preview column -->
+            <ng-container matColumnDef="imagePreview">
+              <th mat-header-cell *matHeaderCellDef>{{ locale.t('results.image') }}</th>
+              <td mat-cell *matCellDef="let file">
+                <img [src]="file.base64Image" [height]="file.height" [width]="file.width" alt="Image">
+                <span class="filename">{{ file.filename }}</span>
+              </td>
+            </ng-container>
+            <!-- Description column -->
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>{{ locale.t('results.description') }}</th>
+              <td mat-cell *matCellDef="let file">
+                <div class="desc-data">
+                  @if (file.generating) {
+                    <span class="loading-wrapper">
+                      <mat-spinner [diameter]="32"></mat-spinner><span class="spinner-label">Ģenerē {{ (teiEncoding() && selectedTaskType === 'transcription') ? 'TEI iekodējumu' : taskNoun.sakuz }}...</span>
+                    </span>
+                  } @else if (file.descriptions.length < 1) {
+                    <span class="no-desc">{{ taskNoun.s }} nav ģenerēts.</span>
+                  } @else {
+                    @let active = file.descriptions[file.activeDescriptionIndex];
+
+                    @if (active?.teiEncoded) {
+                      <pre class="tei-preview language-markup"><code
+                            class="language-markup"
+                            #teiCodeEl
+                            [attr.data-image-id]="file.id"
+                            [attr.data-desc-idx]="file.activeDescriptionIndex"
+                            [textContent]="active.description"
+                      ></code></pre>
+                    } @else {
+                      <span class="desc-text">
+                        {{ active?.description }}
+                      </span>
+                    }
+                  }
+                </div>
+                @if (file.descriptions.length > 0 && !file.generating) {
+                  <div class="actions">
+                    <div class="buttons-wrapper">
+                      @if (file.descriptions.length > 1) {
+                        <button matIconButton
+                          [matTooltip]="`Iepriekšējais ${taskNoun.s}`"
+                          [attr.aria-label]="`Iepriekšējais ${taskNoun.s}`"
+                          [disabled]="file.activeDescriptionIndex < 1"
+                          (click)="previousDescription(file)"
+                        >
+                          <svg lucideChevronLeft aria-hidden="true"></svg>
+                        </button>
+                        <div class="counter">{{ file.activeDescriptionIndex + 1 }}/{{ file.descriptions.length }}</div>
+                        <button matIconButton
+                          [matTooltip]="`Nākošais ${taskNoun.s}`"
+                          [attr.aria-label]="`Nākošais ${taskNoun.s}`"
+                          [disabled]="file.activeDescriptionIndex > file.descriptions.length - 2"
+                          (click)="nextDescription(file)"
+                        >
+                          <svg lucideChevronRight aria-hidden="true"></svg>
+                        </button>
+                      }
+                      <button matIconButton
+                        [matTooltip]="`Pārkopēt ${taskNoun.sakuz}`"
+                        class="copy-button"
+                        [attr.aria-label]="`Pārkopēt ${taskNoun.singular}`"
+                        [cdkCopyToClipboard]="file.descriptions.length > 0 ? file.descriptions[file.activeDescriptionIndex].description : ''"
+                      >
+                        <svg lucideCopy aria-hidden="true"></svg>
+                      </button>
+                      <button matIconButton
+                        [matTooltip]="`Rediģēt ${taskNoun.sakuz}`"
+                        class="edit-button"
+                        [aria-label]="`Rediģēt ${taskNoun.sakuz}`"
+                        (click)="editDescription(file)"
+                      >
+                        <svg lucidePencil aria-hidden="true"></svg>
+                      </button>
+                      @if (selectedTaskType === 'altText') {
+                        <button matIconButton
+                          [matTooltip]="`Pārtulkot ${taskNoun.sakuz}`"
+                          class="translate-button"
+                          [attr.aria-label]="`Pārtulkot ${taskNoun.singular}`"
+                          (click)="translateDescription(file)"
+                        >
+                          <svg lucideLanguages aria-hidden="true"></svg>
+                        </button>
+                      }
+                      <button matIconButton
+                        [matTooltip]="`Izdzēst ${taskNoun.sakuz}`"
+                        class="delete-button"
+                        [attr.aria-label]="`Izdzēst ${taskNoun.sakuz}`"
+                        (click)="deleteDescription(file)"
+                      >
+                        <svg lucideTrash2 aria-hidden="true"></svg>
+                      </button>
+                    </div>
+                    <div class="desc-length">
+                      {{ locale.locale() === 'lv' ? 'Garums' : 'Length' }}: {{ file.descriptions[file.activeDescriptionIndex].description | characterCount }} {{ locale.locale() === 'lv' ? 'rakstzīmes' : 'characters' }}
+                    </div>
+                  </div>
+                }
+              </td>
+            </ng-container>
+            <!-- Actions column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>{{ locale.t('results.actions') }}</th>
+              <td mat-cell *matCellDef="let file">
+                <button matButton="outlined"
+                  (click)="generate(file)"
+                  [disabled]="generating"
+                >{{ file.descriptions.length > 0 ? locale.t('results.regenerate') : locale.t('results.generate') }}</button>
+                <button matButton="outlined"
+                  class="warn-button"
+                  (click)="removeImage(file)"
+                  [disabled]="generating"
+                >{{ locale.locale() === 'lv' ? 'Noņemt attēlu' : 'Remove image' }}</button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[10, 20, 50]"
+            showFirstLastButtons
+            [attr.aria-label]="locale.locale() === 'lv' ? 'Izvēlēties lapu' : 'Select page'"
+            (page)="onPageChange($event)"
+          ></mat-paginator>
+        </div>
+      </div>
+    }
+  }
+}
