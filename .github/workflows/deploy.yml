@@ -23,32 +23,40 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
+      - name: Verify project files
+        run: |
+          echo "Repository root:"
+          pwd
+          ls -la
+
+          test -f package.json
+          test -f package-lock.json
+          test -f angular.json
+
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: "aBBi LV/abbi-ng-ai-image-descriptor/package-lock.json"
+          cache-dependency-path: package-lock.json
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Install dependencies
-        working-directory: "aBBi LV/abbi-ng-ai-image-descriptor"
         run: npm ci
 
       - name: Build Angular application
-        working-directory: "aBBi LV/abbi-ng-ai-image-descriptor"
         run: npm run build -- --base-href=/aiRA/
 
       - name: Prepare Pages artifact
         run: |
-          APP_DIR="aBBi LV/abbi-ng-ai-image-descriptor"
-
-          INDEX_FILE=$(find "$APP_DIR/dist" -type f -name index.html | head -n 1)
+          INDEX_FILE=$(find dist -type f -name index.html | head -n 1)
 
           if [ -z "$INDEX_FILE" ]; then
-            echo "No index.html found inside $APP_DIR/dist"
+            echo "No index.html found inside dist"
+            echo "Contents of dist:"
+            find dist -maxdepth 4 -type f || true
             exit 1
           fi
 
