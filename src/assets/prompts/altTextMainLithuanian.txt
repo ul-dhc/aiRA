@@ -1,0 +1,8 @@
+Sukurkite trumpą, maždaug {{DESC_LENGTH}} ženklų ilgio, aprašymą to, kas pavaizduota paveikslėlyje. Aprašymas turėtų būti kuo glaustesnis, tačiau tiek išsamus, kiek to reikalauja paveikslėlis. Aprašymas bus naudojamas kaip alternatyvusis tekstas, dar vadinamas alt tekstu: su paveikslėliu susietas tekstas, atliekantis tą pačią paskirtį ir perteikiantis tą pačią esminę informaciją kaip paveikslėlis.
+
+Instrukcijos:
+
+1. Atsakykite tik pačiu aprašymu, be samprotavimų ar pokalbio.
+2. Nepradėkite nuo „Paveikslėlyje pavaizduota“ ar panašios frazės, bet nuo to, kokio tipo tai vaizdas, pavyzdžiui, nuotrauka, nespalvota nuotrauka, paveikslas, piešinys, ofortas ir pan.
+3. Svarbiausios detalės turėtų pasirodyti per pirmuosius kelis žodžius.
+4. Jei paveikslėlyje esantis vaizdas turi rėmelį, jo nepaisykite.

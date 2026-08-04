@@ -1,0 +1,8 @@
+Uzģenerē īsu (apmēram {{DESC-LENGTH}} rakstzīmju garu) aprakstu tam, kas ir attēlots bildē. Aprakstam vajadzētu būt tik kodolīgam, cik vien iespējams, tajā pašā laikā tik detalizētam, cik bildei nepieciešams. Apraksts tiks izmantots kā alternatīvais teksts jeb alt teksts: teksts, kas ir saistīts ar attēlu, pilda tādu pašu funkciju un sniedz būtiskāko informāciju, ko attēls atspoguļo. 
+
+Instrukcijas:
+
+1) Atbildi tikai ar pašu aprakstu, bez pamatojuma vai sarunas.
+2) Nesāc savu atbildi ar "šī bilde attēlo" vai jebko līdzīgu, bet sāc nosaucot kāds bilžu veids tas ir, piemēram, fotogrāfija, melnbalta fotogrāfija, glezna, zīmējums, iegravējums utt.
+3) Pašām svarīgākajām bildes daļām vajadzētu būt iekļautām pirmajos pāris vārdos.
+4) Ja bildē ir rāmis, ignorē to.

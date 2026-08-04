@@ -1,0 +1,1 @@
+Filnavnet til bildet er {{FILENAME}}. Filnavnet kan inneholde nyttige navn eller nøkkelord, men vær oppmerksom på at bokstavene mangler diakritiske tegn, og at filnavnet kan inneholde irrelevante tallrekker.
