@@ -1,123 +1,185 @@
-# aBBi – AI-generated image descriptions
+# aiRA – Handwriting Transcription and Image Descriptions
 
-aBBi (“AI-bildbeskrivningar”) is a web app for generating alt texts for images and transcribing text in images using AI. It can also TEI ([Text Encoding Initiative](https://tei-c.org/)) XML encode the transcriptions. It currently supports OpenAI and Google models with vision capabilities. You need an OpenAI or Google API key to use the tool. It is a frontend app without the need of a backend.
+aiRA is a browser-based web application for generating accessible image descriptions and alt text, transcribing handwritten and printed text, and encoding transcriptions as [TEI XML](https://tei-c.org/) with the help of artificial intelligence.
 
-The app is built on [Angular][angular] and uses [Angular Material][material] web components.
+The application supports OpenAI and Google Gemini vision models. A personal OpenAI or Google API key is required to use the AI features.
 
-<p>
-  <a href="https://github.com/angular/angular"><img alt="Angular version badge" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fslsfi%2Fabbi-ng-ai-image-descriptor%2Fmain%2Fpackage-lock.json&query=%24%5B'packages'%5D%5B'node_modules%2F%40angular%2Fcore'%5D%5B'version'%5D&prefix=v&logo=angular&logoColor=%23fff&label=Angular%20Core&color=%23dd0031"></a>
-</p>
+aiRA is a frontend-only application and does not require an application backend. Images, text, and API keys are sent directly from the user's browser to the selected AI provider. They do not pass through an aiRA server.
 
-Author: Sebastian Köhler (2024)
+## Screenshot
 
-<hr>
+![The aiRA interface in Latvian](docs/images/aira-screenshot.png)
 
-## Screenshot of the app
+## Features
 
-<img src="docs/images/abbi-screenshot.jpg" alt="Screenshot of the app.">
+- Generate image descriptions and accessible alt text
+- Transcribe handwritten and printed text
+- Process individual images or image batches
+- Encode transcriptions as TEI XML
+- Use OpenAI and Google Gemini vision models
+- Edit, translate, copy, and export generated results
+- Switch between Latvian and English without reloading the application or losing entered data
+- Use light and dark colour themes
+- Increase or decrease the interface text size
+- Retain language, theme, and text-size preferences between visits
 
-Images in the screenshot: Library of Congress public domain.
+## Direct Links
 
-<hr>
+The interface uses URL fragments that can be shared:
 
-## Changelog
+- `#lv` opens the Latvian interface
+- `#en` opens the English interface
+- `#info` opens the information section
 
-[Learn about the latest improvements][changelog].
+An explicit `#lv` or `#en` link overrides the saved interface language. Other interface preferences are stored locally in the browser.
+
+## Technology
+
+aiRA is built with:
+
+- [Angular](https://angular.dev/)
+- [Angular Material](https://material.angular.io/)
+- [Lucide](https://lucide.dev/) icons
+- [OpenAI JavaScript SDK](https://github.com/openai/openai-node)
+- [Google Gen AI SDK](https://github.com/googleapis/js-genai)
 
 ## Development Setup
 
 ### Prerequisites
 
-1. Install [Node.js][node.js] which includes [npm][npm]. The app is compatible with Node `^20.19.0`, `^22.12.0` and `^24.0.0` (based on [Angular 21 compatibility][angular_version_compatibility]). Check your Node version with:
+Install [Node.js](https://nodejs.org/), which includes `npm`. Based on the Angular 21 compatibility requirements, use Node.js `^20.19.0`, `^22.12.0`, or `^24.0.0`.
 
-```
-Node --version
-```
+Check the installed versions:
 
-2. Install the [Angular CLI][angular_cli] globally:
-
-```
-npm install -g @angular/cli
+```bash
+node --version
+npm --version
 ```
 
-3. [Clone][clone_repository] the repository locally and `cd` into the folder. On Windows you can use [GitHub Desktop][github_desktop] or [Git Bash][git_bash] (see [tutorial on Git Bash][git_bash_tutorial]).
+### Install the Project
 
-4. Install dependencies:
-
-```
+```bash
+git clone https://github.com/ul-dhc/aiRA.git
+cd aiRA
 npm install
 ```
 
-### Run local development server
+A global Angular CLI installation is not required because the required CLI version is included in the project's development dependencies.
 
-To build and serve the application on a development server, run:
+## Run the Local Development Server
 
-```
+```bash
 npm start
 ```
 
-Open your browser on http://localhost:4200/. The app will automatically rebuild and reload if you change any of the source files.
+Open [http://localhost:4200/](http://localhost:4200/). The development server automatically rebuilds and reloads the application when source files change.
 
-## Building and deployment
+Localised interface links:
 
-On each commit in the `main` branch a Docker image with the tag `main` is automatically built using GitHub Actions and stored in the [GitHub Container Registry][abbi_ghcr].
+- [http://localhost:4200/#lv](http://localhost:4200/#lv)
+- [http://localhost:4200/#en](http://localhost:4200/#en)
 
-On each release a Docker image with the chosen release tag and the tag `latest` is automatically built using GitHub Actions and also stored in the [GitHub Container Registry][abbi_ghcr].
+## Testing
 
-To deploy the latest image, you can clone the repository or just [`compose.yaml`][compose.yaml] and run:
+Run the test suite:
 
-```
-docker compose up -d
-```
-
-## Keeping the app up-to-date
-
-### Dependencies
-
-Most of the dependencies are part of the Angular framework (`@angular/`). These should be updated with the command:
-
-```
-ng update @angular/cli @angular/core @angular/cdk @angular/material
+```bash
+npm test
 ```
 
-When updating to a new major version of Angular, check the update guide first: <https://angular.dev/update-guide>. Also update the Angular major version number specified in [`Dockerfile`][dockerfile].
+Run tests in watch mode:
 
-Other dependencies can be updated by bumping the version number in [`package.json`][package.json] and running:
-
+```bash
+npm run test:watch
 ```
+
+## Production Build
+
+```bash
+npm run build
+```
+
+The compiled application is written to `dist/browser/`.
+
+For deployment to this repository's GitHub Pages project site, build with the repository base path:
+
+```bash
+npm run build -- --base-href /aiRA/
+```
+
+Publish the contents of `dist/browser/`, not the Angular source directory.
+
+## Docker
+
+Build a local Docker image:
+
+```bash
+docker build -t aira .
+```
+
+Run the application on port `8082`:
+
+```bash
+docker run --rm -p 8082:80 aira
+```
+
+Then open [http://localhost:8082/](http://localhost:8082/).
+
+## Configuration
+
+### AI Models
+
+Available OpenAI and Google Gemini models are defined in [`src/assets/config/models.ts`](src/assets/config/models.ts).
+
+Each model configuration describes its provider, API identifier, supported tasks, pricing information, request limits, image parameters, and model-specific reasoning or thinking controls.
+
+### Tasks, Languages, and Prompts
+
+Task and output-language configuration is defined in [`src/assets/config/prompts.ts`](src/assets/config/prompts.ts). Prompt text is stored in separate files under [`src/assets/prompts/`](src/assets/prompts/).
+
+Placeholders such as `{{FILENAME}}` and `{{DESC_LENGTH}}` are replaced at runtime with values from the user's settings.
+
+### Interface Translations
+
+Interface translations and runtime language switching are implemented in [`src/app/i18n/`](src/app/i18n/).
+
+## Updating Dependencies
+
+Update Angular packages together:
+
+```bash
+npx ng update @angular/cli @angular/core @angular/cdk @angular/material
+```
+
+Before changing the Angular major version, consult the [Angular Update Guide](https://angular.dev/update-guide) and [version compatibility table](https://angular.dev/reference/versions).
+
+After updating other dependencies in [`package.json`](package.json), run:
+
+```bash
 npm install
 ```
 
-### Node.js and nginx Docker images
+Commit both `package.json` and the updated `package-lock.json`.
 
-[Node.js][node.js] and [nginx][nginx] Docker images are used in the build process. To update these, change the tags specified in both [`Dockerfile`][dockerfile] and in [`docker-build-and-push.yml`][docker_build].
+## Privacy and API Keys
 
-### Modifying available AI-models, languages and prompt types
+- The user supplies and controls their own API key.
+- aiRA maintainers cannot see the user's API key, images, text, or generated results.
+- AI usage costs and data-processing terms are determined by OpenAI or Google according to the user's account and selected model.
+- Do not save an API key in the browser when using a public or shared computer.
 
-The available AI-models are defined in [`src/assets/config/models.ts`][models.ts]. Currently, OpenAI and Google (Gemini) models are supported.
+## Project and Credits
 
-The prompts for the various tasks supported by the app are defined in separate plain text files in [`src/assets/prompts/`][prompts-folder]. The prompts are imported by [`src/assets/config/prompts.ts`][prompts.ts] In the prompts, there are some hard-coded strings like `{{FILENAME}}` and `{{DESC_LENGTH}}` which are replaced by UI settings on runtime.
+aiRA was developed by the [Digital Humanities Centre at the University of Latvia](https://ul-dhc.github.io/) within the [ȬPEN project](https://www.hzf.lu.lv/petnieciba/projekti/open/), No. ZDA-LIP 2025/2.
 
+aiRA is an adaptation of [aBBi](https://github.com/slsfi/abbi-ng-ai-image-descriptor), an open-source tool developed by the Society of Swedish Literature in Finland, Svenska litteratursällskapet i Finland, SLS.
 
+Original aBBi author: Sebastian Köhler, 2024.
 
-[abbi_ghcr]: https://github.com/slsfi/abbi-ng-ai-image-descriptor/pkgs/container/abbi-ng-ai-image-descriptor
-[angular]: https://angular.dev/
-[angular_cli]: https://angular.dev/cli
-[angular_version_compatibility]: https://angular.dev/reference/versions
-[changelog]: CHANGELOG.md
-[clone_repository]: https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository
-[compose.yaml]: compose.yaml
-[docker_build]: .github/workflows/docker-build-and-push.yml
-[dockerfile]: Dockerfile
-[git_bash]: https://gitforwindows.org/
-[git_bash_tutorial]: https://www.atlassian.com/git/tutorials/git-bash
-[github_desktop]: https://desktop.github.com/
-[material]: https://material.angular.io/
-[models.ts]: src/assets/config/models.ts
-[nginx]: https://nginx.org/
-[node.js]: https://nodejs.org/
-[npm]: https://www.npmjs.com/get-npm
-[package.json]: package.json
-[prompts-folder]: src/assets/prompts/
-[prompts.ts]: src/assets/config/prompts.ts
-[SLS]: https://www.sls.fi/en
+## Changelog
+
+See [`CHANGELOG.md`](CHANGELOG.md) for the project history.
+
+## Licence
+
+This project is distributed under the terms described in [`LICENSE`](LICENSE).
