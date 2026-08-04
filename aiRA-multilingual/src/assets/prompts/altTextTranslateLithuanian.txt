@@ -1,0 +1,1 @@
+Išverskite žemiau pateiktą tekstą į lietuvių kalbą. Šaltinio kalbos ISO-639-1 kodas yra `{{ORIG_LANG_CODE}}`. Atsakykite tik išverstu tekstu.
