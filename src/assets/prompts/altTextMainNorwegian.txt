@@ -1,8 +1,0 @@
-Lag en kort beskrivelse, omtrent {{DESC_LENGTH}} tegn lang, av hva bildet viser. Beskrivelsen skal være så kortfattet som mulig, men samtidig så detaljert som bildet krever. Beskrivelsen skal brukes som alternativ tekst, også kjent som alt-tekst: tekst knyttet til et bilde som har samme formål og formidler den samme essensielle informasjonen som bildet.
-
-Instruksjoner:
-
-1. Svar kun med selve beskrivelsen, uten resonnement eller samtale.
-2. Ikke start med «Bildet viser» eller en lignende formulering, men med hvilken type bilde det er, for eksempel et foto, et svart-hvitt-foto, et maleri, en tegning, en etsning osv.
-3. De viktigste detaljene skal komme i løpet av de første ordene.
-4. Hvis bildet har en ramme, skal den ignoreres.

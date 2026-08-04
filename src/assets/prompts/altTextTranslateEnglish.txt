@@ -1,1 +1,0 @@
-Translate the text below to English (the ISO-639-1 code of the source language is `{{ORIG_LANG_CODE}}`). Answer with just the translated text.
