@@ -1,0 +1,1 @@
+Oversett teksten nedenfor til norsk. ISO-639-1-koden for kildespråket er `{{ORIG_LANG_CODE}}`. Svar kun med den oversatte teksten.

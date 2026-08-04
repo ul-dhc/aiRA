@@ -1,0 +1,1 @@
+Tõlgi allolev tekst eesti keelde. Lähtekeele ISO-639-1 kood on `{{ORIG_LANG_CODE}}`. Vasta ainult tõlgitud tekstiga.

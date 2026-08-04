@@ -1,0 +1,1 @@
+Vaizdo failo pavadinimas yra {{FILENAME}}. Failo pavadinime gali būti naudingų vardų ar raktažodžių, tačiau atkreipkite dėmesį, kad raidės neturi diakritinių ženklų, o failo pavadinime gali būti nereikšmingų skaičių sekų.
