@@ -1,0 +1,1 @@
+Pildi failinimi on {{FILENAME}}. Failinimi võib sisaldada kasulikke nimesid või märksõnu, kuid pane tähele, et tähtedel puuduvad diakriitilised märgid ja failinimi võib sisaldada ebaolulisi numbrijadasid.

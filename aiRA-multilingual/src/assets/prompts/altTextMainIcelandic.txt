@@ -1,0 +1,8 @@
+Búðu til stutta lýsingu, um það bil {{DESC_LENGTH}} stafi að lengd, á því sem myndin sýnir. Lýsingin ætti að vera eins hnitmiðuð og mögulegt er, en þó eins ítarleg og myndin krefst. Lýsingin verður notuð sem valtexti, einnig þekktur sem alt-texti: texti tengdur mynd sem þjónar sama tilgangi og miðlar sömu grundvallarupplýsingum og myndin.
+
+Leiðbeiningar:
+
+1. Svaraðu aðeins með sjálfri lýsingunni, án rökstuðnings eða samtals.
+2. Ekki byrja á „Myndin sýnir“ eða svipaðri setningu, heldur á því hvers konar mynd þetta er, til dæmis ljósmynd, svarthvít ljósmynd, málverk, teikning, æting o.s.frv.
+3. Mikilvægustu atriðin ættu að koma fram í fyrstu orðunum.
+4. Ef myndin á myndinni er með ramma, skaltu hunsa hann.

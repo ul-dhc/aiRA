@@ -1,0 +1,1 @@
+Oversæt teksten nedenfor til dansk. ISO-639-1-koden for kildesproget er `{{ORIG_LANG_CODE}}`. Svar kun med den oversatte tekst.

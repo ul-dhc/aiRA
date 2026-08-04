@@ -1,0 +1,1 @@
+Der Dateiname des Bildes ist {{FILENAME}}. Der Dateiname kann nützliche Namen oder Schlüsselwörter enthalten, aber beachte, dass den Buchstaben diakritische Zeichen fehlen und der Dateiname irrelevante Zahlenfolgen enthalten kann.
