@@ -1,0 +1,31 @@
+<form [formGroup]="apiKeyFormGroup">
+  <mat-form-field appearance="outline">
+    <mat-label>{{ settings.selectedModel().provider }} {{ locale.t('api.key') }}</mat-label>
+    <input matInput required
+          [type]="hideApiKey ? 'password' : 'text'"
+          formControlName="apiKeyFC"
+    >
+    <button type="button" matIconButton matSuffix (click)="hideApiKey = !hideApiKey" [attr.aria-label]="locale.locale() === 'lv' ? 'Rādīt vai paslēpt API atslēgu' : 'Show or hide API key'" [attr.aria-pressed]="hideApiKey">
+      @if (hideApiKey) { <svg lucideEyeOff aria-hidden="true"></svg> }
+      @else { <svg lucideEye aria-hidden="true"></svg> }
+    </button>
+    @if (apiKeyFC?.hasError('required')) {
+      <mat-error>{{ locale.t('api.required') }}</mat-error>
+    } @else if (apiKeyFC?.hasError('invalidApiKey')) {
+      <mat-error>{{ locale.t('api.invalid') }}</mat-error>
+    }
+    @if (apiKeyValidationMessage) {
+      <mat-hint [class.valid-api-key]="apiKeyFormGroup.valid">
+        @if (apiKeyFormGroup.valid) {
+          <svg lucideCheck aria-hidden="true"></svg> }
+        {{ apiKeyValidationMessage }}
+      </mat-hint>
+    }
+  </mat-form-field>
+  <file-input
+        [label]="locale.locale() === 'lv' ? 'Ielādēt no datnes (TXT)' : 'Load from file (TXT)'"
+        acceptedFileTypes="text/plain"
+        appearence="stroked"
+        (filesSelected)="loadApiKeyFromFile($event)"
+  ></file-input>
+</form>
