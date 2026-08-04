@@ -1,0 +1,44 @@
+.file-upload {
+  margin: 1rem 0;
+
+  label {
+    background-color: var(--mat-sys-primary);
+    border-radius: var(--mat-sys-corner-full);
+    border-width: 0;
+    color: var(--mat-sys-on-primary);
+    cursor: pointer;
+    font-family: var(--mat-sys-label-large-font);
+    font-size: var(--mat-sys-label-large-size);
+    font-weight: var(--mat-sys-label-large-weight);
+    height: auto;
+    letter-spacing: var(--mat-sys-label-large-tracking);
+    padding: 10.5px 24px;
+
+    &:hover {
+      opacity: 0.92;
+    }
+
+    &:active {
+      opacity: 0.84;
+    }
+
+    &.stroked {
+      background-color: transparent;
+      border: 1px solid var(--mat-sys-outline);
+      color: var(--mat-sys-primary);
+
+      &:hover {
+        background-color: var(--mat-sys-secondary-fixed);
+      }
+  
+      &:active {
+        background-color: var(--mat-sys-secondary-fixed-dim);
+      }
+    }
+  }
+
+  input[type="file"] {
+    opacity: 0;
+    width: 0;
+  }
+}

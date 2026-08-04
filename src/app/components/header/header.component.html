@@ -1,0 +1,179 @@
+<header class="site-header">
+    <div class="site-header-bright-line"></div>
+
+  <div class="site-header-top-line"></div>
+
+  <div class="site-header-inner">
+   <a class="brand" [attr.href]="'/#' + locale.locale()" [attr.aria-label]="locale.locale() === 'lv' ? 'aiRA sākumlapa' : 'aiRA home page'">
+      <span class="dice-logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="wordmark"><strong>aiRA</strong><small>{{ locale.locale() === 'lv' ? 'Rokraksta atšifrēšana un attēlu apraksti ar mākslīgā intelekta palīdzību' : 'Handwriting transcription and image descriptions with artificial intelligence assistance' }}</small></span>
+    </a>
+  
+    <nav class="header-actions" [attr.aria-label]="locale.locale() === 'lv' ? 'Galvenes darbības' : 'Header actions'">
+      <button
+        type="button"
+        class="header-action"
+        [attr.aria-label]="locale.t('header.info')"
+        [attr.title]="locale.t('header.info')"
+        (click)="openInfoOverlay($event)"
+      >
+        <svg lucideInfo aria-hidden="true"></svg>
+        <span>{{ locale.t('header.info') }}</span>
+      </button>
+      
+      <button
+        type="button"
+        class="header-action theme-button"
+        [attr.aria-label]="themeActionLabel()"
+        [attr.title]="themeActionLabel()"
+        (click)="toggleTheme()"
+      >
+        @if (isDarkTheme()) {
+          <svg lucideSun aria-hidden="true"></svg>
+        } @else {
+          <svg lucideMoon aria-hidden="true"></svg>
+        }
+      
+      </button>
+
+      <div class="text-size-controls" [attr.aria-label]="locale.locale() === 'lv' ? 'Teksta izmērs' : 'Text size'" role="group">
+        <button
+          type="button"
+          class="text-size-button"
+          [disabled]="textScale() <= 90"
+          [attr.aria-label]="locale.locale() === 'lv' ? 'Samazināt tekstu' : 'Decrease text size'"
+          [attr.title]="locale.locale() === 'lv' ? 'Samazināt tekstu' : 'Decrease text size'"
+          (click)="changeTextScale(-10)"
+        >A−</button>
+        <button
+          type="button"
+          class="text-size-button"
+          [disabled]="textScale() >= 120"
+          [attr.aria-label]="locale.locale() === 'lv' ? 'Palielināt tekstu' : 'Increase text size'"
+          [attr.title]="locale.locale() === 'lv' ? 'Palielināt tekstu' : 'Increase text size'"
+          (click)="changeTextScale(10)"
+        >A+</button>
+      </div>
+      
+      @if (showLanguageButton) {
+        <button type="button" class="language-button" (click)="setLanguage(locale.otherLocale())" [attr.aria-label]="locale.t('language.switch')">
+          <span>{{ locale.otherLocale().toUpperCase() }}</span>
+        </button>
+      }
+    </nav>
+  </div>
+ 
+</header>
+  @if (showInfoOverlay()) {
+  <div
+  class="info-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="info-overlay-title"
+  (click)="closeInfoOverlay()"
+>
+    
+  <div class="info-overlay-panel" (click)="$event.stopPropagation()">
+      
+      
+      <button
+        type="button"
+        class="info-overlay-close"
+        aria-label="Close information"
+        (click)="closeInfoOverlay()"
+      >
+        ×
+      </button>
+
+      <h1 id="info-overlay-title">{{ locale.t('info.title') }}</h1>
+
+      <p>
+        aiRA rīku ir izveidojis 
+        <a href="https://ul-dhc.github.io/" target="_blank">Latvijas Universitātes Digitālo humanitāro zinātņu centrs </a>
+        projekta <a href="https://www.hzf.lu.lv/petnieciba/projekti/open/" target="_blank">ȬPEN</a> ietvaros (Nr. ZDA-LIP 2025/2). 
+        Projekts veicina zināšanu pieejamību un sabiedrības iesaisti zināšanu radīšanā. Šis rīks ir atvērtā koda projekts un pieejams <a href="https://github.com/ul-dhc/aiRA" target="_blank">GitHub</a>.
+      </p>
+      
+      <p>
+        Tas veidots, adaptējot Somijas Zviedru literatūras biedrības (Svenska litteratursällskapet i Finland – SLS) izstrādāto rīku <a href="https://github.com/slsfi/abbi-ng-ai-image-descriptor/tree/main" target="_blank">aBBi</a>.
+      </p>
+
+      <p>
+        aiRA palīdz ģenerēt attēlu alternatīvos tekstus (alt text) un transkripcijas, izmantojot mākslīgo intelektu (AI). Tāpat rīks spēj kodēt transkripcijas TEI XML formātā, kas paredzēts arhivēšanas vai pētniecības vajadzībām.
+      </p>
+
+      <p>
+        Jūs izmantojat savu personīgo OpenAI vai Google (Gemini) API atslēgu, un rīks darbojas pilnībā jūsu pārlūkprogrammā – nav iesaistīts nekāds aizmugursistēmas (backend) serveris. Attēli no jūsu pārlūkprogrammas tiek nosūtīti tieši izvēlētajam AI pakalpojumu sniedzējam, tiek saņemts rezultāts, un tas arī viss.
+      </p>
+
+      <h2>Tas nozīmē:</h2>
+      <ul>
+        <li><b>Jūs kontrolējat izmaksas.</b> OpenAI vai Google piestāda rēķinu tieši jums, balstoties uz jūsu patēriņu un viņu standarta API tarifiem.</li>
+        <li><b>Jūs kontrolējat datus.</b> Nekas neiet caur mūsu serveriem. Mēs neredzam ne jūsu attēlus, ne tekstu, ne API atslēgu.</li>
+        <li><b>Jūs izvēlaties pakalpojumu sniedzēju.</b> Izvēlieties to AI pakalpojumu, kuram uzticaties un kuram jums ir pieejama atslēga.</li>
+      </ul>
+
+      <h1>{{ locale.t('info.faq') }}</h1>
+      <h2>Ko tieši dara aiRA?</h2>
+      <p>
+        Jūs augšupielādējat vai izvēlaties attēlu, un aiRA nosūta to AI modelim (OpenAI vai Google, atkarībā no jūsu konfigurācijas) kopā ar norādēm: vai nu aprakstīt attēlu (alternatīvajam tekstam), vai transkribēt tajā redzamo tekstu. Ja veicat transkripciju, varat iestatīt, lai rezultāts tiktu izvadīts TEI XML formātā.
+      </p>
+
+      <h2>Vai man ir nepieciešams profils, lai lietotu aiRA?</h2>
+      <p>
+      Mūsu sistēmā profils nav vajadzīgs, taču jums ir nepieciešama OpenAI vai Google API atslēga, jo aiRA izmanto šo uzņēmumu AI modeļus, lai veiktu faktisko attēlu analīzi.
+      </p>
+
+      <h2>Kā es varu iegūt API atslēgu?</h2>
+      <h3>OpenAI:</h3>
+      <ol>
+        <li>Dodieties uz platformu <a href="https://platform.openai.com" target="_blank">platform.openai.com</a> un reģistrējieties vai piesakieties</li>
+        <li>Atveriet sava profila iestatījumu sadaļu "API keys".</li>
+        <li>Izveidojiet jaunu slepeno atslēgu (secret key) un nokopējiet to drošā vietā – vēlreiz to apskatīt vairs nevarēsiet.</li>
+        <li>Pievienojiet maksājumu informāciju, jo API izmantošana ir maksas pakalpojums (tas ir nodalīts no ChatGPT Plus abonementa).</li>
+        <li>Iekopējiet atslēgu aiRA iestatījumos.</li>
+      </ol>
+
+      <h3>Google (Gemini):</h3>
+      
+      <ol>
+        <li>Dodieties uz Google AI Studio (<a href="https://aistudio.google.com" target="blank">aistudio.google.com</a>).</li>
+        <li>Piesakieties ar savu Google kontu.</li>
+        <li>Noklikšķiniet uz "Get API key" un izveidojiet to.</li>
+        <li>Iekopējiet atslēgu aiRA iestatījumos.</li>
+      </ol>
+      
+      <h2>Vai rīka lietošana ir bezmaksas?</h2>
+      <p>Pati aiRA ir bezmaksas. Taču aprakstu un transkripciju ģenerēšanai tiek izmantota jūsu API atslēga, un AI pakalpojumu sniedzēji par šo apjomu iekasē maksu. Parasti par attēlu tie ir daži centi vai summa, kas ir mazāka par centu, taču, strādājot ar lielu apjomu, izmaksas summējas. Pirms intensīvas lietošanas iepazīstieties ar OpenAI vai Google aktuālajiem cenrāžiem.</p>
+     
+      <h2>Kas notiek ar maniem attēliem un API atslēgu? Vai kaut kas tiek saglabāts?</h2>
+      <p>Nekas netiek ne saglabāts, ne sūtīts mums. aiRA darbojas pilnībā jūsu pārlūkprogrammā:</p>
+
+      <ul>
+        <li>jūsu API atslēga tiek saglabāta tikai jūsu pārlūkprogrammā (lokāli), lai tā nebūtu jāievada katru reizi no jauna. Mums tā nekad netiek pārsūtīta;</li>
+        <li>jūsu attēli tiek sūtīti tieši no jūsu pārlūkprogrammas uz OpenAI vai Google API – tie nekad nenonāk uz mūsu serveriem;</li>
+        <li>mēs neveicam nekādu žurnalēšanu (logging), neievācam analītiku par jūsu attēliem un nesaglabājam jūsu rezultātu kopijas. Mēs tos neredzam.</li>
+      </ul>
+
+      <p>Īsāk sakot: jūsu datu attiecības ir ar OpenAI vai Google, nevis ar mums. Skatiet viņu attiecīgās privātuma politikas, lai uzzinātu, kā viņi apstrādā datus, kas nosūtīti uz viņu API (piemēram, vai dati tiek izmantoti modeļu apmācībai – tas atšķiras atkarībā no pakalpojumu sniedzēja un konta veida, tāpēc pārbaudiet viņu aktuālos noteikumus).</p>
+
+      <h2>Vai es varu šo rīku izmantot ar jutīgiem vai privātiem attēliem?</h2>
+      <p>Esiet piesardzīgi. Lai gan pati aiRA neko nesaglabā, jūsu attēli tomēr pamet jūsu ierīci un nonāk pie trešās puses AI pakalpojumu sniedzēja. Ja strādājat ar sensitīviem, personīgiem vai ierobežotas pieejamības materiāliem, pārskatiet OpenAI un Google datu izmantošanas un glabāšanas politikas, kā arī ievērojiet savas organizācijas datu apstrādes vadlīnijas.</p>
+
+      <h2>Kādus AI modeļus es varu izmantot?</h2>
+      <p>Vairākus OpenAI vai Google modeli, kuriem ir "vision" (attēlu izpratnes) kapacitāte. Precīzs saraksts ir konfigurējams un laika gaitā var tikt atjaunināts – pieejamās opcijas meklējiet iestatījumu panelī.</p>
+
+      <h2>Vai es varu pielāgot to, kā tiek rakstīti apraksti?</h2>
+      <p>Jā. Ir iespējams regulēt mākslīgā intelekta domāšanas līmeni un temperatūru jeb radošumu, kas ietekmē aprakstu valodu, kā arī ir iespējams pēc aprakstu ģenerēšanas tos rediģēt un pārtulkot uz citām valodām.</p>
+      
+      <h2>Kādās valodās ir iespējams atšifrēt tekstu?</h2>
+      <p>aiRA atšifrēt spēj tekstus, kuri sastāv no latīņu alfabēta, tai skaitā burtus ar diakritiskām zīmēm, piemēram, “ā”, “ģ”, “ø”.</p>
+
+      <h2>Vai aiRA darbojas mobilajās ierīcēs?</h2>
+      <p>Jā, tā ir adaptīva tīmekļa lietotne (<i>responsive web app</i>). Tiesa, lielāku attēlu apjomu augšupielādei un pārskatīšanai ērtāk būs izmantot lielāku ekrānu.</p>
+      
+      
+      
+    </div>
+  </div>
+}

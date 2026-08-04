@@ -1,0 +1,10 @@
+@let images = imageCount();
+@let batches = batchPlan().length;
+@let imagesPerBatch = settings.batchSize();
+
+<p>
+  {{ locale.locale() === 'lv' ? 'Atšifrēt un iekodēt ar TEI' : 'Transcribe and TEI encode' }}
+  <strong>{{ images }} {{ locale.locale() === 'lv' ? 'attēlus' : 'images' }}</strong>
+  <strong>{{ batches }} {{ locale.locale() === 'lv' ? 'grupās' : 'batches' }}</strong>
+  ({{ locale.locale() === 'lv' ? 'Līdz attēliem grupā' : 'Up to images per batch' }}: {{ imagesPerBatch }}).
+</p>
