@@ -1,5 +1,7 @@
 # aiRA – Handwriting Transcription and Image Descriptions
 
+Public interface: ![https://ul-dhc.github.io/aiRA](https://ul-dhc.github.io/aiRA/)
+
 aiRA is a browser-based web application for generating accessible image descriptions and alt text, transcribing handwritten and printed text, and encoding transcriptions as [TEI XML](https://tei-c.org/) with the help of artificial intelligence.
 
 The application supports OpenAI and Google Gemini vision models. A personal OpenAI or Google API key is required to use the AI features.
