@@ -841,6 +841,10 @@ html.theme-light {
   --aira-info-surface: #eef7f2;
   --aira-info-card: rgba(255, 255, 255, .76);
   --aira-info-panel: #edf7f2;
+  --aira-control-fill: color-mix(in srgb, var(--aira-primary) 68%, transparent);
+  --aira-next-fill: var(--aira-primary);
+  --aira-control-off-track: color-mix(in srgb, var(--aira-primary) 10%, var(--aira-surface));
+  --aira-control-off-handle: color-mix(in srgb, var(--aira-primary) 42%, var(--aira-surface));
 }
 
 html.theme-dark {
@@ -865,6 +869,68 @@ html.theme-dark {
   --aira-info-surface: #0b211b;
   --aira-info-card: rgba(7, 23, 19, .72);
   --aira-info-panel: #0d251f;
+  --aira-control-fill: color-mix(in srgb, var(--aira-primary) 58%, transparent);
+  --aira-next-fill: var(--aira-control-fill);
+  --aira-control-off-track: color-mix(in srgb, var(--aira-primary) 12%, var(--aira-surface));
+  --aira-control-off-handle: color-mix(in srgb, var(--aira-primary) 38%, var(--aira-surface));
+}
+
+/* Soften prominent green controls in both themes. */
+.primary-next.mat-mdc-unelevated-button {
+  --mat-button-filled-container-color: var(--aira-next-fill);
+  --mat-button-filled-label-text-color: #f7fcf9;
+  background-color: var(--aira-next-fill) !important;
+  color: #f7fcf9 !important;
+}
+
+.mat-mdc-slide-toggle {
+  --mdc-switch-selected-track-color: var(--aira-control-fill);
+  --mdc-switch-selected-hover-track-color: var(--aira-control-fill);
+  --mdc-switch-selected-focus-track-color: var(--aira-control-fill);
+  --mdc-switch-selected-pressed-track-color: var(--aira-control-fill);
+  --mdc-switch-unselected-track-color: var(--aira-control-off-track);
+  --mdc-switch-unselected-hover-track-color: var(--aira-control-off-track);
+  --mdc-switch-unselected-focus-track-color: var(--aira-control-off-track);
+  --mdc-switch-unselected-pressed-track-color: var(--aira-control-off-track);
+  --mdc-switch-unselected-handle-color: var(--aira-control-off-handle);
+  --mdc-switch-unselected-hover-handle-color: var(--aira-control-off-handle);
+  --mdc-switch-unselected-focus-handle-color: var(--aira-control-off-handle);
+  --mdc-switch-unselected-pressed-handle-color: var(--aira-control-off-handle);
+  --mdc-switch-unselected-icon-color: var(--aira-text);
+}
+
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__track,
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__track::before,
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__track::after {
+  background-color: var(--aira-control-off-track) !important;
+  border-color: var(--aira-border-strong) !important;
+  opacity: 1 !important;
+}
+
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__handle,
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__handle::before,
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__handle::after {
+  background-color: var(--aira-control-off-handle) !important;
+}
+
+.mat-mdc-slide-toggle .mdc-switch:not(.mdc-switch--selected) .mdc-switch__icons {
+  color: var(--aira-text) !important;
+  opacity: .82;
+}
+
+.mat-mdc-slide-toggle.mat-accent .mdc-switch--selected .mdc-switch__track,
+.mat-mdc-slide-toggle.mat-accent .mdc-switch--selected .mdc-switch__track::before,
+.mat-mdc-slide-toggle.mat-accent .mdc-switch--selected .mdc-switch__track::after {
+  background-color: var(--aira-control-fill) !important;
+  border-color: var(--aira-control-fill) !important;
+}
+
+.mat-mdc-slider {
+  --mdc-slider-handle-color: var(--aira-control-fill);
+  --mdc-slider-hover-handle-color: var(--aira-control-fill);
+  --mdc-slider-focus-handle-color: var(--aira-control-fill);
+  --mdc-slider-pressed-handle-color: var(--aira-control-fill);
+  --mdc-slider-active-track-color: var(--aira-control-fill);
 }
 
 /* Keep each workflow phase compact; the connector lines own free space. */

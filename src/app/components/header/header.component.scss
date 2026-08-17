@@ -353,6 +353,43 @@
   margin: 0 0 16px;
 }
 
+.info-overlay-panel .contact-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.contact-line svg {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+  color: var(--aira-primary);
+  stroke-width: 2;
+}
+
+.info-overlay-panel .subtle-external-link {
+  color: inherit;
+  text-decoration-color: color-mix(in srgb, currentColor 32%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.subtle-external-link svg {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 4px;
+  vertical-align: -2px;
+  color: var(--aira-text-muted);
+  stroke-width: 1.8;
+}
+
+.info-overlay-panel .subtle-external-link:hover,
+.info-overlay-panel .subtle-external-link:focus-visible {
+  color: var(--aira-primary);
+  text-decoration-color: currentColor;
+}
+
 .info-overlay-panel ul {
   max-width: 760px;
   margin: 0 0 16px;

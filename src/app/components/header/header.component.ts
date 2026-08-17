@@ -7,7 +7,7 @@ import {
   inject,
   signal
 } from '@angular/core';
-import { LucideInfo, LucideMoon, LucideSun } from '@lucide/angular';
+import { LucideExternalLink, LucideInfo, LucideMail, LucideMoon, LucideSun } from '@lucide/angular';
 import { LocaleService } from '../../i18n/locale.service';
 import { UiLocale } from '../../i18n/translations';
 
@@ -16,7 +16,9 @@ type ColorTheme = 'light' | 'dark';
 @Component({
   selector: 'app-header',
   imports: [
+    LucideExternalLink,
     LucideInfo,
+    LucideMail,
     LucideMoon,
     LucideSun
   ],

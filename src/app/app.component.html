@@ -34,7 +34,7 @@
     <main class="main-wrapper workspace">
       <header class="workspace-heading">
         <h1>{{ locale.locale() === 'lv' ? 'Sāc darbu' : 'Get started' }}</h1>
-        <p>{{ locale.locale() === 'lv' ? 'Izpildi soļus secībā, lai izveidotu attēlu aprakstus vai atšifrētu tekstu.' : 'Complete the steps in order to create image descriptions or transcribe text.' }}</p>
+        <p>{{ locale.locale() === 'lv' ? 'Lai izveidotu attēlu aprakstus vai atšifrētu tekstu, veic šos soļus.' : 'Complete the steps in order to create image descriptions or transcribe text.' }}</p>
       </header>
 
     <mat-stepper [orientation]="(stepperOrientation | async)!" [linear]="true" #stepper (selectionChange)="currentStepIndex.set($event.selectedIndex)">

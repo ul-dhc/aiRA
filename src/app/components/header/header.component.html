@@ -5,7 +5,6 @@
 
   <div class="site-header-inner">
    <a class="brand" [attr.href]="'/#' + locale.locale()" [attr.aria-label]="locale.locale() === 'lv' ? 'aiRA sākumlapa' : 'aiRA home page'">
-      <span class="dice-logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
       <span class="wordmark"><strong>aiRA</strong><small>{{ locale.locale() === 'lv' ? 'Rokraksta atšifrēšana un attēlu apraksti ar mākslīgā intelekta palīdzību' : 'Handwriting transcription and image descriptions with artificial intelligence assistance' }}</small></span>
     </a>
   
@@ -79,7 +78,7 @@
       <button
         type="button"
         class="info-overlay-close"
-        aria-label="Close information"
+        [attr.aria-label]="locale.locale() === 'lv' ? 'Aizvērt informāciju' : 'Close information'"
         (click)="closeInfoOverlay()"
       >
         ×
@@ -87,17 +86,17 @@
 
       <h1 id="info-overlay-title">{{ locale.t('info.title') }}</h1>
 
+      @if (locale.locale() === 'lv') {
+
       <p>
         aiRA rīku ir izveidojis 
         <a href="https://ul-dhc.github.io/" target="_blank">Latvijas Universitātes Digitālo humanitāro zinātņu centrs </a>
         projekta <a href="https://www.hzf.lu.lv/petnieciba/projekti/open/" target="_blank">ȬPEN</a> ietvaros (Nr. ZDA-LIP 2025/2). 
         Projekts veicina zināšanu pieejamību un sabiedrības iesaisti zināšanu radīšanā. Šis rīks ir atvērtā koda projekts un pieejams <a href="https://github.com/ul-dhc/aiRA" target="_blank">GitHub</a>.
       </p>
-      
-      <p>
-        Tas veidots, adaptējot Somijas Zviedru literatūras biedrības (Svenska litteratursällskapet i Finland – SLS) izstrādāto rīku <a href="https://github.com/slsfi/abbi-ng-ai-image-descriptor/tree/main" target="_blank">aBBi</a>.
-      </p>
 
+      <p class="contact-line"><svg lucideMail aria-hidden="true"></svg><span>Kontakti: <a href="mailto:dhc@lu.lv">dhc&#64;lu.lv</a></span></p>
+      
       <p>
         aiRA palīdz ģenerēt attēlu alternatīvos tekstus (alt text) un transkripcijas, izmantojot mākslīgo intelektu (AI). Tāpat rīks spēj kodēt transkripcijas TEI XML formātā, kas paredzēts arhivēšanas vai pētniecības vajadzībām.
       </p>
@@ -112,6 +111,10 @@
         <li><b>Jūs kontrolējat datus.</b> Nekas neiet caur mūsu serveriem. Mēs neredzam ne jūsu attēlus, ne tekstu, ne API atslēgu.</li>
         <li><b>Jūs izvēlaties pakalpojumu sniedzēju.</b> Izvēlieties to AI pakalpojumu, kuram uzticaties un kuram jums ir pieejama atslēga.</li>
       </ul>
+
+      <p>
+        aiRA rīks veidots, adaptējot <a class="subtle-external-link" href="https://www.sls.fi/en/" target="_blank">Somijas Zviedru literatūras biedrības (Svenska litteratursällskapet i Finland – SLS)<svg lucideExternalLink aria-hidden="true"></svg></a> izstrādāto rīku <a href="https://github.com/slsfi/abbi-ng-ai-image-descriptor/tree/main" target="_blank">aBBi</a>.
+      </p>
 
       <h1>{{ locale.t('info.faq') }}</h1>
       <h2>Ko tieši dara aiRA?</h2>
@@ -171,9 +174,97 @@
 
       <h2>Vai aiRA darbojas mobilajās ierīcēs?</h2>
       <p>Jā, tā ir adaptīva tīmekļa lietotne (<i>responsive web app</i>). Tiesa, lielāku attēlu apjomu augšupielādei un pārskatīšanai ērtāk būs izmantot lielāku ekrānu.</p>
-      
-      
-      
+
+      } @else {
+
+      <p>
+        aiRA was created by the
+        <a href="https://ul-dhc.github.io/" target="_blank">Digital Humanities Centre at the University of Latvia</a>
+        as part of the <a href="https://www.hzf.lu.lv/petnieciba/projekti/open/" target="_blank">ȬPEN</a> project (No. ZDA-LIP 2025/2).
+        The project promotes access to knowledge and public participation in knowledge creation. This tool is an open-source project available on <a href="https://github.com/ul-dhc/aiRA" target="_blank">GitHub</a>.
+      </p>
+
+      <p class="contact-line"><svg lucideMail aria-hidden="true"></svg><span>Contact: <a href="mailto:dhc@lu.lv">dhc&#64;lu.lv</a></span></p>
+
+      <p>
+        aiRA helps generate alternative text (alt text) for images and transcriptions using artificial intelligence (AI). The tool can also encode transcriptions in TEI XML format for archival or research purposes.
+      </p>
+
+      <p>
+        You use your own OpenAI or Google (Gemini) API key, and the tool runs entirely in your browser–no backend server is involved. Images are sent directly from your browser to the selected AI service provider, the result is returned, and that is all.
+      </p>
+
+      <h2>This means:</h2>
+      <ul>
+        <li><b>You control the costs.</b> OpenAI or Google bills you directly based on your usage and its standard API rates.</li>
+        <li><b>You control the data.</b> Nothing passes through our servers. We cannot see your images, text, or API key.</li>
+        <li><b>You choose the service provider.</b> Choose an AI service that you trust and for which you have an API key.</li>
+      </ul>
+
+      <p>
+        aiRA was created by adapting <a href="https://github.com/slsfi/abbi-ng-ai-image-descriptor/tree/main" target="_blank">aBBi</a>, a tool developed by the <a class="subtle-external-link" href="https://www.sls.fi/en/" target="_blank">Society of Swedish Literature in Finland (Svenska litteratursällskapet i Finland – SLS)<svg lucideExternalLink aria-hidden="true"></svg></a>.
+      </p>
+
+      <h1>{{ locale.t('info.faq') }}</h1>
+      <h2>What exactly does aiRA do?</h2>
+      <p>
+        You upload or select an image, and aiRA sends it to an AI model (OpenAI or Google, depending on your configuration) with instructions either to describe the image for alternative text or to transcribe the text visible in it. For transcriptions, you can choose to receive the result in TEI XML format.
+      </p>
+
+      <h2>Do I need an account to use aiRA?</h2>
+      <p>
+        You do not need an account in our system, but you do need an OpenAI or Google API key because aiRA uses these companies’ AI models to analyse images.
+      </p>
+
+      <h2>How can I obtain an API key?</h2>
+      <h3>OpenAI:</h3>
+      <ol>
+        <li>Go to <a href="https://platform.openai.com" target="_blank">platform.openai.com</a> and sign up or sign in.</li>
+        <li>Open the “API keys” section in your account settings.</li>
+        <li>Create a new secret key and copy it to a secure location. You will not be able to view it again.</li>
+        <li>Add billing information because API usage is a paid service and is separate from a ChatGPT Plus subscription.</li>
+        <li>Paste the key into the aiRA settings.</li>
+      </ol>
+
+      <h3>Google (Gemini):</h3>
+      <ol>
+        <li>Go to Google AI Studio at <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a>.</li>
+        <li>Sign in with your Google account.</li>
+        <li>Click “Get API key” and create a key.</li>
+        <li>Paste the key into the aiRA settings.</li>
+      </ol>
+
+      <h2>Is aiRA free to use?</h2>
+      <p>aiRA itself is free. However, descriptions and transcriptions are generated using your API key, and the AI service providers charge for this usage. Processing one image generally costs a few cents or less than one cent, but costs add up when processing large volumes. Check the current OpenAI or Google pricing before intensive use.</p>
+
+      <h2>What happens to my images and API key? Is anything stored?</h2>
+      <p>Nothing is stored by or sent to us. aiRA runs entirely in your browser:</p>
+
+      <ul>
+        <li>your API key is stored only locally in your browser so that you do not have to enter it every time. It is never sent to us;</li>
+        <li>your images are sent directly from your browser to the OpenAI or Google API and never reach our servers;</li>
+        <li>we do not log or collect analytics about your images, nor do we store copies of your results. We cannot see them.</li>
+      </ul>
+
+      <p>In short, your data relationship is with OpenAI or Google, not with us. Consult their respective privacy policies to learn how they process data sent to their APIs, including whether data is used for model training. This varies by provider and account type, so check their current terms.</p>
+
+      <h2>Can I use aiRA with sensitive or private images?</h2>
+      <p>Use caution. Although aiRA itself does not store anything, your images leave your device and are sent to a third-party AI service provider. If you work with sensitive, personal, or restricted material, review the data use and retention policies of OpenAI and Google and follow your organisation’s data-processing guidelines.</p>
+
+      <h2>Which AI models can I use?</h2>
+      <p>You can use several OpenAI or Google models with vision capabilities. The exact list is configurable and may be updated over time; see the settings panel for the available options.</p>
+
+      <h2>Can I customise how descriptions are written?</h2>
+      <p>Yes. You can adjust the AI reasoning level and temperature, or creativity, which affect the language of the descriptions. You can also edit generated descriptions and translate them into other languages.</p>
+
+      <h2>Which languages can aiRA transcribe?</h2>
+      <p>aiRA can transcribe text written in the Latin alphabet, including letters with diacritics such as “ā”, “ģ”, and “ø”.</p>
+
+      <h2>Does aiRA work on mobile devices?</h2>
+      <p>Yes. It is a responsive web application. However, a larger screen is more convenient when uploading and reviewing large numbers of images.</p>
+
+      }
+
     </div>
   </div>
 }
