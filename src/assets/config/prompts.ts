@@ -169,7 +169,9 @@ export const TASK_CONFIGS: TaskTypeConfig[] = [
 	s: 'atšifrējums',
 	sakuz: 'atšifrējumu'
     },
-    defaultModel: 'gemini-3.1-pro-preview',
+    // Prefer a stable, generally available Gemini model for transcription.
+    // Users can still select Gemini 3.1 Pro Preview when their account has access.
+    defaultModel: 'gemini-3.5-flash',
     variants: [
       {
         id: 'default',
@@ -196,7 +198,7 @@ export const TASK_CONFIGS: TaskTypeConfig[] = [
 	s: 'atšifrējums un iekodējums',
 	sakuz: 'atšifrējumu un iekodējumu'
     },
-    defaultModel: 'gemini-3.1-pro-preview',
+    defaultModel: 'gemini-3.5-flash',
     variants: [
       {
         id: 'default',

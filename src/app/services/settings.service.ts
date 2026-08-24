@@ -1,4 +1,4 @@
-import { Injectable, computed, effect, signal, untracked } from '@angular/core';
+import { Injectable, computed, effect, signal } from '@angular/core';
 
 import { MODELS, ModelId, getModelsForTaskType,
          isModelAllowedForTaskType
@@ -85,38 +85,23 @@ export class SettingsService {
   });
 
   constructor() {
-    // Keep selectedModel compatible with task type
+    // Preserve the user's model across task changes whenever it supports the
+    // newly selected task. Only fall back to that task's configured default
+    // when the current model is incompatible.
     effect(() => {
       const modelId = this.selectedModelId();
-
-      untracked(() => {
-        const taskType = this.selectedTaskType();
-
-        if (!isModelAllowedForTaskType(modelId, taskType)) {
-          const compatible = getModelsForTaskType(taskType);
-          const fallback = compatible[0]?.id;
-
-          if (fallback) {
-            this.selectedModelId.set(fallback);
-          }
-        }
-      });
-    });
-
-    // Set default model when task type changes
-    effect(() => {
       const cfg = this.selectedTaskConfig();
 
-      const taskDefaultModelId = cfg.defaultModel;
-      if (!isModelAllowedForTaskType(taskDefaultModelId, cfg.taskType)) {
+      if (!isModelAllowedForTaskType(modelId, cfg.taskType)) {
+        const taskDefaultModelId = cfg.defaultModel;
         const compatible = getModelsForTaskType(cfg.taskType);
-        const fallback = compatible[0]?.id;
+        const fallback = isModelAllowedForTaskType(taskDefaultModelId, cfg.taskType)
+          ? taskDefaultModelId
+          : compatible[0]?.id;
 
         if (fallback) {
           this.selectedModelId.set(fallback);
         }
-      } else {
-        this.selectedModelId.set(taskDefaultModelId);
       }
     });
 

@@ -83,6 +83,9 @@ export const MODELS: Model[] = [
     parameters: {
       thinkingLevel: 'low',
       thinkingLevels: ['minimal', 'low', 'medium', 'high'],
+      // Gemini 3.5 migration guidance recommends omitting sampling
+      // parameters such as temperature when thinking is enabled.
+      reasoningSupportsTemperature: false,
       maxImageShortsidePx: null,
       mediaResolution: 'high'
     },
