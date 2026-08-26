@@ -247,7 +247,7 @@ td {
 .results-table,
 mat-table,
 .mat-mdc-table {
-  background-color: var(--aira-surface-raised);
+  background-color: var(--aira-surface);
   color: var(--aira-text);
 }
 
@@ -256,6 +256,6 @@ mat-paginator,
 .mat-mdc-paginator,
 .mat-mdc-paginator-container,
 .mat-mdc-paginator-outer-container {
-  background-color: var(--aira-surface-raised) !important;
+  background-color: var(--aira-surface) !important;
   color: var(--aira-text);
 }
