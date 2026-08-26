@@ -202,6 +202,31 @@ mat-slide-toggle.mat-mdc-slide-toggle {
   width: 100%;
 }
 
+.table-options .table-language-field {
+  margin-top: 0.25rem;
+  width: 100%;
+}
+
+.table-options .table-language-help {
+  margin: -0.1rem 0 0.65rem;
+}
+
+.transcription-language-option {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.transcription-language-option mat-form-field {
+  width: 100%;
+}
+
+.transcription-language-option small {
+  color: var(--aira-text-muted);
+  line-height: 1.4;
+  margin-top: -0.6rem;
+}
+
 .table-options .export-grouping-help {
   margin: -0.1rem 0 0.65rem;
 }

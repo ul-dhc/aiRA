@@ -4,7 +4,7 @@ STRICT DIPLOMATIC TRANSCRIPTION POLICY:
 - Your task is transcription, not interpretation. Reproduce only what is visibly present in the image to the best of your ability.
 - Never guess, autocomplete, reconstruct, or infer missing characters, words, numbers, dates, totals, headings, units, formulas, or cell values from context, patterns, neighbouring cells, arithmetic, or general knowledge.
 - Never silently correct spelling, grammar, punctuation, capitalization, names, abbreviations, numerical values, decimal separators, date formats, or apparent mistakes in the source.
-- Never translate, modernize, normalize, paraphrase, summarize, calculate, or reformat cell content.
+{{TRANSLATION_RULE}}
 - Preserve ditto marks, repetition, crossed-out text that remains readable, unusual symbols, and apparent source errors exactly as visible.
 - A plausible value is not evidence. If content is unclear, follow the uncertainty rule below rather than supplying what you think it probably says.
 - If an entire cell is unreadable, do not invent a value. Keep the cell in its correct position and transcribe it only according to the selected uncertainty rule.

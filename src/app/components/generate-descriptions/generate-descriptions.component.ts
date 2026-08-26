@@ -113,6 +113,18 @@ export class GenerateDescriptionsComponent implements OnInit {
   readonly settings = inject(SettingsService);
   readonly locale = inject(LocaleService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly tableLanguageNames: Record<LanguageCode, string> = {
+    lv: 'Latvian',
+    en: 'English',
+    dk: 'Danish',
+    ee: 'Estonian',
+    is: 'Icelandic',
+    lt: 'Lithuanian',
+    no: 'Norwegian',
+    fi: 'Finnish',
+    de: 'German',
+    sv: 'Swedish'
+  };
 
   @ViewChild(MatPaginator)
   set paginator(paginator: MatPaginator | undefined) {
@@ -1017,6 +1029,17 @@ export class GenerateDescriptionsComponent implements OnInit {
       promptTemplate = promptTemplate + '\n\n' + filenamePrompt;
     }
 
+    if (taskConfig.taskType === 'transcription' || taskConfig.taskType === 'transcriptionBatchTei') {
+      const translationLanguage = this.settings.transcriptionTranslationLanguage();
+      if (translationLanguage !== 'original') {
+        const translationPrompt = taskConfig.helpers?.translationPrompt ?? '';
+        promptTemplate += '\n\n' + translationPrompt.replaceAll(
+          '{{TARGET_LANGUAGE}}',
+          this.tableLanguageNames[translationLanguage]
+        );
+      }
+    }
+
     return promptTemplate;
   }
 
@@ -1029,7 +1052,12 @@ export class GenerateDescriptionsComponent implements OnInit {
       prompt = prompt.replaceAll('{{FILENAME}}', imageObj.filename);
     }
     if (this.settings.selectedTaskType() === 'tableDigitization') {
+      const translationLanguage = this.settings.tableTranslationLanguage();
+      const translationRule = translationLanguage === 'original'
+        ? '- Never translate, modernize, normalize, paraphrase, summarize, calculate, or reformat cell content. Preserve the original language exactly.'
+        : `- First transcribe each readable cell faithfully, then translate only its natural-language text into ${this.tableLanguageNames[translationLanguage]}. Translation is the only permitted transformation. Do not translate or alter numbers, formulas, identifiers, names that should remain proper names, units, dates, punctuation, XML structure, cell references, confidence values, or [unclear] markers. Never guess unclear source text in order to make the translation fluent.`;
       prompt = prompt
+        .replaceAll('{{TRANSLATION_RULE}}', translationRule)
         .replaceAll(
           '{{BLANK_CELL_RULE}}',
           this.settings.tablePreserveBlankCells()

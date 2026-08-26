@@ -18,4 +18,6 @@ export interface RequestSettings {
   tablePreserveMergedCells?: boolean;
   tableMarkUnclearText?: boolean;
   tableExportGrouping?: 'combined' | 'separate';
+  tableTranslationLanguage?: 'original' | LanguageCode;
+  transcriptionTranslationLanguage?: 'original' | LanguageCode;
 };

@@ -12,7 +12,7 @@ import { LucideBox, LucideClipboardList, LucideExternalLink, LucideSlidersHorizo
 import { PricePerMTokensPipe } from '../../pipes/price-per-m-tokens.pipe';
 import { SettingsService } from '../../services/settings.service';
 import { GeminiThinkingLevel, Model, OpenAiReasoningEffort } from '../../types/model.types';
-import { TaskTypeId } from '../../../assets/config/prompts';
+import { LanguageCode, TaskTypeId } from '../../../assets/config/prompts';
 import { LocaleService } from '../../i18n/locale.service';
 
 @Component({
@@ -46,6 +46,7 @@ export class SettingsFormComponent {
   descLengthMin: number = 150;
   temperatureMax: number = 2.0;
   temperatureMin: number = 0.0;
+  readonly supportedTranslationLanguages: LanguageCode[] = ['lv', 'en', 'dk', 'ee', 'is', 'lt', 'no', 'fi', 'de', 'sv'];
 
   setDescLength(length: number): void {
     this.settings.updateSelectedDescLength(length);
@@ -111,6 +112,14 @@ export class SettingsFormComponent {
 
   setTableExportGrouping(value: 'combined' | 'separate'): void {
     this.settings.updateTableExportGrouping(value);
+  }
+
+  setTableTranslationLanguage(value: 'original' | LanguageCode): void {
+    this.settings.updateTableTranslationLanguage(value);
+  }
+
+  setTranscriptionTranslationLanguage(value: 'original' | LanguageCode): void {
+    this.settings.updateTranscriptionTranslationLanguage(value);
   }
 
   modelRecommendation(model: Model): string {

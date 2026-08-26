@@ -32,6 +32,8 @@ export class SettingsService {
   readonly tablePreserveMergedCells = signal<boolean>(true);
   readonly tableMarkUnclearText = signal<boolean>(true);
   readonly tableExportGrouping = signal<'combined' | 'separate'>('combined');
+  readonly tableTranslationLanguage = signal<'original' | LanguageCode>('original');
+  readonly transcriptionTranslationLanguage = signal<'original' | LanguageCode>('original');
 
   readonly batchSizeMin = signal<number>(BATCH_SIZE_MIN);
   readonly batchSizeMax = signal<number>(BATCH_SIZE_MAX);
@@ -170,6 +172,8 @@ export class SettingsService {
       tablePreserveMergedCells: this.tablePreserveMergedCells(),
       tableMarkUnclearText: this.tableMarkUnclearText(),
       tableExportGrouping: this.tableExportGrouping(),
+      tableTranslationLanguage: this.tableTranslationLanguage(),
+      transcriptionTranslationLanguage: this.transcriptionTranslationLanguage(),
     };
   }
 
@@ -235,6 +239,14 @@ export class SettingsService {
 
   updateTableExportGrouping(value: 'combined' | 'separate'): void {
     this.tableExportGrouping.set(value);
+  }
+
+  updateTableTranslationLanguage(value: 'original' | LanguageCode): void {
+    this.tableTranslationLanguage.set(value);
+  }
+
+  updateTranscriptionTranslationLanguage(value: 'original' | LanguageCode): void {
+    this.transcriptionTranslationLanguage.set(value);
   }
 
 }

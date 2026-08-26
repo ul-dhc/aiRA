@@ -112,6 +112,24 @@
       </div>
     }
 
+    @if (selectedTaskTypeValue === 'transcription' || selectedTaskTypeValue === 'transcriptionBatchTei') {
+      <div class="transcription-language-option">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ locale.locale() === 'lv' ? 'Atšifrējuma valoda' : 'Transcription language' }}</mat-label>
+          <mat-select
+            [value]="settings.transcriptionTranslationLanguage()"
+            (valueChange)="setTranscriptionTranslationLanguage($event)"
+          >
+            <mat-option value="original">{{ locale.locale() === 'lv' ? 'Saglabāt oriģinālvalodu (ieteicams)' : 'Keep the original language (recommended)' }}</mat-option>
+            @for (language of supportedTranslationLanguages; track language) {
+              <mat-option [value]="language">{{ locale.languageLabel(language) }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <small>{{ locale.locale() === 'lv' ? 'Tulkošana saglabā dokumenta struktūru un neskaidrības; MI nedrīkst papildināt vai izlabot avota tekstu.' : 'Translation preserves document structure and uncertainty; the AI must not complete or correct the source text.' }}</small>
+      </div>
+    }
+
     @if (selectedTaskTypeValue === 'transcription') {
       <div class="form-field-wrapper">
         <mat-slide-toggle
@@ -158,6 +176,20 @@
       <p class="output-help">{{ locale.locale() === 'lv' ? 'Izvēlieties, cik precīzi saglabāt attēlā redzamo tabulas struktūru. Šie iestatījumi tiek iekļauti MI uzvednē.' : 'Choose how faithfully the visible table structure should be preserved. These settings are included in the AI prompt.' }}</p>
 
       <div class="table-options">
+        <mat-form-field appearance="outline" class="table-language-field">
+          <mat-label>{{ locale.locale() === 'lv' ? 'Tabulas satura valoda' : 'Table content language' }}</mat-label>
+          <mat-select
+            [value]="settings.tableTranslationLanguage()"
+            (valueChange)="setTableTranslationLanguage($event)"
+          >
+            <mat-option value="original">{{ locale.locale() === 'lv' ? 'Saglabāt oriģinālvalodu (ieteicams)' : 'Keep the original language (recommended)' }}</mat-option>
+            @for (language of supportedTranslationLanguages; track language) {
+              <mat-option [value]="language">{{ locale.languageLabel(language) }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <small class="table-language-help">{{ locale.locale() === 'lv' ? 'Izvēloties citu valodu, MI tulko tikai salasāmo tekstu šūnās. Skaitļi, formulas, struktūra un [unclear] atzīmes netiek mainītas.' : 'When another language is selected, the AI translates only readable cell text. Numbers, formulas, structure, and [unclear] markers remain unchanged.' }}</small>
+
         <mat-form-field appearance="outline" class="export-grouping-field">
           <mat-label>{{ locale.locale() === 'lv' ? 'Eksporta failu organizēšana' : 'Export file organization' }}</mat-label>
           <mat-select

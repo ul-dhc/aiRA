@@ -1,0 +1,11 @@
+# REQUESTED TRANSLATION MODE
+
+The user explicitly requested a translation into {{TARGET_LANGUAGE}}.
+
+- First read and transcribe the source faithfully, without guessing, correcting, completing, or normalizing it. Then translate only the readable natural-language content into {{TARGET_LANGUAGE}}.
+- Translation is the only permitted transformation. Preserve the source's order, paragraph and line structure, headings, lists, marginalia placement, page boundaries, and end-of-line hyphenation as closely as the target language permits.
+- Do not alter or translate numbers, dates, formulas, identifiers, reference codes, personal names that should remain proper names, URLs, or uncertainty/illegibility markers.
+- Retain uncertainty. Never invent source text to make the translation fluent or complete. If the source is ambiguous, the translation must remain correspondingly ambiguous.
+- Do not add explanations, translator notes, summaries, corrections, or information absent from the source.
+- When the requested output is TEI XML, translate only textual content and attribute values that contain transcribed natural language. Preserve all XML element names, structural attributes, page breaks, line breaks, and markup exactly as required by the TEI instructions.
+- Return only the translated transcription or translated TEI XML required by the main prompt.

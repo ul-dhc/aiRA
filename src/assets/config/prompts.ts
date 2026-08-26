@@ -45,6 +45,7 @@ import transcriptionIgnoreHeadersPrompt from '../prompts/transcriptionIgnoreHead
 import transcriptionTeiPrompt from '../prompts/transcriptionTei.txt?raw';
 import transcriptionBatchTeiPrompt from '../prompts/transcriptionBatchTei.txt?raw';
 import tableDigitizationPrompt from '../prompts/tableDigitization.txt?raw';
+import transcriptionTranslatePrompt from '../prompts/transcriptionTranslate.txt?raw';
 
 /*
 console.log(
@@ -185,7 +186,8 @@ export const TASK_CONFIGS: TaskTypeConfig[] = [
       },
     ],
     helpers: {
-      teiEncodePrompt: transcriptionTeiPrompt
+      teiEncodePrompt: transcriptionTeiPrompt,
+      translationPrompt: transcriptionTranslatePrompt
     }
   },
   {
@@ -206,7 +208,10 @@ export const TASK_CONFIGS: TaskTypeConfig[] = [
         label: 'TEI body (batched, no running headers)',
         prompt: transcriptionBatchTeiPrompt
       }
-    ]
+    ],
+    helpers: {
+      translationPrompt: transcriptionTranslatePrompt
+    }
   },
   {
     taskType: 'tableDigitization',
