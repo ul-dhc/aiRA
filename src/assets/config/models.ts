@@ -45,7 +45,7 @@ export const MODELS: Model[] = [
     inputPrice: 2.0,
     outputPrice: 8.0,
     rpm: 5000,
-    supportedTaskTypes: ['altText', 'transcription'],
+    supportedTaskTypes: ['altText', 'transcription', 'tableDigitization'],
     url: 'https://developers.openai.com/api/docs/models/gpt-4.1',
     parameters: {
       imageDetail: 'high'
@@ -59,7 +59,7 @@ export const MODELS: Model[] = [
     inputPrice: { tiers: [{ upToTokens: 272000, per1M: 2.50 }, { upToTokens: null, per1M: 5.00 }] },
     outputPrice: { tiers: [{ upToTokens: 272000, per1M: 15.00 }, { upToTokens: null, per1M: 22.50 }] },
     rpm: 5000,
-    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei'],
+    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei', 'tableDigitization'],
     url: 'https://developers.openai.com/api/docs/models/gpt-5.4',
     parameters: {
       imageDetail: 'original',
@@ -78,7 +78,7 @@ export const MODELS: Model[] = [
     inputPrice: 1.5,
     outputPrice: 9.0,
     rpm: 1000,
-    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei'],
+    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei', 'tableDigitization'],
     url: 'https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash',
     parameters: {
       thinkingLevel: 'low',
@@ -99,7 +99,7 @@ export const MODELS: Model[] = [
     inputPrice: { tiers: [{ upToTokens: 200000, per1M: 2.00 }, { upToTokens: null, per1M: 4.00 }] },
     outputPrice: { tiers: [{ upToTokens: 200000, per1M: 12.00 }, { upToTokens: null, per1M: 18.00 }] },
     rpm: 25,
-    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei'],
+    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei', 'tableDigitization'],
     url: 'https://ai.google.dev/gemini-api/docs/models/gemini-3.1-pro-preview',
     parameters: {
       thinkingLevel: 'low',
@@ -117,7 +117,7 @@ export const MODELS: Model[] = [
     inputPrice: { tiers: [{ upToTokens: 200000, per1M: 1.25 }, { upToTokens: null, per1M: 2.50 }] },
     outputPrice: { tiers: [{ upToTokens: 200000, per1M: 10.00 }, { upToTokens: null, per1M: 15.00 }] },
     rpm: 150,
-    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei'],
+    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei', 'tableDigitization'],
     url: 'https://ai.google.dev/gemini-api/docs/models#gemini-2.5-pro',
     parameters: {
       thinkingBudget: 512,
@@ -134,7 +134,7 @@ export const MODELS: Model[] = [
     inputPrice: 0.30,
     outputPrice: 2.50,
     rpm: 1000,
-    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei'],
+    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei', 'tableDigitization'],
     url: 'https://ai.google.dev/gemini-api/docs/models#gemini-2.5-flash',
     parameters: {
       thinkingBudget: 512,

@@ -66,7 +66,7 @@ export class EditDescriptionDialogComponent implements OnInit {
 
   activeDescriptionData?: DescriptionData = this.imageObj?.descriptions[this.imageObj.activeDescriptionIndex];
   editedDescription: string = this.activeDescriptionData?.description ?? this.batchObj?.teiBody ?? '';
-  teiEncoding: boolean = (this.activeDescriptionData?.teiEncoded || this.batchObj !== undefined);
+  teiEncoding: boolean = !!(this.activeDescriptionData?.teiEncoded || this.activeDescriptionData?.structuredXml || this.batchObj !== undefined);
 
   dialogImages: ImageData[] = (this.imageObj !== undefined)
     ? [this.imageObj]

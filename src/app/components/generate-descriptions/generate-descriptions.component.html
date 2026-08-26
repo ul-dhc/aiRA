@@ -50,12 +50,23 @@
           <div class="cost right-aligned">{{ locale.locale() === 'lv' ? 'Kopējās izmaksas' : 'Total cost' }}: ${{ this.costService.cumulativeCost() | number }}</div>
         </div>
         <div class="buttons-row">
-          <button matButton="outlined"
-            [disabled]="generating || !o.imageList?.length || exporting"
-            (click)="export()"
-          >
-            @if (exporting) { Saglabāt {{ taskNoun.s }}... } @else { Saglabāt {{ taskNoun.pakuz }} }
-          </button>
+          @if (selectedTaskType === 'tableDigitization') {
+            <button matButton="outlined"
+              [disabled]="generating || !o.imageList?.length"
+              (click)="exportDigitizedTables('xml')"
+            >{{ locale.locale() === 'lv' ? 'Saglabāt XML' : 'Save XML' }}</button>
+            <button matButton="outlined"
+              [disabled]="generating || !o.imageList?.length"
+              (click)="exportDigitizedTables('xlsx')"
+            >{{ locale.locale() === 'lv' ? 'Saglabāt Excel' : 'Save Excel' }}</button>
+          } @else {
+            <button matButton="outlined"
+              [disabled]="generating || !o.imageList?.length || exporting"
+              (click)="export()"
+            >
+              @if (exporting) { Saglabāt {{ taskNoun.s }}... } @else { Saglabāt {{ taskNoun.pakuz }} }
+            </button>
+          }
           <button matButton="outlined"
             class="right-aligned warn-button"
             [disabled]="generating || !o.imageList?.length"
@@ -86,7 +97,7 @@
                   } @else {
                     @let active = file.descriptions[file.activeDescriptionIndex];
 
-                    @if (active?.teiEncoded) {
+                    @if (active?.teiEncoded || active?.structuredXml) {
                       <pre class="tei-preview language-markup"><code
                             class="language-markup"
                             #teiCodeEl

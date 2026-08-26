@@ -223,7 +223,8 @@ export class GenerateDescriptionsComponent implements OnInit {
 
     const res = await this.runAiTask('image', settings, prompt, false, imageObj);
     if (res) {
-      const desc = this.buildDescription(settings, res.text, res.usage, res.cost, settings.language, false);
+      const structuredXml = settings.taskType === 'tableDigitization';
+      const desc = this.buildDescription(settings, res.text, res.usage, res.cost, settings.language, false, structuredXml);
       this.commitDescription(imageObj, desc);
     }
 
@@ -259,7 +260,8 @@ export class GenerateDescriptionsComponent implements OnInit {
 
       const res = await this.runAiTask('image', settings, prompt, true, imageObj);
       if (res) {
-        const desc = this.buildDescription(settings, res.text, res.usage, res.cost, settings.language, false);
+        const structuredXml = settings.taskType === 'tableDigitization';
+        const desc = this.buildDescription(settings, res.text, res.usage, res.cost, settings.language, false, structuredXml);
         this.commitDescription(imageObj, desc);
       }
 
@@ -966,6 +968,21 @@ export class GenerateDescriptionsComponent implements OnInit {
     this.export(true);
   }
 
+  exportDigitizedTables(format: 'xml' | 'xlsx'): void {
+    try {
+      this.exportService.exportDigitizedTables(format);
+    } catch (error) {
+      console.error(error);
+      this.snackBar.open(
+        this.locale.locale() === 'lv'
+          ? 'Neizdevās eksportēt tabulu. Pārbaudiet, vai ģenerētais XML ir derīgs.'
+          : 'Could not export the table. Check that the generated XML is valid.',
+        this.locale.locale() === 'lv' ? 'Aizvērt' : 'Close',
+        { duration: 8000 }
+      );
+    }
+  }
+
   /**
    * When the page changes in the table paginator, scroll window to top of table.
    */
@@ -1339,16 +1356,20 @@ export class GenerateDescriptionsComponent implements OnInit {
     usage: any,
     cost: number,
     language?: LanguageCode,
-    teiEncoded?: boolean
+    teiEncoded?: boolean,
+    structuredXml?: boolean
   ): DescriptionData {
     return {
-      description: this.exportService.normaliseCharacters(text, teiEncoded),
+      description: structuredXml
+        ? this.exportService.normaliseStructuredXml(text)
+        : this.exportService.normaliseCharacters(text, teiEncoded),
       language,
       model: settings.model?.id ?? '',
       inputTokens: usage?.inputTokens ?? 0,
       outputTokens: usage?.outputTokens ?? 0,
       cost,
-      teiEncoded
+      teiEncoded,
+      structuredXml
     };
   }
 
@@ -1357,7 +1378,7 @@ export class GenerateDescriptionsComponent implements OnInit {
     const idx = imageObj.descriptions.length - 1;
     imageObj.activeDescriptionIndex = idx;
 
-    if (desc.teiEncoded) {
+    if (desc.teiEncoded || desc.structuredXml) {
       this.markNeedsHighlight(imageObj.id, idx);
     }
   }

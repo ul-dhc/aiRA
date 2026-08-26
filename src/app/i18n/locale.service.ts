@@ -40,7 +40,8 @@ export class LocaleService {
     const labels: Record<string, [string, string]> = {
       altText: ['Attēlu aprakstu izveide', 'Generate alt text'],
       transcription: ['Atšifrēt', 'Transcribe'],
-      transcriptionBatchTei: ['Atšifrēt + TEI iekodēt (pa grupām)', 'Transcribe + TEI encode (batched)']
+      transcriptionBatchTei: ['Atšifrēt + TEI iekodēt (pa grupām)', 'Transcribe + TEI encode (batched)'],
+      tableDigitization: ['Digitalizēt tabulu', 'Digitize a table']
     };
     return labels[taskType]?.[this.locale() === 'lv' ? 0 : 1] ?? taskType;
   }
@@ -58,6 +59,10 @@ export class LocaleService {
       transcriptionBatchTei: [
         'Izvilkt tekstu no vairākiem attēliem reizē un iekodēt rezultātu TEI XML kodā.',
         'Transcribe multiple images in batches and encode the results as TEI XML.'
+      ],
+      tableDigitization: [
+        'Izvilkt visus tabulas datus no attēla, saglabājot šūnu izvietojumu, un eksportēt tos XML vai Excel formātā.',
+        'Extract every table cell from an image, preserve its layout, and export it as XML or Excel.'
       ]
     };
     return descriptions[taskType]?.[this.locale() === 'lv' ? 0 : 1] ?? '';

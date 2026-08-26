@@ -44,6 +44,7 @@ import transcriptionIncludeHeadersPrompt from '../prompts/transcriptionIncludeHe
 import transcriptionIgnoreHeadersPrompt from '../prompts/transcriptionIgnoreHeaders.txt?raw';
 import transcriptionTeiPrompt from '../prompts/transcriptionTei.txt?raw';
 import transcriptionBatchTeiPrompt from '../prompts/transcriptionBatchTei.txt?raw';
+import tableDigitizationPrompt from '../prompts/tableDigitization.txt?raw';
 
 /*
 console.log(
@@ -52,7 +53,7 @@ console.log(
 );
 */
 
-export type TaskTypeId = 'altText' | 'transcription' | 'transcriptionBatchTei';
+export type TaskTypeId = 'altText' | 'transcription' | 'transcriptionBatchTei' | 'tableDigitization';
 export type LanguageCode = 'lv' | 'en' | 'dk' | 'ee' | 'is' | 'lt' | 'no' | 'fi' | 'de' | 'sv' ;
 
 export const TASK_CONFIGS: TaskTypeConfig[] = [
@@ -204,6 +205,26 @@ export const TASK_CONFIGS: TaskTypeConfig[] = [
         id: 'default',
         label: 'TEI body (batched, no running headers)',
         prompt: transcriptionBatchTeiPrompt
+      }
+    ]
+  },
+  {
+    taskType: 'tableDigitization',
+    label: 'Digitalizēt tabulu',
+    taskDescription: 'Izvilkt visus tabulas datus no attēla, saglabājot šūnu izvietojumu, un eksportēt tos XML vai Excel formātā.',
+    nouns: {
+      singular: 'digitalizēta tabula',
+      plural: 'digitalizētas tabulas',
+      pakuz: 'digitalizētās tabulas',
+      s: 'digitalizēta tabula',
+      sakuz: 'digitalizētu tabulu'
+    },
+    defaultModel: 'gemini-3.5-flash',
+    variants: [
+      {
+        id: 'default',
+        label: 'Saglabāt visas šūnas un tabulas struktūru',
+        prompt: tableDigitizationPrompt
       }
     ]
   }

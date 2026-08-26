@@ -14,6 +14,7 @@
           <li>{{ locale.locale() === 'lv' ? 'Izveidot attēlu aprakstus (alt text)' : 'Create image descriptions and alt text' }}</li>
           <li>{{ locale.locale() === 'lv' ? 'Atšifrēt rokrakstu un drukātu tekstu' : 'Transcribe handwritten and printed text' }}</li>
           <li>{{ locale.locale() === 'lv' ? 'Iekodēt tekstu TEI XML formātā' : 'Encode text in TEI XML format' }}</li>
+          <li>{{ locale.locale() === 'lv' ? 'Digitalizēt tabulas XML un Excel formātā' : 'Digitize tables as XML and Excel' }}</li>
         </ul>
       </section>
       <section class="info-card">
@@ -84,8 +85,8 @@
       </mat-step>
 
       <!-- Step 4: Generate image descriptions -->
-      <mat-step [label]="locale.locale() === 'lv' ? `Ģenerēt ${taskNoun.pakuz}` : 'Generate descriptions'">
-        <h2 id="generate-step-title">{{ locale.locale() === 'lv' ? 'Ģenerēt rezultātus' : 'Generate descriptions' }}</h2>
+      <mat-step [label]="locale.locale() === 'lv' ? `Ģenerēt ${taskNoun.pakuz}` : (settings.selectedTaskType() === 'tableDigitization' ? 'Digitize tables' : 'Generate descriptions')">
+        <h2 id="generate-step-title">{{ locale.locale() === 'lv' ? 'Ģenerēt rezultātus' : (settings.selectedTaskType() === 'tableDigitization' ? 'Digitize tables' : 'Generate descriptions') }}</h2>
         <!-- Defer loading the generate-descriptions component until the API key in step 2 has validated -->
         @defer (when isApiKeyFormValid) {
           <generate-descriptions></generate-descriptions>

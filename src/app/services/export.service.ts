@@ -76,6 +76,168 @@ export class ExportService {
     return this.previousFilename;
   }
 
+  /** Export AI-extracted spreadsheet XML either as canonical XML or a real XLSX workbook. */
+  exportDigitizedTables(format: 'xml' | 'xlsx', filename = 'digitized-tables'): void {
+    const tables = this.imageListService.imageList
+      .map(image => ({ image, description: this.getActiveDescription(image) }))
+      .filter(item => item.description?.structuredXml)
+      .map(item => ({
+        image: item.image,
+        document: this.parseSpreadsheetXml(item.description!.description)
+      }));
+
+    if (tables.length === 0) {
+      throw new Error('No valid digitized table results are available for export.');
+    }
+
+    const safeFilename = this.sanitizeFilename(filename, 'digitized-tables');
+    if (format === 'xml') {
+      const serializer = new XMLSerializer();
+      const sources = tables.map(({ image, document }) =>
+        `  <source filename="${this.escapeXml(image.filename)}">\n${this.indentXml(serializer.serializeToString(document.documentElement), 4)}\n  </source>`
+      );
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<digitizedSpreadsheets>\n${sources.join('\n')}\n</digitizedSpreadsheets>\n`;
+      this.initiateDownload(new Blob([xml], { type: 'application/xml;charset=utf-8' }), `${safeFilename}.xml`);
+      return;
+    }
+
+    const workbookSheets: Array<{ name: string; worksheet: Element }> = [];
+    for (const { image, document } of tables) {
+      const worksheets = Array.from(document.documentElement.children)
+        .filter(element => element.localName === 'worksheet');
+      worksheets.forEach((worksheet, index) => {
+        const proposedName = worksheet.getAttribute('name') || this.getBaseName(image.filename) || `Sheet${index + 1}`;
+        workbookSheets.push({ name: this.uniqueWorksheetName(proposedName, workbookSheets.map(sheet => sheet.name)), worksheet });
+      });
+    }
+
+    if (workbookSheets.length === 0) {
+      throw new Error('The spreadsheet XML contains no worksheets.');
+    }
+
+    const workbook = this.buildXlsx(workbookSheets);
+    const workbookBuffer = workbook.buffer.slice(
+      workbook.byteOffset,
+      workbook.byteOffset + workbook.byteLength
+    ) as ArrayBuffer;
+    this.initiateDownload(
+      new Blob([workbookBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }),
+      `${safeFilename}.xlsx`
+    );
+  }
+
+  /** Strip optional Markdown fences without applying TEI-specific transformations. */
+  normaliseStructuredXml(value: string): string {
+    let text = value.replaceAll('\r', '').trim();
+    if (text.startsWith('```') && text.endsWith('```')) {
+      const lines = text.split('\n');
+      if (/^```(?:xml)?\s*$/i.test(lines[0]) && lines.at(-1)?.trim() === '```') {
+        text = lines.slice(1, -1).join('\n').trim();
+      }
+    }
+    return text;
+  }
+
+  private parseSpreadsheetXml(xml: string): XMLDocument {
+    const document = new DOMParser().parseFromString(this.normaliseStructuredXml(xml), 'application/xml');
+    if (document.querySelector('parsererror') || document.documentElement.localName !== 'spreadsheet') {
+      throw new Error('Invalid spreadsheet XML returned by the AI model.');
+    }
+    return document;
+  }
+
+  private buildXlsx(sheets: Array<{ name: string; worksheet: Element }>): Uint8Array {
+    const worksheetFiles: Record<string, Uint8Array> = {};
+    sheets.forEach((sheet, index) => {
+      worksheetFiles[`xl/worksheets/sheet${index + 1}.xml`] = strToU8(this.buildWorksheetXml(sheet.worksheet));
+    });
+
+    const workbookSheetEntries = sheets.map((sheet, index) =>
+      `<sheet name="${this.escapeXml(sheet.name)}" sheetId="${index + 1}" r:id="rId${index + 1}"/>`
+    ).join('');
+    const relationshipEntries = sheets.map((_, index) =>
+      `<Relationship Id="rId${index + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${index + 1}.xml"/>`
+    ).join('');
+    const worksheetOverrides = sheets.map((_, index) =>
+      `<Override PartName="/xl/worksheets/sheet${index + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`
+    ).join('');
+
+    return zipSync({
+      '[Content_Types].xml': strToU8(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${worksheetOverrides}</Types>`),
+      '_rels/.rels': strToU8(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`),
+      'xl/workbook.xml': strToU8(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${workbookSheetEntries}</sheets></workbook>`),
+      'xl/_rels/workbook.xml.rels': strToU8(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${relationshipEntries}<Relationship Id="rId${sheets.length + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`),
+      'xl/styles.xml': strToU8(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="1"><font><sz val="11"/><name val="Calibri"/><family val="2"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/></cellXfs></styleSheet>`),
+      ...worksheetFiles
+    });
+  }
+
+  private buildWorksheetXml(worksheet: Element): string {
+    const rows = Array.from(worksheet.children).filter(element => element.localName === 'row');
+    const rowXml = rows.map((row, rowOffset) => {
+      const rowIndex = Number(row.getAttribute('index')) || rowOffset + 1;
+      const cells = Array.from(row.children).filter(element => element.localName === 'cell');
+      const cellsXml = cells.map((cell, cellOffset) => {
+        const ref = cell.getAttribute('ref') || `${this.columnName(cellOffset + 1)}${rowIndex}`;
+        if (!/^[A-Z]+[1-9]\d*$/.test(ref)) throw new Error(`Invalid cell reference: ${ref}`);
+        const value = cell.textContent ?? '';
+        const type = cell.getAttribute('type');
+        if (type === 'number' && /^-?(?:\d+|\d*\.\d+)(?:[Ee][+-]?\d+)?$/.test(value.trim())) {
+          return `<c r="${ref}"><v>${value.trim()}</v></c>`;
+        }
+        if (type === 'boolean' && /^(?:true|false|0|1)$/i.test(value.trim())) {
+          const booleanValue = /^(?:true|1)$/i.test(value.trim()) ? '1' : '0';
+          return `<c r="${ref}" t="b"><v>${booleanValue}</v></c>`;
+        }
+        return `<c r="${ref}" t="inlineStr"><is><t xml:space="preserve">${this.escapeXml(value)}</t></is></c>`;
+      }).join('');
+      return `<row r="${rowIndex}">${cellsXml}</row>`;
+    }).join('');
+
+    const merges = Array.from(worksheet.children)
+      .filter(element => element.localName === 'merge')
+      .map(element => element.getAttribute('ref') ?? '')
+      .filter(ref => /^[A-Z]+[1-9]\d*:[A-Z]+[1-9]\d*$/.test(ref));
+    const mergeXml = merges.length
+      ? `<mergeCells count="${merges.length}">${merges.map(ref => `<mergeCell ref="${ref}"/>`).join('')}</mergeCells>`
+      : '';
+
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>${rowXml}</sheetData>${mergeXml}</worksheet>`;
+  }
+
+  private uniqueWorksheetName(name: string, existing: string[]): string {
+    const base = (name.replace(/[\\/?*\[\]:]/g, '_').trim() || 'Sheet').slice(0, 31);
+    let candidate = base;
+    let suffix = 2;
+    while (existing.some(current => current.toLowerCase() === candidate.toLowerCase())) {
+      const ending = ` (${suffix++})`;
+      candidate = `${base.slice(0, 31 - ending.length)}${ending}`;
+    }
+    return candidate;
+  }
+
+  private columnName(index: number): string {
+    let result = '';
+    for (let value = index; value > 0; value = Math.floor((value - 1) / 26)) {
+      result = String.fromCharCode(65 + ((value - 1) % 26)) + result;
+    }
+    return result;
+  }
+
+  private escapeXml(value: string): string {
+    return value
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&apos;');
+  }
+
+  private indentXml(value: string, spaces: number): string {
+    const prefix = ' '.repeat(spaces);
+    return value.split('\n').map(line => prefix + line).join('\n');
+  }
+
   generateDOCX(imageFiles: ImageData[], filename: string = FALLBACK_FILENAME): void {
     // Provide an options object with sections
     const doc = new Document({
