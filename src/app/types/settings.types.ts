@@ -14,4 +14,7 @@ export interface RequestSettings {
   includeFilename: boolean;
   teiEncode: boolean;
   batchSize: number;
+  tablePreserveBlankCells?: boolean;
+  tablePreserveMergedCells?: boolean;
+  tableMarkUnclearText?: boolean;
 };

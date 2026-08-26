@@ -139,6 +139,54 @@ mat-slide-toggle.mat-mdc-slide-toggle {
   line-height: 1.65;
 }
 
+.table-guidance,
+.model-recommendations {
+  background: var(--aira-primary-soft);
+  border: 1px solid var(--aira-border);
+  border-radius: 10px;
+  color: var(--aira-text);
+  font-size: 0.84rem;
+  line-height: 1.45;
+  margin-bottom: 1rem;
+  padding: 0.8rem 0.9rem;
+}
+
+.table-guidance ul {
+  margin: 0.45rem 0 0;
+  padding-left: 1.15rem;
+}
+
+.table-guidance li + li {
+  margin-top: 0.3rem;
+}
+
+.output-help {
+  color: var(--aira-text-muted);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  margin: 0 0 1rem;
+}
+
+.table-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.table-options mat-slide-toggle {
+  margin: 0.4rem 0 0 !important;
+}
+
+.table-options small {
+  color: var(--aira-text-muted);
+  line-height: 1.35;
+  margin: 0 0 0.45rem 3.25rem;
+}
+
+.model-recommendations p {
+  margin: 0.45rem 0 0;
+}
+
 /* Three-card settings presentation */
 .settings-column-wrapper { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
 .parameters-wrapper { max-width: none; width: auto; min-width: 0; padding: 20px; border: 1px solid var(--aira-border); border-radius: 15px; background: var(--aira-surface-raised); box-shadow: none; transition: border-color 180ms cubic-bezier(.2,0,0,1), box-shadow 180ms cubic-bezier(.2,0,0,1), transform 180ms cubic-bezier(.2,0,0,1); }

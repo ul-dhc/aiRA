@@ -38,6 +38,17 @@
       <p class="model-description">{{ locale.taskDescription(selectedTaskConfigValue.taskType) }}</p>
     }
 
+    @if (selectedTaskTypeValue === 'tableDigitization') {
+      <div class="table-guidance">
+        <strong>{{ locale.locale() === 'lv' ? 'Labākam rezultātam' : 'For best results' }}</strong>
+        <ul>
+          <li>{{ locale.locale() === 'lv' ? 'Augšupielādējiet asu, taisni uzņemtu attēlu.' : 'Upload a sharp image photographed straight-on.' }}</li>
+          <li>{{ locale.locale() === 'lv' ? 'Iekļaujiet visu tabulu, arī virsrakstus un piezīmes.' : 'Include the complete table, including headings and notes.' }}</li>
+          <li>{{ locale.locale() === 'lv' ? 'Pēc ģenerēšanas pārbaudiet šūnas ar zemu pārliecību.' : 'Review low-confidence cells after generation.' }}</li>
+        </ul>
+      </div>
+    }
+
     @if (selectedTaskTypeValue === 'altText') {
       <div class="form-field-wrapper include-filename">
         <mat-slide-toggle
@@ -142,6 +153,30 @@
         </div>
       </div>
     }
+
+    @if (selectedTaskTypeValue === 'tableDigitization') {
+      <p class="output-help">{{ locale.locale() === 'lv' ? 'Izvēlieties, cik precīzi saglabāt attēlā redzamo tabulas struktūru. Šie iestatījumi tiek iekļauti MI uzvednē.' : 'Choose how faithfully the visible table structure should be preserved. These settings are included in the AI prompt.' }}</p>
+
+      <div class="table-options">
+        <mat-slide-toggle
+          [checked]="settings.tablePreserveBlankCells()"
+          (change)="setTablePreserveBlankCells($event)"
+        >{{ locale.locale() === 'lv' ? 'Saglabāt tukšās šūnas' : 'Preserve blank cells' }}</mat-slide-toggle>
+        <small>{{ locale.locale() === 'lv' ? 'Saglabā sākotnējo rindu un kolonnu izvietojumu.' : 'Maintains the original row and column layout.' }}</small>
+
+        <mat-slide-toggle
+          [checked]="settings.tablePreserveMergedCells()"
+          (change)="setTablePreserveMergedCells($event)"
+        >{{ locale.locale() === 'lv' ? 'Saglabāt apvienotās šūnas' : 'Preserve merged cells' }}</mat-slide-toggle>
+        <small>{{ locale.locale() === 'lv' ? 'Pārnes šūnu apvienojumus uz XML un Excel.' : 'Carries merged ranges into XML and Excel.' }}</small>
+
+        <mat-slide-toggle
+          [checked]="settings.tableMarkUnclearText()"
+          (change)="setTableMarkUnclearText($event)"
+        >{{ locale.locale() === 'lv' ? 'Atzīmēt neskaidro tekstu' : 'Mark unclear text' }}</mat-slide-toggle>
+        <small>{{ locale.locale() === 'lv' ? 'Neizlasāmas vietas apzīmē ar [unclear], nevis uzmin.' : 'Marks unreadable content as [unclear] instead of guessing.' }}</small>
+      </div>
+    }
   </div>
 
   <div class="parameters-wrapper">
@@ -165,11 +200,25 @@
               name="model"
         >
           @for (model of settings.availableModels(); track model.id) {
-            <mat-option [value]="model">{{model.provider}} {{model.name}}</mat-option>
+            <mat-option [value]="model">
+              {{model.provider}} {{model.name}}
+              @if (selectedTaskTypeValue === 'tableDigitization' && modelRecommendation(model)) {
+                — {{ modelRecommendation(model) }}
+              }
+            </mat-option>
           }
         </mat-select>
       </mat-form-field>
     </div>
+
+    @if (selectedTaskTypeValue === 'tableDigitization') {
+      <div class="model-recommendations">
+        <strong>{{ locale.locale() === 'lv' ? 'Modeļu ieteikumi' : 'Model recommendations' }}</strong>
+        <p><b>Gemini 3.5 Flash</b> — {{ locale.locale() === 'lv' ? 'ieteicamais ātruma, cenas un precizitātes līdzsvars.' : 'recommended balance of speed, cost, and accuracy.' }}</p>
+        <p><b>Gemini 3.1 Pro Preview</b> — {{ locale.locale() === 'lv' ? 'vislabākais sarežģītām, blāvām vai neregulārām tabulām.' : 'best for complex, faint, or irregular tables.' }}</p>
+        <p><b>GPT-5.4</b> — {{ locale.locale() === 'lv' ? 'jaudīga alternatīva sarežģītai struktūrai.' : 'a strong alternative for complex layouts.' }}</p>
+      </div>
+    }
 
     <mat-expansion-panel>
       <mat-expansion-panel-header>

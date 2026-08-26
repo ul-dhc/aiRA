@@ -1028,6 +1028,27 @@ export class GenerateDescriptionsComponent implements OnInit {
     if (this.settings.includeFilename() && prompt) {
       prompt = prompt.replaceAll('{{FILENAME}}', imageObj.filename);
     }
+    if (this.settings.selectedTaskType() === 'tableDigitization') {
+      prompt = prompt
+        .replaceAll(
+          '{{BLANK_CELL_RULE}}',
+          this.settings.tablePreserveBlankCells()
+            ? '- Represent every visible empty cell needed to preserve the layout as <cell ref="..." type="blank" confidence="high"></cell>.'
+            : '- Empty cells may be omitted, but cell references of populated cells must still match their original positions.'
+        )
+        .replaceAll(
+          '{{MERGED_CELL_RULE}}',
+          this.settings.tablePreserveMergedCells()
+            ? '- Preserve merged cells: put the value in the top-left cell and add one <merge ref="A1:C1"/> element for each merged range.'
+            : '- Do not emit <merge> elements; place a merged value in its top-left cell and keep all other cells in that range empty.'
+        )
+        .replaceAll(
+          '{{UNCLEAR_TEXT_RULE}}',
+          this.settings.tableMarkUnclearText()
+            ? '- Set confidence to high, medium, or low. Insert [unclear] exactly where characters cannot be determined; never guess.'
+            : '- Set confidence to high, medium, or low. Preserve only characters you can read; never guess or insert an uncertainty marker.'
+        );
+    }
     return prompt;
   }
 

@@ -28,6 +28,9 @@ export class SettingsService {
   readonly selectedReasoningEffort = signal<OpenAiReasoningEffort | null>(null);
   readonly selectedThinkingLevel = signal<GeminiThinkingLevel | null>(null);
   readonly teiEncode = signal<boolean>(false);
+  readonly tablePreserveBlankCells = signal<boolean>(true);
+  readonly tablePreserveMergedCells = signal<boolean>(true);
+  readonly tableMarkUnclearText = signal<boolean>(true);
 
   readonly batchSizeMin = signal<number>(BATCH_SIZE_MIN);
   readonly batchSizeMax = signal<number>(BATCH_SIZE_MAX);
@@ -162,6 +165,9 @@ export class SettingsService {
       includeFilename: this.includeFilename(),
       teiEncode: this.teiEncode(),
       batchSize: this.batchSize(),
+      tablePreserveBlankCells: this.tablePreserveBlankCells(),
+      tablePreserveMergedCells: this.tablePreserveMergedCells(),
+      tableMarkUnclearText: this.tableMarkUnclearText(),
     };
   }
 
@@ -211,6 +217,18 @@ export class SettingsService {
 
   updateBatchSize(value: number) {
     this.batchSize.set(value);
+  }
+
+  updateTablePreserveBlankCells(value: boolean): void {
+    this.tablePreserveBlankCells.set(value);
+  }
+
+  updateTablePreserveMergedCells(value: boolean): void {
+    this.tablePreserveMergedCells.set(value);
+  }
+
+  updateTableMarkUnclearText(value: boolean): void {
+    this.tableMarkUnclearText.set(value);
   }
 
 }

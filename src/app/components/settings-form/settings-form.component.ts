@@ -97,4 +97,29 @@ export class SettingsFormComponent {
     this.settings.updateBatchSize(size);
   }
 
+  setTablePreserveBlankCells(event: MatSlideToggleChange): void {
+    this.settings.updateTablePreserveBlankCells(event.checked);
+  }
+
+  setTablePreserveMergedCells(event: MatSlideToggleChange): void {
+    this.settings.updateTablePreserveMergedCells(event.checked);
+  }
+
+  setTableMarkUnclearText(event: MatSlideToggleChange): void {
+    this.settings.updateTableMarkUnclearText(event.checked);
+  }
+
+  modelRecommendation(model: Model): string {
+    if (model.id === 'gemini-3.1-pro-preview') {
+      return this.locale.locale() === 'lv' ? 'Visaugstākā precizitāte' : 'Highest accuracy';
+    }
+    if (model.id === 'gemini-3.5-flash') {
+      return this.locale.locale() === 'lv' ? 'Ieteicamā izvēle' : 'Recommended';
+    }
+    if (model.id === 'gpt-5.4') {
+      return this.locale.locale() === 'lv' ? 'Jaudīga alternatīva' : 'Strong alternative';
+    }
+    return '';
+  }
+
 }
