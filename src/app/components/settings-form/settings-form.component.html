@@ -158,6 +158,18 @@
       <p class="output-help">{{ locale.locale() === 'lv' ? 'Izvēlieties, cik precīzi saglabāt attēlā redzamo tabulas struktūru. Šie iestatījumi tiek iekļauti MI uzvednē.' : 'Choose how faithfully the visible table structure should be preserved. These settings are included in the AI prompt.' }}</p>
 
       <div class="table-options">
+        <mat-form-field appearance="outline" class="export-grouping-field">
+          <mat-label>{{ locale.locale() === 'lv' ? 'Eksporta failu organizēšana' : 'Export file organization' }}</mat-label>
+          <mat-select
+            [value]="settings.tableExportGrouping()"
+            (valueChange)="setTableExportGrouping($event)"
+          >
+            <mat-option value="combined">{{ locale.locale() === 'lv' ? 'Viens fails, katra tabula savā lapā' : 'One file, each table on a separate sheet' }}</mat-option>
+            <mat-option value="separate">{{ locale.locale() === 'lv' ? 'Atsevišķs fails katram attēlam' : 'A separate file for each image' }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <small class="export-grouping-help">{{ locale.locale() === 'lv' ? 'Atsevišķie faili tiek ievietoti vienā ZIP arhīvā. CSV formātā katrai tabulai vienmēr tiek izveidota sava datne.' : 'Separate files are packaged in one ZIP archive. CSV always creates one file per table.' }}</small>
+
         <mat-slide-toggle
           [checked]="settings.tablePreserveBlankCells()"
           (change)="setTablePreserveBlankCells($event)"

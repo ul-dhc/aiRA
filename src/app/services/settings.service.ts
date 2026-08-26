@@ -31,6 +31,7 @@ export class SettingsService {
   readonly tablePreserveBlankCells = signal<boolean>(true);
   readonly tablePreserveMergedCells = signal<boolean>(true);
   readonly tableMarkUnclearText = signal<boolean>(true);
+  readonly tableExportGrouping = signal<'combined' | 'separate'>('combined');
 
   readonly batchSizeMin = signal<number>(BATCH_SIZE_MIN);
   readonly batchSizeMax = signal<number>(BATCH_SIZE_MAX);
@@ -168,6 +169,7 @@ export class SettingsService {
       tablePreserveBlankCells: this.tablePreserveBlankCells(),
       tablePreserveMergedCells: this.tablePreserveMergedCells(),
       tableMarkUnclearText: this.tableMarkUnclearText(),
+      tableExportGrouping: this.tableExportGrouping(),
     };
   }
 
@@ -229,6 +231,10 @@ export class SettingsService {
 
   updateTableMarkUnclearText(value: boolean): void {
     this.tableMarkUnclearText.set(value);
+  }
+
+  updateTableExportGrouping(value: 'combined' | 'separate'): void {
+    this.tableExportGrouping.set(value);
   }
 
 }

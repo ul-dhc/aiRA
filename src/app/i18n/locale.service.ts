@@ -61,8 +61,8 @@ export class LocaleService {
         'Transcribe multiple images in batches and encode the results as TEI XML.'
       ],
       tableDigitization: [
-        'Izvilkt visus tabulas datus no attēla, saglabājot šūnu izvietojumu, un eksportēt tos XML vai Excel formātā.',
-        'Extract every table cell from an image, preserve its layout, and export it as XML or Excel.'
+        'Izvilkt visus tabulas datus no attēla, saglabājot šūnu izvietojumu, un eksportēt tos XML, Excel vai CSV formātā.',
+        'Extract every table cell from an image, preserve its layout, and export it as XML, Excel, or CSV.'
       ]
     };
     return descriptions[taskType]?.[this.locale() === 'lv' ? 0 : 1] ?? '';

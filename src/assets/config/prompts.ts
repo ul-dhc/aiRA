@@ -211,7 +211,7 @@ export const TASK_CONFIGS: TaskTypeConfig[] = [
   {
     taskType: 'tableDigitization',
     label: 'Digitalizēt tabulu',
-    taskDescription: 'Izvilkt visus tabulas datus no attēla, saglabājot šūnu izvietojumu, un eksportēt tos XML vai Excel formātā.',
+    taskDescription: 'Izvilkt visus tabulas datus no attēla, saglabājot šūnu izvietojumu, un eksportēt tos XML, Excel vai CSV formātā.',
     nouns: {
       singular: 'digitalizēta tabula',
       plural: 'digitalizētas tabulas',

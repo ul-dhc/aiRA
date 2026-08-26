@@ -17,4 +17,5 @@ export interface RequestSettings {
   tablePreserveBlankCells?: boolean;
   tablePreserveMergedCells?: boolean;
   tableMarkUnclearText?: boolean;
+  tableExportGrouping?: 'combined' | 'separate';
 };

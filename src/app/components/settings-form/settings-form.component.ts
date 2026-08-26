@@ -109,6 +109,10 @@ export class SettingsFormComponent {
     this.settings.updateTableMarkUnclearText(event.checked);
   }
 
+  setTableExportGrouping(value: 'combined' | 'separate'): void {
+    this.settings.updateTableExportGrouping(value);
+  }
+
   modelRecommendation(model: Model): string {
     if (model.id === 'gemini-3.1-pro-preview') {
       return this.locale.locale() === 'lv' ? 'Visaugstākā precizitāte' : 'Highest accuracy';

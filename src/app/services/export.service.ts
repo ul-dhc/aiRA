@@ -76,8 +76,12 @@ export class ExportService {
     return this.previousFilename;
   }
 
-  /** Export AI-extracted spreadsheet XML either as canonical XML or a real XLSX workbook. */
-  exportDigitizedTables(format: 'xml' | 'xlsx', filename = 'digitized-tables'): void {
+  /** Export AI-extracted spreadsheet data as XML, CSV, or a real XLSX workbook. */
+  exportDigitizedTables(
+    format: 'xml' | 'xlsx' | 'csv',
+    grouping: 'combined' | 'separate' = 'combined',
+    filename = 'digitized-tables'
+  ): void {
     const tables = this.imageListService.imageList
       .map(image => ({ image, description: this.getActiveDescription(image) }))
       .filter(item => item.description?.structuredXml)
@@ -93,6 +97,16 @@ export class ExportService {
     const safeFilename = this.sanitizeFilename(filename, 'digitized-tables');
     if (format === 'xml') {
       const serializer = new XMLSerializer();
+      if (grouping === 'separate') {
+        const files: Record<string, Uint8Array> = {};
+        tables.forEach(({ image, document }, index) => {
+          const baseName = this.uniqueArchiveFilename(this.getBaseName(image.filename) || `table-${index + 1}`, files, 'xml');
+          const xml = `<?xml version="1.0" encoding="UTF-8"?>\n${serializer.serializeToString(document.documentElement)}\n`;
+          files[`${baseName}.xml`] = strToU8(xml);
+        });
+        this.zipAndInitiateDownload(files, `${safeFilename}-xml.zip`);
+        return;
+      }
       const sources = tables.map(({ image, document }) =>
         `  <source filename="${this.escapeXml(image.filename)}">\n${this.indentXml(serializer.serializeToString(document.documentElement), 4)}\n  </source>`
       );
@@ -101,10 +115,52 @@ export class ExportService {
       return;
     }
 
+    if (format === 'csv') {
+      const files: Record<string, Uint8Array> = {};
+      tables.forEach(({ image, document }, imageIndex) => {
+        const worksheets = this.getSpreadsheetWorksheets(document);
+        worksheets.forEach((worksheet, sheetIndex) => {
+          const worksheetName = worksheet.getAttribute('name') || `table-${sheetIndex + 1}`;
+          const proposedName = worksheets.length === 1
+            ? this.getBaseName(image.filename) || `table-${imageIndex + 1}`
+            : `${this.getBaseName(image.filename) || `image-${imageIndex + 1}`}-${worksheetName}`;
+          const baseName = this.uniqueArchiveFilename(proposedName, files, 'csv');
+          files[`${baseName}.csv`] = strToU8('\ufeff' + this.buildCsv(worksheet));
+        });
+      });
+      const csvNames = Object.keys(files);
+      if (csvNames.length === 0) throw new Error('The spreadsheet XML contains no worksheets.');
+      if (csvNames.length === 1 && grouping === 'combined') {
+        this.initiateDownload(new Blob([files[csvNames[0]] as BlobPart], { type: 'text/csv;charset=utf-8' }), csvNames[0]);
+      } else {
+        this.zipAndInitiateDownload(files, `${safeFilename}-csv.zip`);
+      }
+      return;
+    }
+
+    if (grouping === 'separate') {
+      const files: Record<string, Uint8Array> = {};
+      tables.forEach(({ image, document }, imageIndex) => {
+        const worksheets = this.getSpreadsheetWorksheets(document);
+        if (worksheets.length === 0) return;
+        const sheets = worksheets.map((worksheet, index) => ({
+          name: this.uniqueWorksheetName(
+            worksheet.getAttribute('name') || `Sheet${index + 1}`,
+            worksheets.slice(0, index).map(previous => previous.getAttribute('name') || '')
+          ),
+          worksheet
+        }));
+        const baseName = this.uniqueArchiveFilename(this.getBaseName(image.filename) || `table-${imageIndex + 1}`, files, 'xlsx');
+        files[`${baseName}.xlsx`] = this.buildXlsx(sheets);
+      });
+      if (Object.keys(files).length === 0) throw new Error('The spreadsheet XML contains no worksheets.');
+      this.zipAndInitiateDownload(files, `${safeFilename}-excel.zip`);
+      return;
+    }
+
     const workbookSheets: Array<{ name: string; worksheet: Element }> = [];
     for (const { image, document } of tables) {
-      const worksheets = Array.from(document.documentElement.children)
-        .filter(element => element.localName === 'worksheet');
+      const worksheets = this.getSpreadsheetWorksheets(document);
       worksheets.forEach((worksheet, index) => {
         const proposedName = worksheet.getAttribute('name') || this.getBaseName(image.filename) || `Sheet${index + 1}`;
         workbookSheets.push({ name: this.uniqueWorksheetName(proposedName, workbookSheets.map(sheet => sheet.name)), worksheet });
@@ -144,6 +200,63 @@ export class ExportService {
       throw new Error('Invalid spreadsheet XML returned by the AI model.');
     }
     return document;
+  }
+
+  private getSpreadsheetWorksheets(document: XMLDocument): Element[] {
+    return Array.from(document.documentElement.children)
+      .filter(element => element.localName === 'worksheet');
+  }
+
+  private buildCsv(worksheet: Element): string {
+    const values = new Map<string, string>();
+    let maxRow = 0;
+    let maxColumn = 0;
+
+    for (const row of Array.from(worksheet.children).filter(element => element.localName === 'row')) {
+      for (const cell of Array.from(row.children).filter(element => element.localName === 'cell')) {
+        const ref = cell.getAttribute('ref') ?? '';
+        const match = /^([A-Z]+)([1-9]\d*)$/.exec(ref);
+        if (!match) throw new Error(`Invalid cell reference: ${ref}`);
+        const column = this.columnIndex(match[1]);
+        const rowIndex = Number(match[2]);
+        maxColumn = Math.max(maxColumn, column);
+        maxRow = Math.max(maxRow, rowIndex);
+        values.set(`${rowIndex}:${column}`, cell.textContent ?? '');
+      }
+    }
+
+    const lines: string[] = [];
+    for (let row = 1; row <= maxRow; row++) {
+      const cells: string[] = [];
+      for (let column = 1; column <= maxColumn; column++) {
+        const value = values.get(`${row}:${column}`) ?? '';
+        cells.push(`"${value.replaceAll('"', '""')}"`);
+      }
+      lines.push(cells.join(','));
+    }
+    return lines.join('\r\n') + '\r\n';
+  }
+
+  private columnIndex(name: string): number {
+    let index = 0;
+    for (const character of name) {
+      index = index * 26 + character.charCodeAt(0) - 64;
+    }
+    return index;
+  }
+
+  private uniqueArchiveFilename(
+    proposedName: string,
+    files: Record<string, Uint8Array>,
+    extension: string
+  ): string {
+    const base = this.sanitizeFilename(proposedName, 'table');
+    let candidate = base;
+    let suffix = 2;
+    while (Object.prototype.hasOwnProperty.call(files, `${candidate}.${extension}`)) {
+      candidate = `${base}-${suffix++}`;
+    }
+    return candidate;
   }
 
   private buildXlsx(sheets: Array<{ name: string; worksheet: Element }>): Uint8Array {

@@ -968,9 +968,9 @@ export class GenerateDescriptionsComponent implements OnInit {
     this.export(true);
   }
 
-  exportDigitizedTables(format: 'xml' | 'xlsx'): void {
+  exportDigitizedTables(format: 'xml' | 'xlsx' | 'csv'): void {
     try {
-      this.exportService.exportDigitizedTables(format);
+      this.exportService.exportDigitizedTables(format, this.settings.tableExportGrouping());
     } catch (error) {
       console.error(error);
       this.snackBar.open(

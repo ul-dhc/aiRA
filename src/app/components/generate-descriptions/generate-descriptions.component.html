@@ -59,6 +59,10 @@
               [disabled]="generating || !o.imageList?.length"
               (click)="exportDigitizedTables('xlsx')"
             >{{ locale.locale() === 'lv' ? 'Saglabāt Excel' : 'Save Excel' }}</button>
+            <button matButton="outlined"
+              [disabled]="generating || !o.imageList?.length"
+              (click)="exportDigitizedTables('csv')"
+            >{{ locale.locale() === 'lv' ? 'Saglabāt CSV' : 'Save CSV' }}</button>
           } @else {
             <button matButton="outlined"
               [disabled]="generating || !o.imageList?.length || exporting"
