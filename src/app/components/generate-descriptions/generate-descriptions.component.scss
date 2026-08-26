@@ -47,13 +47,13 @@ table.main-table {
 
 th,
 td {
-  border-bottom: 1px solid #8c8caf;
+  border-bottom: 1px solid var(--aira-border);
   line-height: 1.5;
   padding: 0.75rem 2rem 0.75rem 0;
 }
 
 th {
-  border-color: #5B5A86;
+  border-color: var(--aira-border-strong);
   font-weight: 500;
   text-align: left;
 
@@ -63,7 +63,7 @@ th {
 }
 
 tr:last-child td {
-  border-bottom: 1px solid #8c8caf;
+  border-bottom: 1px solid var(--aira-border);
 }
 
 th:last-of-type,
@@ -135,7 +135,7 @@ td {
       margin-top: 0.375rem;
 
       .counter {
-        color: #575757;
+        color: var(--aira-text-muted);
         font-size: 0.875rem;
       }
 
@@ -177,8 +177,9 @@ td {
     }
 
     .tei-preview {
-      background-color: #f7f7f9;
-      border: 1px solid #dbdbdb;
+      background-color: var(--aira-surface-raised);
+      border: 1px solid var(--aira-border);
+      color: var(--aira-text);
       border-radius: 2px;
       max-height: 65vh;
       max-width: 100%;
@@ -194,13 +195,13 @@ td {
     }
 
     .desc-length {
-      color: #575757;
+      color: var(--aira-text-muted);
       font-size: 0.875rem;
       margin: 0 0.75rem 0 auto;
     }
 
     .no-desc {
-      color: #4e4e4e;
+      color: var(--aira-text-muted);
       font-style: italic;
     }
 
@@ -246,7 +247,8 @@ td {
 .results-table,
 mat-table,
 .mat-mdc-table {
-  background-color: #FCFAF6;
+  background-color: var(--aira-surface-raised);
+  color: var(--aira-text);
 }
 
 /* Paginator area */
@@ -254,5 +256,6 @@ mat-paginator,
 .mat-mdc-paginator,
 .mat-mdc-paginator-container,
 .mat-mdc-paginator-outer-container {
-  background-color: #FCFAF6 !important;
+  background-color: var(--aira-surface-raised) !important;
+  color: var(--aira-text);
 }

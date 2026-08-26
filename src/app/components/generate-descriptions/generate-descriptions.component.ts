@@ -736,7 +736,9 @@ export class GenerateDescriptionsComponent implements OnInit {
         // runAiTaskBatchImages already showed a snackbar; mark the batch as error
         this.batchResults.update(batchId, {
           status: 'error',
-          error: 'Batch request failed.',
+          error: this.locale.locale() === 'lv'
+            ? 'Grupas pieprasījums neizdevās.'
+            : 'Batch request failed.',
         });
       }
     } finally {
