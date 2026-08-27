@@ -46,6 +46,19 @@
     }
   </mat-radio-group>
 
+  @if (isTranscriptionExport) {
+    <fieldset class="text-layout-options">
+      <legend>{{ locale.locale() === 'lv' ? 'Teksta iedalījums' : 'Text layout' }}</legend>
+      <mat-radio-group [(ngModel)]="selectedTextLayout">
+        <mat-radio-button value="lines">{{ locale.locale() === 'lv' ? 'Ievērot iedalījumu rindās' : 'Preserve line division' }}</mat-radio-button>
+        <mat-radio-button value="continuous">{{ locale.locale() === 'lv' ? 'Vienlaidus teksts' : 'Continuous text' }}</mat-radio-button>
+      </mat-radio-group>
+      <p>{{ locale.locale() === 'lv'
+        ? 'Vienlaidus teksts apvieno parastos rindu pārnesumus, bet saglabā skaidras tukšās atstarpes kā jaunas rindkopas vai pantus.'
+        : 'Continuous text joins ordinary line breaks but preserves clear blank gaps as new paragraphs or stanzas.' }}</p>
+    </fieldset>
+  }
+
   <mat-form-field class="filename-input">
     <mat-label>{{ locale.locale() === 'lv' ? 'Datnes nosaukums' : 'Filename' }}</mat-label>
     <input matInput [(ngModel)]="filename">
@@ -62,7 +75,8 @@
     [mat-dialog-close]="{
       value: true,
       selectedExportFormat: selectedFormatOption.fileFormat,
-      filename
+      filename,
+      textLayout: selectedTextLayout
     }"
   >
     {{ locale.t('common.save') }}

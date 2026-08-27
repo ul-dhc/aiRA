@@ -59,5 +59,8 @@ export class ExportDialogComponent {
       ) ?? this.formatOptions[0]
     : this.formatOptions[0];
   filename: string = this.exportService.getPreviousFilename();
+  readonly isTranscriptionExport = this.settings.selectedTaskType() === 'transcription'
+    || this.settings.selectedTaskType() === 'transcriptionBatchTei';
+  selectedTextLayout: 'lines' | 'continuous' = this.exportService.getPreviousTextLayout();
 
 }

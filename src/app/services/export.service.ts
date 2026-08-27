@@ -38,12 +38,18 @@ export class ExportService {
 
   private previousFileFormat: string | null = null;
   private previousFilename: string = FALLBACK_FILENAME;
+  private previousTextLayout: 'lines' | 'continuous' = 'lines';
 
-  exportImageListToFile(fileFormat: string, filename?: string): void {
+  exportImageListToFile(
+    fileFormat: string,
+    filename?: string,
+    textLayout: 'lines' | 'continuous' = 'lines'
+  ): void {
     const safeBaseFilename = this.sanitizeFilename(filename, FALLBACK_FILENAME);
 
     this.previousFileFormat = fileFormat;
     this.previousFilename = safeBaseFilename;
+    this.previousTextLayout = textLayout;
 
     if (fileFormat == 'docx-table') {
       this.generateDOCXTable(this.imageListService.imageList, safeBaseFilename);
@@ -74,6 +80,10 @@ export class ExportService {
 
   getPreviousFilename(): string {
     return this.previousFilename;
+  }
+
+  getPreviousTextLayout(): 'lines' | 'continuous' {
+    return this.previousTextLayout;
   }
 
   /** Export AI-extracted spreadsheet data as XML, CSV, or a real XLSX workbook. */
@@ -645,6 +655,9 @@ export class ExportService {
   private convertTeiBodyToTEIXML(teiBody: string, filename: string): string {
     let trimmedBody = teiBody.trim();
     trimmedBody = this.extractBody(trimmedBody);
+    if (this.previousTextLayout === 'continuous') {
+      trimmedBody = this.makeContinuousTei(trimmedBody);
+    }
     trimmedBody = trimmedBody.trim() + '\r\n';
 
     let contentStr = this.getTeiHeader(filename);
@@ -817,7 +830,40 @@ export class ExportService {
       text = text.replaceAll('"', '”');
     }
 
+    if (this.previousTextLayout === 'continuous') {
+      text = teiEncoded
+        ? this.makeContinuousTei(text)
+        : this.makeContinuousPlainText(text);
+    }
+
     return text.replaceAll('\n', newline);
+  }
+
+  /** Join visual line wrapping while preserving blank-line paragraph/stanza gaps. */
+  private makeContinuousPlainText(value: string): string {
+    return value
+      .replaceAll('\r', '')
+      .split(/\n[ \t]*\n+/)
+      .map(block => block
+        .replace(/-\s*\n\s*/g, '-')
+        .replace(/[ \t]*\n[ \t]*/g, ' ')
+        .replace(/[ \t]{2,}/g, ' ')
+        .trim()
+      )
+      .filter(block => block.length > 0)
+      .join('\n\n');
+  }
+
+  /** Remove visual line milestones but retain TEI paragraph, stanza, and page structure. */
+  private makeContinuousTei(value: string): string {
+    let text = value.replaceAll('\r', '');
+    text = text.replace(/<lb\b(?=[^>]*\bbreak=["']word["'])[^>]*\/>[ \t\n]*/gi, '');
+    text = text.replace(/[ \t]*<lb\b[^>]*\/>[ \t\n]*/gi, ' ');
+    text = text.replace(/(<lg\b[^>]*>)([\s\S]*?)(<\/lg>)/gi, (_match, opening, body, closing) => {
+      const joinedLines = String(body).replace(/<\/l>[ \t\n]*<l\b[^>]*>/gi, ' ');
+      return opening + joinedLines + closing;
+    });
+    return text;
   }
 
   /**

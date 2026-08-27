@@ -969,7 +969,8 @@ export class GenerateDescriptionsComponent implements OnInit {
         this.exporting = true;
         this.exportService.exportImageListToFile(
           result?.selectedExportFormat,
-          result?.filename
+          result?.filename,
+          result?.textLayout ?? 'lines'
         );
         this.exporting = false;
       }
