@@ -615,7 +615,7 @@ export class ExportService {
     imageFiles.forEach((imageObj: ImageData) => {
       let description = this.getActiveDescription(imageObj)?.description ?? '';
       description = this.normaliseForExport(description);
-      description = this.escapeDelimitedValue(description, delimiter);
+      description = this.escapeDelimitedValue(description, delimiter, delimiter === '\t');
       const filename = this.escapeDelimitedValue(imageObj.filename, delimiter);
       contentStr += filename + delimiter + description + '\n';
     });
@@ -696,18 +696,17 @@ export class ExportService {
     return contentStr;
   }
 
-  private escapeDelimitedValue(value: any, delimiter: string): string {
+  private escapeDelimitedValue(value: any, delimiter: string, preserveLineBreaks = false): string {
     if (value === null || value === undefined) {
       return '';
     }
 
-    let valueStr = value.toString().replaceAll('\r', '').replaceAll('\n', ' ').replaceAll('\t', ' ');
-    if (
-      delimiter != '\t' &&
-      (
-        valueStr.includes(delimiter) || valueStr.includes('"')
-      )
-    ) {
+    let valueStr = value.toString().replaceAll('\r', '').replaceAll('\t', ' ');
+    if (!preserveLineBreaks) {
+      valueStr = valueStr.replaceAll('\n', ' ');
+    }
+
+    if (valueStr.includes(delimiter) || valueStr.includes('"') || valueStr.includes('\n')) {
       valueStr = `"${valueStr.replaceAll('"', '""')}"`;
     }
 
