@@ -13,6 +13,10 @@ export class CostService {
     this.cumulativeCost.update((currentTotal: number) => currentTotal + cost);
   }
 
+  reset(): void {
+    this.cumulativeCost.set(0);
+  }
+
   updateCostFromResponse(model?: Model, usage?: AiUsage): number {
     if (!model || !usage) return 0;
 

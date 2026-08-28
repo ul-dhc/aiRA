@@ -167,6 +167,7 @@ export class GenerateDescriptionsComponent implements OnInit {
    * when an in-flight request resolves after cancellation.
    */
   private readonly cancelledBatchIds = new Set<string>();
+  private knownImageUploadKeys = new Set<string>();
 
   constructor() {
     afterRenderEffect(() => {
@@ -196,6 +197,12 @@ export class GenerateDescriptionsComponent implements OnInit {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(
       (imageList: ImageData[]) => {
+        const currentKeys = new Set(imageList.map(image => image.uploadKey));
+        const imageWasRemoved = [...this.knownImageUploadKeys].some(key => !currentKeys.has(key));
+        if (imageWasRemoved && this.generating) {
+          this.stopFromProgressSnack();
+        }
+        this.knownImageUploadKeys = currentKeys;
         this.matTableDataSource.data = imageList;
       }
     );
@@ -226,6 +233,7 @@ export class GenerateDescriptionsComponent implements OnInit {
   }
 
   private async generateImageDescription(imageObj: ImageData) {
+    if (!this.isImageActive(imageObj)) return;
     this.setGlobalGenerating(true);
     this.setImageGenerating(imageObj, true);
 
@@ -234,7 +242,7 @@ export class GenerateDescriptionsComponent implements OnInit {
     const prompt = this.constructPrompt(promptTemplate, imageObj);
 
     const res = await this.runAiTask('image', settings, prompt, false, imageObj);
-    if (res) {
+    if (res && this.isImageActive(imageObj)) {
       const structuredXml = settings.taskType === 'tableDigitization';
       const desc = this.buildDescription(settings, res.text, res.usage, res.cost, settings.language, false, structuredXml);
       this.commitDescription(imageObj, desc);
@@ -249,29 +257,31 @@ export class GenerateDescriptionsComponent implements OnInit {
 
     const settings: RequestSettings = this.settings.getSettings();
     const promptTemplate = this.constructPromptTemplate();
+    const runImages = [...this.imageListService.imageList];
     let counter = 0;
     let lastRequestAt: number | null = null;
 
-    for (const imageObj of this.imageListService.imageList) {
+    for (const imageObj of runImages) {
       if (!this.generating) {
         // Generation has been stopped by user
         break;
       }
+      if (!this.isImageActive(imageObj)) continue;
 
       // Throttle (only when rpm < 100)
       lastRequestAt = await this.enforceRpm(settings.model?.rpm, lastRequestAt);
-      if (!this.generating) {
+      if (!this.generating || !this.isImageActive(imageObj)) {
         break;
       }
 
       counter++;
-      this.openProgressSnack(`Ģenerē ${this.settings.taskNouns().sakuz} ${counter}/${this.imageListService.imageList.length}`);
+      this.openProgressSnack(`Ģenerē ${this.settings.taskNouns().sakuz} ${counter}/${runImages.length}`);
 
       this.setImageGenerating(imageObj, true);
       const prompt = this.constructPrompt(promptTemplate, imageObj);
 
       const res = await this.runAiTask('image', settings, prompt, true, imageObj);
-      if (res) {
+      if (res && this.isImageActive(imageObj)) {
         const structuredXml = settings.taskType === 'tableDigitization';
         const desc = this.buildDescription(settings, res.text, res.usage, res.cost, settings.language, false, structuredXml);
         this.commitDescription(imageObj, desc);
@@ -321,6 +331,7 @@ export class GenerateDescriptionsComponent implements OnInit {
    * @param imageObj The image to transcribe and TEI-encode
    */
   private async transcribeAndTeiEncode(imageObj: ImageData) {
+    if (!this.isImageActive(imageObj)) return;
     this.setGlobalGenerating(true);
     this.setImageGenerating(imageObj, true);
 
@@ -344,7 +355,7 @@ export class GenerateDescriptionsComponent implements OnInit {
     // 2. TEI-encode transcription from previous pass
     try {
       for (const teiEncodingPass of [false, true]) {
-        if (!this.generating) {
+        if (!this.generating || !this.isImageActive(imageObj)) {
           // Generation has been stopped by user
           break;
         }
@@ -359,7 +370,7 @@ export class GenerateDescriptionsComponent implements OnInit {
           ? await this.runAiTaskSingleImageFilesApi(settings, prompt, true, imageObj, this.teiAbortCtrl?.signal)
           : await this.runAiTask('image', settings, prompt, true, imageObj);
 
-        if (res) {
+        if (res && this.isImageActive(imageObj)) {
           if (teiEncodingPass) {
             // in the TEI encoding pass, store the transcribed and encoded data in a new
             // description and add metrics from the transcription pass
@@ -441,10 +452,12 @@ export class GenerateDescriptionsComponent implements OnInit {
       transcription: this.constructPromptTemplate(),
       teiEncoding: this.getTeiEncodePromptTemplate()
     }
+    const runImages = [...this.imageListService.imageList];
 
-    loopImages: for (const imageObj of this.imageListService.imageList) {
+    loopImages: for (const imageObj of runImages) {
+      if (!this.isImageActive(imageObj)) continue;
       counter++;
-      this.openProgressSnack(`Transcribing and TEI encoding ${counter}/${this.imageListService.imageList.length}`);
+      this.openProgressSnack(`Transcribing and TEI encoding ${counter}/${runImages.length}`);
 
       let transcriptionDesc: DescriptionData | null = null;
 
@@ -455,14 +468,14 @@ export class GenerateDescriptionsComponent implements OnInit {
 
       try {
         for (const teiEncodingPass of [false, true]) {
-          if (!this.generating) {
+          if (!this.generating || !this.isImageActive(imageObj)) {
             // Generation has been stopped by user
             break loopImages;
           }
 
           // Throttle (only when rpm < 100)
           lastRequestAt = await this.enforceRpm(settings.model?.rpm, lastRequestAt);
-          if (!this.generating) {
+          if (!this.generating || !this.isImageActive(imageObj)) {
             break loopImages;
           }
 
@@ -477,7 +490,7 @@ export class GenerateDescriptionsComponent implements OnInit {
             ? await this.runAiTaskSingleImageFilesApi(settings, prompt, true, imageObj, this.teiAbortCtrl?.signal)
             : await this.runAiTask('image', settings, prompt, true, imageObj);
 
-          if (res) {
+          if (res && this.isImageActive(imageObj)) {
             if (teiEncodingPass) {
               // in the TEI encoding pass, store the transcribed and encoded data in a new
               // description and add metrics from the transcription pass
@@ -542,7 +555,7 @@ export class GenerateDescriptionsComponent implements OnInit {
     const settings: RequestSettings = this.settings.getSettings();
     const prompt = this.constructPromptTemplate();
 
-    const images = this.imageListService.imageList;
+    const images = [...this.imageListService.imageList];
     const batchSize = settings.batchSize || 10;
     const batches = this.chunkArray(images, batchSize);
 
@@ -584,6 +597,9 @@ export class GenerateDescriptionsComponent implements OnInit {
       }
 
       const batch = batches[batchIndex];
+      if (!this.areImagesActive(batch)) {
+        break;
+      }
       const batchId = this.batchResults.results()[batchIndex].id;
 
       // If user already cancelled this batch while it was still pending, skip it
@@ -773,8 +789,8 @@ export class GenerateDescriptionsComponent implements OnInit {
 
     const settings: RequestSettings = this.settings.getSettings();
 
-    const res = await this.runAiTask('text', settings, prompt, false);
-    if (res) {
+    const res = await this.runAiTask('text', settings, prompt, false, imageObj);
+    if (res && this.isImageActive(imageObj)) {
       const desc = this.buildDescription(settings, res.text, res.usage, res.cost, targetLanguageCode, false);
       this.commitDescription(imageObj, desc);
     }
@@ -844,9 +860,8 @@ export class GenerateDescriptionsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((remove: boolean) => {
       if (remove) {
-        this.aiService.deleteUploadedFile(imageObj).finally(() => {
-          this.imageListService.removeImage(imageObj);
-        });
+        this.imageListService.removeImage(imageObj);
+        void this.aiService.deleteUploadedFile(imageObj);
       }
     });
   }
@@ -863,11 +878,10 @@ export class GenerateDescriptionsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((remove: boolean) => {
       if (remove) {
-        Promise.allSettled(this.imageListService.imageList.map(img => this.aiService.deleteUploadedFile(img)))
-          .finally(() => {
-            this.imageListService.updateImageList([]);
-            this.batchResults.clear();
-          });
+        const images = [...this.imageListService.imageList];
+        this.imageListService.updateImageList([]);
+        this.batchResults.clear();
+        void Promise.allSettled(images.map(img => this.aiService.deleteUploadedFile(img)));
       }
     });
   }
@@ -1189,6 +1203,16 @@ export class GenerateDescriptionsComponent implements OnInit {
     imageObj.generating = isGenerating;
   }
 
+  private isImageActive(imageObj: ImageData): boolean {
+    return this.imageListService.imageList.some(
+      image => image === imageObj && image.uploadKey === imageObj.uploadKey
+    );
+  }
+
+  private areImagesActive(images: ImageData[]): boolean {
+    return images.every(image => this.isImageActive(image));
+  }
+
   private handleApiFailure(settings: RequestSettings, result: any, stopGeneration: boolean, imageObj?: ImageData) {
     const e = result?.error;
     if (e) {
@@ -1218,6 +1242,10 @@ export class GenerateDescriptionsComponent implements OnInit {
       const result = (mode === 'image' && imageObj !== undefined)
         ? await this.aiService.describeImage(settings, prompt, imageObj.base64Image)
         : await this.aiService.responsesTextTask(settings, prompt);
+
+      if (imageObj && !this.isImageActive(imageObj)) {
+        return null;
+      }
       // console.log(result);
       const text = result?.text ?? '';
 
@@ -1287,7 +1315,7 @@ export class GenerateDescriptionsComponent implements OnInit {
     signal?: AbortSignal
   ): Promise<{ text: string; usage: any; cost: number } | null> {
     try {
-      if (signal?.aborted) {
+      if (signal?.aborted || !this.isImageActive(imageObj)) {
         return null;
       }
 
@@ -1298,7 +1326,7 @@ export class GenerateDescriptionsComponent implements OnInit {
         { signal }
       );
 
-      if (signal?.aborted) {
+      if (signal?.aborted || !this.isImageActive(imageObj)) {
         return null;
       }
 
@@ -1354,7 +1382,7 @@ export class GenerateDescriptionsComponent implements OnInit {
     try {
       let result: AiResult | null = null;
 
-      if (signal?.aborted) {
+      if (signal?.aborted || (images !== undefined && !this.areImagesActive(images))) {
         return null;
       }
 
@@ -1375,7 +1403,7 @@ export class GenerateDescriptionsComponent implements OnInit {
         throw new Error('Batch image mode and provided data does not match.');
       }
 
-      if (signal?.aborted) {
+      if (signal?.aborted || (images !== undefined && !this.areImagesActive(images))) {
         return null;
       }
 
@@ -1424,6 +1452,9 @@ export class GenerateDescriptionsComponent implements OnInit {
   }
 
   private commitDescription(imageObj: ImageData, desc: DescriptionData) {
+    if (!this.isImageActive(imageObj)) {
+      return;
+    }
     imageObj.descriptions.push(desc);
     const idx = imageObj.descriptions.length - 1;
     imageObj.activeDescriptionIndex = idx;

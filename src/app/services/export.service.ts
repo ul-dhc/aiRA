@@ -373,13 +373,14 @@ export class ExportService {
         properties: {},
         children: imageFiles.map((imageObj: ImageData) => {
           const descriptionObj = this.getActiveDescription(imageObj);
+          const description = this.normaliseForExport(descriptionObj?.description ?? '');
             return new Paragraph({
               children: [
                 new TextRun({
                   text: imageObj.filename + ':',
                   bold: true
                 }),
-                new TextRun(' ' + this.normaliseForExport(descriptionObj?.description ?? ''))
+                ...this.getDocxTextRuns(description, true)
               ],
               style: 'paragraph'
             });
@@ -397,6 +398,7 @@ export class ExportService {
     // Create table rows with cells containing filenames and descriptions
     const tableRows = imageFiles.map((imageObj: ImageData) => {
       const descriptionObj = this.getActiveDescription(imageObj);
+      const description = this.normaliseForExport(descriptionObj?.description ?? '');
       return new TableRow({
         children: [
           new TableCell({
@@ -433,7 +435,7 @@ export class ExportService {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun(this.normaliseForExport(descriptionObj?.description ?? ''))
+                  ...this.getDocxTextRuns(description)
                 ],
                 style: 'paragraph'
               })
@@ -747,6 +749,14 @@ export class ExportService {
     }
 
     return styleObj;
+  }
+
+  private getDocxTextRuns(value: string, leadingSpace = false): TextRun[] {
+    const lines = value.replaceAll('\r', '').split('\n');
+    return lines.map((line, index) => new TextRun({
+      text: `${index === 0 && leadingSpace ? ' ' : ''}${line}`,
+      break: index > 0 ? 1 : undefined
+    }));
   }
 
   private getBaseName(filename: string): string {

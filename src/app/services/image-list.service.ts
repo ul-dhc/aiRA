@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ImageData } from '../types/image-data.types';
 import { SettingsService } from './settings.service';
+import { CostService } from './cost.service';
 
 
 // the default maximum length of the short side of the image
@@ -15,6 +16,7 @@ const IMG_LONG_SIDE_MAX: number = 2048;
 })
 export class ImageListService {
   private readonly settings = inject(SettingsService);
+  private readonly costService = inject(CostService);
 
   private _imageList: BehaviorSubject<ImageData[]> = new BehaviorSubject<ImageData[]>([]);
   imageList$: Observable<ImageData[]> = this._imageList.asObservable();
@@ -128,6 +130,7 @@ export class ImageListService {
     this._imageList.next(list);
     if (list.length === 0) {
       this.nextId = 0;
+      this.costService.reset();
     }
   }
 
