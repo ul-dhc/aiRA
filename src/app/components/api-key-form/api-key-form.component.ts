@@ -71,9 +71,9 @@ export class ApiKeyFormComponent implements OnInit, OnDestroy {
     this.formControlChangeSubscr = this.apiKeyFC?.statusChanges.subscribe(status => {
       if (this.apiKeyFC?.value) {
         if (status === 'PENDING') {
-          this.apiKeyValidationMessage = this.locale.t('api.validating');
+          this.apiKeyValidationMessage = 'api.validating';
         } else if (status === 'VALID') {
-          this.apiKeyValidationMessage = this.locale.t('api.valid');
+          this.apiKeyValidationMessage = 'api.valid';
           const key = (this.apiKeyFC.value ?? '').trim();
           this.aiService.updateClient(key);
           this.apiKeyValidated.emit(key);

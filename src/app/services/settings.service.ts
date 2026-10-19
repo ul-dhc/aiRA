@@ -1,4 +1,5 @@
-import { Injectable, computed, effect, signal } from '@angular/core';
+import { LocaleService } from '../i18n/locale.service';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
 
 import { MODELS, ModelId, getModelsForTaskType,
          isModelAllowedForTaskType
@@ -16,6 +17,7 @@ const BATCH_SIZE_MAX = 30;
   providedIn: 'root'
 })
 export class SettingsService {
+  private readonly locale = inject(LocaleService);
   // --- User-controlled state ---
   selectedTaskType = signal<TaskTypeId>(TASK_CONFIGS[0].taskType);
   readonly selectedVariantId = signal<string>(TASK_CONFIGS[0].variants[0].id);
@@ -81,7 +83,17 @@ export class SettingsService {
     }
   });
 
-  readonly taskNouns = computed(() =>  this.selectedTaskConfig().nouns);
+  readonly taskNouns = computed(() => {
+    if (this.locale.locale() === 'lv') return this.selectedTaskConfig().nouns;
+    const [singular, plural] = this.selectedTaskType() === 'altText'
+      ? ['alt text', 'alt texts']
+      : this.selectedTaskType() === 'tableDigitization'
+        ? ['digitized table', 'digitized tables']
+        : this.selectedTaskType() === 'transcriptionBatchTei'
+          ? ['TEI transcription', 'TEI transcriptions']
+          : ['transcription', 'transcriptions'];
+    return { singular, plural, s: singular, sakuz: singular, pakuz: plural };
+  });
 
   readonly selectedVariant = computed<PromptVariant>(() => {
     const cfg = this.selectedTaskConfig();

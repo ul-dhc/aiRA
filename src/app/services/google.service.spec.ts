@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { GoogleService } from './google.service';
 import { RequestSettings } from '../types/settings.types';
 
@@ -6,7 +7,7 @@ function createSettings(overrides: Partial<RequestSettings> = {}): RequestSettin
     model: {
       provider: 'Google',
       name: 'Test model',
-      id: 'gemini-3-flash-preview',
+      id: 'gemini-3.5-flash',
       inputPrice: 0,
       outputPrice: 0,
       rpm: 1,
@@ -33,7 +34,7 @@ function createSettings(overrides: Partial<RequestSettings> = {}): RequestSettin
 
 describe('GoogleService', () => {
   it('keeps temperature in the payload when the model does not opt out', async () => {
-    const service = new GoogleService();
+    const service = TestBed.runInInjectionContext(() => new GoogleService());
     const generateSpy = jasmine.createSpy().and.resolveTo({
       text: 'ok',
       usageMetadata: {
@@ -56,7 +57,7 @@ describe('GoogleService', () => {
   });
 
   it('omits temperature when the model opts out and thinking is enabled', async () => {
-    const service = new GoogleService();
+    const service = TestBed.runInInjectionContext(() => new GoogleService());
     const generateSpy = jasmine.createSpy().and.resolveTo({
       text: 'ok',
       usageMetadata: {

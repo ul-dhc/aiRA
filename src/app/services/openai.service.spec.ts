@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { OpenAiService } from './openai.service';
 import { ImageData } from '../types/image-data.types';
 import { RequestSettings } from '../types/settings.types';
@@ -53,7 +54,7 @@ function createImage(overrides: Partial<ImageData> = {}): ImageData {
 
 describe('OpenAiService', () => {
   it('keeps temperature in the payload when the model does not opt out', async () => {
-    const service = new OpenAiService();
+    const service = TestBed.runInInjectionContext(() => new OpenAiService());
     const createSpy = jasmine.createSpy().and.resolveTo({
       output_text: 'ok',
       usage: { input_tokens: 1, output_tokens: 1 },
@@ -72,7 +73,7 @@ describe('OpenAiService', () => {
   });
 
   it('omits temperature when the model opts out and reasoning is enabled', async () => {
-    const service = new OpenAiService();
+    const service = TestBed.runInInjectionContext(() => new OpenAiService());
     const createSpy = jasmine.createSpy().and.resolveTo({
       output_text: 'ok',
       usage: { input_tokens: 1, output_tokens: 1 },
@@ -101,7 +102,7 @@ describe('OpenAiService', () => {
   });
 
   it('uses image detail from the model parameters', async () => {
-    const service = new OpenAiService();
+    const service = TestBed.runInInjectionContext(() => new OpenAiService());
     const createSpy = jasmine.createSpy().and.resolveTo({
       output_text: 'ok',
       usage: { input_tokens: 1, output_tokens: 1 },
@@ -128,7 +129,7 @@ describe('OpenAiService', () => {
   });
 
   it('builds a multi-image payload for inline batch requests', async () => {
-    const service = new OpenAiService();
+    const service = TestBed.runInInjectionContext(() => new OpenAiService());
     const createSpy = jasmine.createSpy().and.resolveTo({
       output_text: 'ok',
       usage: { input_tokens: 2, output_tokens: 1 },
@@ -157,7 +158,7 @@ describe('OpenAiService', () => {
   });
 
   it('uploads OpenAI Files API images with a 48 hour expiry and sends file ids to the model', async () => {
-    const service = new OpenAiService();
+    const service = TestBed.runInInjectionContext(() => new OpenAiService());
     const uploadSpy = jasmine.createSpy().and.resolveTo({ id: 'file-123' });
     const createSpy = jasmine.createSpy().and.resolveTo({
       output_text: 'ok',
@@ -201,7 +202,7 @@ describe('OpenAiService', () => {
   });
 
   it('reuses a cached OpenAI file upload when the file still exists', async () => {
-    const service = new OpenAiService();
+    const service = TestBed.runInInjectionContext(() => new OpenAiService());
     const retrieveSpy = jasmine.createSpy().and.resolveTo({ id: 'file-existing' });
     const uploadSpy = jasmine.createSpy();
     const createSpy = jasmine.createSpy().and.resolveTo({
@@ -239,7 +240,7 @@ describe('OpenAiService', () => {
   });
 
   it('deletes a cached OpenAI upload and clears the image cache fields', async () => {
-    const service = new OpenAiService();
+    const service = TestBed.runInInjectionContext(() => new OpenAiService());
     const deleteSpy = jasmine.createSpy().and.resolveTo({ deleted: true });
 
     (service as any).client = {
@@ -263,7 +264,7 @@ describe('OpenAiService', () => {
   });
 
   it('returns a cancelled result when an OpenAI Files API batch request is aborted', async () => {
-    const service = new OpenAiService();
+    const service = TestBed.runInInjectionContext(() => new OpenAiService());
     const ctrl = new AbortController();
 
     (service as any).client = {

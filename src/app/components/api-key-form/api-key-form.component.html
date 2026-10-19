@@ -18,7 +18,7 @@
       <mat-hint [class.valid-api-key]="apiKeyFormGroup.valid">
         @if (apiKeyFormGroup.valid) {
           <svg lucideCheck aria-hidden="true"></svg> }
-        {{ apiKeyValidationMessage }}
+        {{ locale.t(apiKeyValidationMessage) }}
       </mat-hint>
     }
   </mat-form-field>

@@ -68,7 +68,7 @@
               [disabled]="generating || !o.imageList?.length || exporting"
               (click)="export()"
             >
-              @if (exporting) { Saglabāt {{ taskNoun.s }}... } @else { Saglabāt {{ taskNoun.pakuz }} }
+              @if (exporting) { {{ locale.locale() === 'lv' ? 'Saglabāt' : 'Saving' }} {{ taskNoun.s }}… } @else { {{ locale.t('common.save') }} {{ taskNoun.pakuz }} }
             </button>
           }
           <button matButton="outlined"
@@ -94,10 +94,10 @@
                 <div class="desc-data">
                   @if (file.generating) {
                     <span class="loading-wrapper">
-                      <mat-spinner [diameter]="32"></mat-spinner><span class="spinner-label">Ģenerē {{ (teiEncoding() && selectedTaskType === 'transcription') ? 'TEI iekodējumu' : taskNoun.sakuz }}...</span>
+                      <mat-spinner [diameter]="32"></mat-spinner><span class="spinner-label">{{ locale.locale() === 'lv' ? 'Ģenerē' : 'Generating' }} {{ (teiEncoding() && selectedTaskType === 'transcription') ? (locale.locale() === 'lv' ? 'TEI iekodējumu' : 'TEI encoding') : taskNoun.sakuz }}…</span>
                     </span>
                   } @else if (file.descriptions.length < 1) {
-                    <span class="no-desc">{{ taskNoun.s }} nav ģenerēts.</span>
+                    <span class="no-desc">{{ taskNoun.s }} {{ locale.locale() === 'lv' ? 'nav ģenerēts.' : 'has not been generated.' }}</span>
                   } @else {
                     @let active = file.descriptions[file.activeDescriptionIndex];
 
@@ -121,8 +121,8 @@
                     <div class="buttons-wrapper">
                       @if (file.descriptions.length > 1) {
                         <button matIconButton
-                          [matTooltip]="`Iepriekšējais ${taskNoun.s}`"
-                          [attr.aria-label]="`Iepriekšējais ${taskNoun.s}`"
+                          [matTooltip]="locale.locale() === 'lv' ? `Iepriekšējais ${taskNoun.s}` : `Previous ${taskNoun.s}`"
+                          [attr.aria-label]="locale.locale() === 'lv' ? `Iepriekšējais ${taskNoun.s}` : `Previous ${taskNoun.s}`"
                           [disabled]="file.activeDescriptionIndex < 1"
                           (click)="previousDescription(file)"
                         >
@@ -130,8 +130,8 @@
                         </button>
                         <div class="counter">{{ file.activeDescriptionIndex + 1 }}/{{ file.descriptions.length }}</div>
                         <button matIconButton
-                          [matTooltip]="`Nākošais ${taskNoun.s}`"
-                          [attr.aria-label]="`Nākošais ${taskNoun.s}`"
+                          [matTooltip]="locale.locale() === 'lv' ? `Nākošais ${taskNoun.s}` : `Next ${taskNoun.s}`"
+                          [attr.aria-label]="locale.locale() === 'lv' ? `Nākošais ${taskNoun.s}` : `Next ${taskNoun.s}`"
                           [disabled]="file.activeDescriptionIndex > file.descriptions.length - 2"
                           (click)="nextDescription(file)"
                         >
@@ -139,35 +139,35 @@
                         </button>
                       }
                       <button matIconButton
-                        [matTooltip]="`Pārkopēt ${taskNoun.sakuz}`"
+                        [matTooltip]="locale.locale() === 'lv' ? `Pārkopēt ${taskNoun.sakuz}` : `Copy ${taskNoun.s}`"
                         class="copy-button"
-                        [attr.aria-label]="`Pārkopēt ${taskNoun.singular}`"
+                        [attr.aria-label]="locale.locale() === 'lv' ? `Pārkopēt ${taskNoun.singular}` : `Copy ${taskNoun.s}`"
                         [cdkCopyToClipboard]="file.descriptions.length > 0 ? file.descriptions[file.activeDescriptionIndex].description : ''"
                       >
                         <svg lucideCopy aria-hidden="true"></svg>
                       </button>
                       <button matIconButton
-                        [matTooltip]="`Rediģēt ${taskNoun.sakuz}`"
+                        [matTooltip]="locale.locale() === 'lv' ? `Rediģēt ${taskNoun.sakuz}` : `Edit ${taskNoun.s}`"
                         class="edit-button"
-                        [aria-label]="`Rediģēt ${taskNoun.sakuz}`"
+                        [aria-label]="locale.locale() === 'lv' ? `Rediģēt ${taskNoun.sakuz}` : `Edit ${taskNoun.s}`"
                         (click)="editDescription(file)"
                       >
                         <svg lucidePencil aria-hidden="true"></svg>
                       </button>
                       @if (selectedTaskType === 'altText') {
                         <button matIconButton
-                          [matTooltip]="`Pārtulkot ${taskNoun.sakuz}`"
+                          [matTooltip]="locale.locale() === 'lv' ? `Pārtulkot ${taskNoun.sakuz}` : `Translate ${taskNoun.s}`"
                           class="translate-button"
-                          [attr.aria-label]="`Pārtulkot ${taskNoun.singular}`"
+                          [attr.aria-label]="locale.locale() === 'lv' ? `Pārtulkot ${taskNoun.singular}` : `Translate ${taskNoun.s}`"
                           (click)="translateDescription(file)"
                         >
                           <svg lucideLanguages aria-hidden="true"></svg>
                         </button>
                       }
                       <button matIconButton
-                        [matTooltip]="`Izdzēst ${taskNoun.sakuz}`"
+                        [matTooltip]="locale.locale() === 'lv' ? `Izdzēst ${taskNoun.sakuz}` : `Delete ${taskNoun.s}`"
                         class="delete-button"
-                        [attr.aria-label]="`Izdzēst ${taskNoun.sakuz}`"
+                        [attr.aria-label]="locale.locale() === 'lv' ? `Izdzēst ${taskNoun.sakuz}` : `Delete ${taskNoun.s}`"
                         (click)="deleteDescription(file)"
                       >
                         <svg lucideTrash2 aria-hidden="true"></svg>

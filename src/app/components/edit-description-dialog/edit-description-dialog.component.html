@@ -14,16 +14,16 @@
           <div class="page-toolbar">
             <button matIconButton
                   (click)="previousImage()"
-                  aria-label="Iepriekšējais attēls"
-                  matTooltip="Iepriekšējais attēls"
+                  [attr.aria-label]="locale.t('edit.previousImage')"
+                  [matTooltip]="locale.t('edit.previousImage')"
             >
               <svg lucideArrowLeft aria-hidden="true"></svg>
             </button>
             <span class="toolbar-label" aria-label="Image number">{{ imageIndex + 1 }} / {{ dialogImages.length }}</span>
             <button matIconButton
                   (click)="nextImage()"
-                  aria-label="Nākamais attēls"
-                  matTooltip="Nākamais attēls"
+                  [attr.aria-label]="locale.t('edit.nextImage')"
+                  [matTooltip]="locale.t('edit.nextImage')"
             >
               <svg lucideArrowRight aria-hidden="true"></svg>
             </button>
@@ -33,8 +33,8 @@
           <button matIconButton
                 (click)="zoomOut()"
                 [disabled]="zoom <= minZoom"
-                aria-label="Attālināt"
-                matTooltip="Attālināt"
+                [attr.aria-label]="locale.t('edit.zoomOut')"
+                [matTooltip]="locale.t('edit.zoomOut')"
           >
             <svg lucideMinus aria-hidden="true"></svg>
           </button>
@@ -42,16 +42,16 @@
           <button matIconButton
                 (click)="zoomIn()"
                 [disabled]="zoom >= maxZoom"
-                aria-label="Pietuvināt"
-                matTooltip="Pietuvināt"
+                [attr.aria-label]="locale.t('edit.zoomIn')"
+                [matTooltip]="locale.t('edit.zoomIn')"
           >
             <svg lucidePlus aria-hidden="true"></svg>
           </button>
           <button matIconButton
                 (click)="resetZoom()"
                 [disabled]="zoom === 1"
-                aria-label="Atiestatīt pietuvinājumu"
-                matTooltip="Atiestatīt pietuvinājumu"
+                [attr.aria-label]="locale.t('edit.resetZoom')"
+                [matTooltip]="locale.t('edit.resetZoom')"
           >
             <svg lucideMaximize aria-hidden="true"></svg>
           </button>
@@ -105,8 +105,8 @@
           <button matIconButton
             class="toggle-preview-button"
             (click)="togglePreview()"
-            [attr.aria-label]="previewShownValue ? 'Rediģēt atšifrējumu' : 'Parādīt atšifrējumu ar izceltu sintaksi'"
-            [matTooltip]="previewShownValue ? 'Rediģēt atšifrējumu' : 'Parādīt atšifrējumu ar izceltu sintaksi'"
+            [attr.aria-label]="previewShownValue ? locale.t('edit.transcription') : locale.t('edit.syntax')"
+            [matTooltip]="previewShownValue ? locale.t('edit.transcription') : locale.t('edit.syntax')"
           >
             @if (previewShownValue) { <svg lucidePencil aria-hidden="true"></svg> }
             @else { <svg lucideEye aria-hidden="true"></svg> }

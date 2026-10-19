@@ -1,3 +1,4 @@
+import { UiLocale } from '../i18n/translations';
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { PricePerMTokens } from '../types/model.types';
@@ -6,14 +7,17 @@ import { PricePerMTokens } from '../types/model.types';
   name: 'pricePerMTokens'
 })
 export class PricePerMTokensPipe implements PipeTransform {
-  transform(price: PricePerMTokens | null | undefined): string[] {
+  transform(price: PricePerMTokens | null | undefined, locale: UiLocale = 'lv'): string[] {
+    const tokens = locale === 'lv' ? 'tekstvienībām' : 'tokens';
+    const prompts = locale === 'lv' ? 'uzvednēm' : 'for prompts';
+    const allPrompts = locale === 'lv' ? 'visām uzvednēm' : 'for all prompts';
     if (price == null) {
       return ['–'];
     }
 
     // Flat price: number
     if (typeof price === 'number') {
-      return [`$${price.toFixed(2)} / 1M tekstvienībām`];
+      return [`$${price.toFixed(2)} / 1M ${tokens}`];
     }
 
     // Tiered price
@@ -25,13 +29,13 @@ export class PricePerMTokensPipe implements PipeTransform {
       const dollars = `$${tier.per1M.toFixed(2)}`;
 
       if (tier.upToTokens !== null) {
-        lines.push(`${dollars} / 1M tekstvienībām, uzvednēm <= ${this.formatTokens(tier.upToTokens)} tekstvienībām`);
+        lines.push(`${dollars} / 1M ${tokens}, ${prompts} <= ${this.formatTokens(tier.upToTokens)} ${tokens}`);
         prevUpTo = tier.upToTokens;
       } else {
         if (prevUpTo == null) {
-          lines.push(`${dollars} / 1M tekstvienībām, visām uzvednēm`);
+          lines.push(`${dollars} / 1M ${tokens}, ${allPrompts}`);
         } else {
-          lines.push(`${dollars} / 1M tekstvienībām, uzvednēm > ${this.formatTokens(prevUpTo)} tekstvienībām`);
+          lines.push(`${dollars} / 1M ${tokens}, ${prompts} > ${this.formatTokens(prevUpTo)} ${tokens}`);
         }
       }
     }

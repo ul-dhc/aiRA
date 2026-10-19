@@ -11,8 +11,8 @@
     <h3>
       <span>a) {{ locale.locale() === 'lv' ? 'Uzdevuma nosacījumi' : 'Task settings' }}</span>
       <button matIconButton
-            aria-label="Izvēlies MI darba uzdevumu."
-            matTooltip="Izvēlies MI darba uzdevumu."
+            [attr.aria-label]="locale.t('settings.taskHelp')"
+            [matTooltip]="locale.t('settings.taskHelp')"
             matTooltipPosition="above"
       >
         <svg lucideClipboardList aria-hidden="true"></svg>
@@ -54,7 +54,7 @@
         <mat-slide-toggle
               [checked]="settings.includeFilename()"
               (change)="setIncludeFilename($event)"
-              matTooltip="Atzīmē, ja attēlanosaukums iekļauj noderīgu kontekstu, piemēram, vārdus, datumu. Datnes nosaukums tiks iekļauts MI uzvednē lai uzlabotu attēlu tekstuālās alternatīvas (alt text) kvalitāti."
+              [matTooltip]="locale.t('settings.filenameHelp')"
         >{{ locale.t('settings.includeFilename') }}</mat-slide-toggle>
       </div>
     }
@@ -64,8 +64,8 @@
     <h3>
       <span>b) {{ locale.locale() === 'lv' ? 'Izvades iestatījumi' : 'Output settings' }}</span>
       <button matIconButton
-            aria-label="Pielāgot rezultātu formatējumu."
-            matTooltip="Pielāgot rezultātu formatējumu."
+            [attr.aria-label]="locale.t('settings.outputHelp')"
+            [matTooltip]="locale.t('settings.outputHelp')"
             matTooltipPosition="above"
       >
         <svg lucideSlidersHorizontal aria-hidden="true"></svg>
@@ -100,7 +100,7 @@
               [step]="25"
               [discrete]="true"
               [showTickMarks]="true"
-              matTooltip="Vēlamaiss garums ģenerētajai attēlu tekstuālajai alternatīvai (alt text)."
+              [matTooltip]="locale.t('settings.lengthHelp')"
           >
             <input matSliderThumb
                   [value]="settings.selectedDescLength()"
@@ -135,16 +135,16 @@
         <mat-slide-toggle
               [checked]="transcribeHeaders()"
               (change)="setTranscribeHeaders($event)"
-              matTooltip="Izvēlies, lai iekļautu lapu galvenes, kājenes un lapaspušu numurus atšifrējumā."
-        >Atšifrējumā iekļaut arī galveni, kājeni un lapu numurus</mat-slide-toggle>
+              [matTooltip]="locale.t('settings.headersHelp')"
+        >{{ locale.t('settings.headers') }}</mat-slide-toggle>
       </div>
 
       <div class="form-field-wrapper">
         <mat-slide-toggle
               [checked]="teiEncode()"
               (change)="setTeiEncode($event)"
-              matTooltip="Izvēlies, lai TEI XML iekodētu katru atšifrēto lapu atsevišķi."
-        >TEI XML iekodēt katru lapu atšifrējumu atsevišķi</mat-slide-toggle>
+              [matTooltip]="locale.t('settings.teiHelp')"
+        >{{ locale.t('settings.tei') }}</mat-slide-toggle>
       </div>
     }
 
@@ -152,8 +152,8 @@
       <div class="form-field-wrapper">
         <div class="slider-wrapper">
           <div class="slider-label-wrapper">
-            <label id="batch-slider-label" class="slider-label">Bilžu grupējuma lielums:</label>
-            <label class="slider-value-label">{{batchSizeSlider.value}} bildes</label>
+            <label id="batch-slider-label" class="slider-label">{{ locale.t('settings.batchLabel') }}</label>
+            <label class="slider-value-label">{{batchSizeSlider.value}} {{ locale.locale() === 'lv' ? 'bildes' : 'images' }}</label>
           </div>
           <mat-slider
               [min]="settings.batchSizeMin()"
@@ -161,7 +161,7 @@
               [step]="1"
               [discrete]="true"
               [showTickMarks]="true"
-              matTooltip="Bilžu grupējuma lielums regulē cik daudz bildes MI apstrādā kopā. Ja bilžu skaits pārsniedz grupējuma lielumu, tad bildes tiks sadalītas vairākos grupējumos ar noteikto izmēru. Katru grupējumu MI uztver kā vienu ”vienību”."
+              [matTooltip]="locale.t('settings.batchHelp')"
           >
             <input matSliderThumb
                   [value]="settings.batchSize()"
@@ -227,8 +227,8 @@
     <h3>
       <span>c) {{ locale.locale() === 'lv' ? 'Modeļa iestatījumi' : 'Model settings' }}</span>
       <button matIconButton
-            aria-label="Iestatījumi attēlu apstrādei un interpretēšanai ar MI."
-            matTooltip="Iestatījumi attēlu apstrādei un interpretēšanai ar MI."
+            [attr.aria-label]="locale.t('settings.modelHelp')"
+            [matTooltip]="locale.t('settings.modelHelp')"
             matTooltipPosition="above"
       >
         <svg lucideBox aria-hidden="true"></svg>
@@ -274,7 +274,7 @@
       @if (reasoningEfforts.length > 0) {
         <div class="form-field-wrapper">
           <mat-form-field appearance="outline">
-            <mat-label>Domāšanas līmenis</mat-label>
+            <mat-label>{{ locale.t('settings.reasoning') }}</mat-label>
             <mat-select
                   [value]="settings.selectedReasoningEffort()"
                   (valueChange)="setReasoningEffort($event)"
@@ -283,22 +283,22 @@
               @for (reasoningEffort of reasoningEfforts; track reasoningEffort) {
 
                 @if(reasoningEffort == "none"){
-                <mat-option [value]="reasoningEffort">Nekāds</mat-option>
+                <mat-option [value]="reasoningEffort">{{ locale.t('settings.none') }}</mat-option>
                 }
                 @if(reasoningEffort == "minimal"){
-                <mat-option [value]="reasoningEffort">Minimāls</mat-option>
+                <mat-option [value]="reasoningEffort">{{ locale.t('settings.minimal') }}</mat-option>
                 }
                 @if(reasoningEffort == "low"){
-                <mat-option [value]="reasoningEffort">Zems</mat-option>
+                <mat-option [value]="reasoningEffort">{{ locale.t('settings.low') }}</mat-option>
                 }
                 @if(reasoningEffort == "medium"){
-                <mat-option [value]="reasoningEffort">Mērens</mat-option>
+                <mat-option [value]="reasoningEffort">{{ locale.t('settings.medium') }}</mat-option>
                 }
                 @if(reasoningEffort == "high"){
-                <mat-option [value]="reasoningEffort">Augsts</mat-option>
+                <mat-option [value]="reasoningEffort">{{ locale.t('settings.high') }}</mat-option>
                 }
                 @if(reasoningEffort == "xhigh"){
-                <mat-option [value]="reasoningEffort">Ļoti augsts</mat-option>
+                <mat-option [value]="reasoningEffort">{{ locale.t('settings.xhigh') }}</mat-option>
                 }
                 
               
@@ -311,7 +311,7 @@
       @if (thinkingLevels.length > 0) {
         <div class="form-field-wrapper">
           <mat-form-field appearance="outline">
-            <mat-label>Domāšanas līmenis</mat-label>
+            <mat-label>{{ locale.t('settings.reasoning') }}</mat-label>
             <mat-select
                   [value]="settings.selectedThinkingLevel()"
                   (valueChange)="setThinkingLevel($event)"
@@ -320,16 +320,16 @@
               @for (thinkingLevel of thinkingLevels; track thinkingLevel) {
                 
                 @if(thinkingLevel == "minimal"){
-                <mat-option [value]="thinkingLevel">Minimāls</mat-option>
+                <mat-option [value]="thinkingLevel">{{ locale.t('settings.minimal') }}</mat-option>
                 }
                 @if(thinkingLevel == "low"){
-                <mat-option [value]="thinkingLevel">Zems</mat-option>
+                <mat-option [value]="thinkingLevel">{{ locale.t('settings.low') }}</mat-option>
                 }
                 @if(thinkingLevel == "medium"){
-                <mat-option [value]="thinkingLevel">Mērens</mat-option>
+                <mat-option [value]="thinkingLevel">{{ locale.t('settings.medium') }}</mat-option>
                 }
                 @if(thinkingLevel == "high"){
-                <mat-option [value]="thinkingLevel">Augsts</mat-option>
+                <mat-option [value]="thinkingLevel">{{ locale.t('settings.high') }}</mat-option>
                 }
                 
               } 
@@ -342,7 +342,7 @@
         @if (tempSupported) {
           <div class="slider-wrapper">
             <div class="slider-label-wrapper">
-              <label id="temp-slider-label" class="slider-label">Temperatūra:</label>
+              <label id="temp-slider-label" class="slider-label">{{ locale.t('settings.temperatureLabel') }}</label>
               <label class="slider-value-label">{{temperatureSlider.value}}</label>
             </div>
             <mat-slider
@@ -351,7 +351,7 @@
                   [step]="0.1"
                   [discrete]="true"
                   [showTickMarks]="true"
-                  matTooltip="Temperatūra nosaka, cik paredzamas vai daudzveidīgas ir MI atbildes.r Izvēloties zemāku temperatūru, atbildes būs vienveidīgākas, savukārt ar augstākām vērtībām tās būs radošākas un ar zemāku noteiktspēju. Teksta atšifrēšanai īpaši noder temperatūra ar vērtību 0.0, tomēr daudzi modeļi ir optimizēti vērtībai 1.0."
+                  [matTooltip]="locale.t('settings.temperatureHelp')"
             >
               <input matSliderThumb
                     [value]="settings.selectedTemperature()"
@@ -361,7 +361,7 @@
             </mat-slider>
           </div>
         } @else {
-          <p class="slider-support-message">Modelis neatbalsta temperatūras regulēšanu, kad izvēlēts šis domāšanas līmenis.</p>
+          <p class="slider-support-message">{{ locale.t('settings.temperatureUnsupported') }}</p>
         }
       </div>
     </mat-expansion-panel>
@@ -375,7 +375,7 @@
       <div class="model-details-wrapper">
         <h4>{{ model.name }} ({{ model.provider }})</h4>
         @if (model.description) {
-          <p>{{ model.description }}</p>
+          <p>{{ locale.modelDescription(model.id, model.description) }}</p>
         }
         <table>
           <tbody>
@@ -384,23 +384,23 @@
               <td>{{ model.id }}</td>
             </tr>
             <tr>
-              <th scope="row">Ievades cena:</th>
+              <th scope="row">{{ locale.t('settings.inputPrice') }}</th>
               <td>
-                @for (line of model.inputPrice | pricePerMTokens; track $index) {
+                @for (line of model.inputPrice | pricePerMTokens:locale.locale(); track $index) {
                   <div>{{ line }}</div>
                 }
               </td>
             </tr>
             <tr>
-              <th scope="row">Izvadnes cena:</th>
+              <th scope="row">{{ locale.t('settings.outputPrice') }}</th>
               <td>
-                @for (line of model.outputPrice | pricePerMTokens; track $index) {
+                @for (line of model.outputPrice | pricePerMTokens:locale.locale(); track $index) {
                   <div>{{ line }}</div>
                 }
               </td>
             </tr>
             <tr>
-              <th scope="row">Pieprasījumi minūtē:</th>
+              <th scope="row">{{ locale.t('settings.rpm') }}</th>
               <td>{{ model.rpm }}</td>
             </tr>
             <tr>

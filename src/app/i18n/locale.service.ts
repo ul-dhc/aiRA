@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
 
 import { TRANSLATIONS, UiLocale } from './translations';
 
@@ -12,7 +12,20 @@ export class LocaleService {
   readonly otherLocale = computed<UiLocale>(() => this.locale() === 'lv' ? 'en' : 'lv');
 
   constructor() {
-    this.document.documentElement.lang = this.locale();
+    effect(() => {
+      const locale = this.locale();
+      this.document.documentElement.lang = locale;
+      const title = this.t('meta.title');
+      const description = this.t('meta.description');
+      this.document.title = title;
+      for (const selector of ['meta[name="description"]', 'meta[property="og:description"]', 'meta[name="twitter:description"]']) {
+        this.document.querySelector(selector)?.setAttribute('content', description);
+      }
+      for (const selector of ['meta[property="og:title"]', 'meta[property="og:image:alt"]', 'meta[name="twitter:title"]', 'meta[name="twitter:image:alt"]']) {
+        this.document.querySelector(selector)?.setAttribute('content', title);
+      }
+      this.document.querySelector('meta[property="og:locale"]')?.setAttribute('content', locale === 'lv' ? 'lv_LV' : 'en_GB');
+    });
   }
 
   setLocale(locale: UiLocale): void {
@@ -66,6 +79,18 @@ export class LocaleService {
       ]
     };
     return descriptions[taskType]?.[this.locale() === 'lv' ? 0 : 1] ?? '';
+  }
+
+  localizeMessage(message: string | undefined): string {
+    if (!message) return '';
+    const key = Object.keys(TRANSLATIONS.lv).find(key =>
+      key.startsWith('error.') && (TRANSLATIONS.lv[key] === message || TRANSLATIONS.en[key] === message)
+    );
+    return key ? this.t(key) : message;
+  }
+
+  modelDescription(id: string, fallback: string): string {
+    return this.locale() === 'en' ? (TRANSLATIONS.en[`model.${id}`] ?? fallback) : fallback;
   }
 
   languageLabel(code: string): string {

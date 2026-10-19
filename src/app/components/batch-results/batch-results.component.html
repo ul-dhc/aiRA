@@ -22,12 +22,12 @@
           } @else if (r.status === 'cancelled') {
             <div class="batch-status batch-cancelled">
               <svg lucideCircleX aria-hidden="true"></svg>
-              <p>{{ r.error ?? (locale.locale() === 'lv' ? 'Atcelts.' : 'Cancelled.') }}</p>
+              <p>{{ locale.localizeMessage(r.error) || (locale.locale() === 'lv' ? 'Atcelts.' : 'Cancelled.') }}</p>
             </div>
           } @else if (r.status === 'error') {
             <div class="batch-status batch-error">
               <svg lucideCircleAlert aria-hidden="true"></svg>
-              <p>{{ r.error }}</p>
+              <p>{{ locale.localizeMessage(r.error) }}</p>
             </div>
           } @else {
             @if (r.teiBody) {
@@ -71,8 +71,8 @@
               </button>
               <button matIconButton
                 (click)="downloadTei(r)"
-                [attr.aria-label]="'Lejupielādēt XML'"
-                [matTooltip]="'Lejupielādēt XML'"
+                [attr.aria-label]="locale.t('batch.download')"
+                [matTooltip]="locale.t('batch.download')"
               >
                 <svg lucideDownload aria-hidden="true"></svg>
               </button>
@@ -99,8 +99,8 @@
             @if (r.status === 'generating') {
               <button matIconButton
                 (click)="cancelOne(r.id)"
-                [attr.aria-label]="'Atcelt grupu'"
-                [matTooltip]="'Atcelt grupu'"
+                [attr.aria-label]="locale.t('batch.cancel')"
+                [matTooltip]="locale.t('batch.cancel')"
               >
                 <svg lucideCircleX aria-hidden="true"></svg>
               </button>
@@ -122,8 +122,8 @@
             <button matIconButton
               class="hide-preview-button"
               (click)="togglePreview(r.id)"
-              [attr.aria-label]="'Slēpt augstāk redzamo atšifrējumu'"
-              [matTooltip]="'Slēpt augstāk redzamo atšifrējumu'"
+              [attr.aria-label]="locale.t('batch.hide')"
+              [matTooltip]="locale.t('batch.hide')"
             >
               <svg lucideEyeOff aria-hidden="true"></svg>
             </button>

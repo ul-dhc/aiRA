@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { LocaleService } from '../i18n/locale.service';
+import { Injectable, inject } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { ApiError, File, GenerateContentResponse, GoogleGenAI, MediaResolution,
          ThinkingLevel, createPartFromUri, createUserContent
@@ -16,6 +17,7 @@ import { isTemperatureSupportedForModel } from '../utils/model-parameters';
   providedIn: 'root'
 })
 export class GoogleService {
+  private readonly locale = inject(LocaleService);
   private apiKey = '';
   private client: GoogleGenAI | null = null;
   private modelList: any[] = [];
@@ -84,12 +86,12 @@ export class GoogleService {
 
   async describeImage(settings: RequestSettings, prompt: string, base64Image: string): Promise<AiResult> {
     if (!this.client) {
-      return { text: '', error: { code: 401, message: 'Google API atslēga nav iestatīta.' } };
+      return { text: '', error: { code: 401, message: this.locale.t('error.googleKey') } };
     }
 
     // console.log('Prompt:', prompt);
     if (!prompt) {
-      return { text: '', error: { code: 400, message: 'Trūkst uzvednes.' } };
+      return { text: '', error: { code: 400, message: this.locale.t('error.prompt') } };
     }
 
     const parsed = parseDataUrl(base64Image);
@@ -124,15 +126,15 @@ export class GoogleService {
 
   async describeImages(settings: RequestSettings, prompt: string, base64Images: string[]): Promise<AiResult> {
     if (!this.client) {
-      return { text: '', error: { code: 401, message: 'Google API atslēga nav iestatīta.' } };
+      return { text: '', error: { code: 401, message: this.locale.t('error.googleKey') } };
     }
 
     if (!prompt) {
-      return { text: '', error: { code: 400, message: 'Trūkst uzvednes.' } };
+      return { text: '', error: { code: 400, message: this.locale.t('error.prompt') } };
     }
 
     if (!base64Images?.length) {
-      return { text: '', error: { code: 400, message: 'Nav pievienotu attēlu.' } };
+      return { text: '', error: { code: 400, message: this.locale.t('error.images') } };
     }
 
     // Parse all images first so we can fail fast with a good error
@@ -191,15 +193,15 @@ export class GoogleService {
     const signal = options?.signal;
 
     if (!this.client) {
-      return { text: '', error: { code: 401, message: 'Google API atslēga nav iestatīta.' } };
+      return { text: '', error: { code: 401, message: this.locale.t('error.googleKey') } };
     }
 
     if (!prompt) {
-      return { text: '', error: { code: 400, message: 'Trūkst uzvednes.' } };
+      return { text: '', error: { code: 400, message: this.locale.t('error.prompt') } };
     }
 
     if (!images?.length) {
-      return { text: '', error: { code: 400, message: 'Nav pievienotu attēlu.' } };
+      return { text: '', error: { code: 400, message: this.locale.t('error.images') } };
     }
 
     try {
@@ -235,7 +237,7 @@ export class GoogleService {
     } catch (e) {
       // If aborted, surface a clean error object; the caller will typically ignore it.
       if (e instanceof DOMException && e.name === 'AbortError') {
-        return { text: '', error: { code: 499, message: 'Pieprasījums atcelts.' }, raw: e };
+        return { text: '', error: { code: 499, message: this.locale.t('error.cancelled') }, raw: e };
       }
       return this.toAiResultErrorGoogle(e);
     }
@@ -243,11 +245,11 @@ export class GoogleService {
 
   async responsesTextTask(settings: RequestSettings, prompt: string): Promise<AiResult> {
     if (!this.client) {
-      return { text: '', error: { code: 401, message: 'Google API atslēga nav iestatīta.' } };
+      return { text: '', error: { code: 401, message: this.locale.t('error.googleKey') } };
     }
 
     if (!prompt) {
-      return { text: '', error: { code: 400, message: 'Trūkst uzvednes.' } };
+      return { text: '', error: { code: 400, message: this.locale.t('error.prompt') } };
     }
 
     try {
@@ -609,7 +611,7 @@ export class GoogleService {
     console.error('Unexpected Error:', e);
     return {
       text: '',
-      error: { code: 500, message: 'Iekšējā servera kļūda.' },
+      error: { code: 500, message: this.locale.t('error.server') },
       raw: e
     };
   }
@@ -640,7 +642,7 @@ export class GoogleService {
         if (typeof msg === 'string' && msg.trim()) return msg.trim();
       } catch {}
     }
-    return raw || 'Google API kļūda.';
+    return raw || this.locale.t('error.google');
   }
 
   /**

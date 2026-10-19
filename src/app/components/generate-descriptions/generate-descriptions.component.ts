@@ -43,32 +43,6 @@ import { AiResult } from '../../types/ai.types';
 import { RequestSettings } from '../../types/settings.types';
 import { LanguageCode } from '../../../assets/config/prompts';
 
-function customPaginatorLabels(): MatPaginatorIntl {
-  const paginatorIntl = new MatPaginatorIntl();
-
-  paginatorIntl.itemsPerPageLabel = 'Attēlu skaits vienai lapai';
-  paginatorIntl.nextPageLabel = 'Nākošā lapa';
-  paginatorIntl.previousPageLabel = 'Iepriekšējā lapa';
-  paginatorIntl.firstPageLabel = 'Pirmā lapa';
-  paginatorIntl.lastPageLabel = 'Pēdējā lapa';
-
-  paginatorIntl.getRangeLabel = (
-    page: number,
-    pageSize: number,
-    length: number
-  ): string => {
-    if (length === 0 || pageSize === 0) {
-      return `0 no ${length}`;
-    }
-
-    const startIndex = page * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, length);
-
-    return `${startIndex + 1} – ${endIndex} no ${length}`;
-  };
-
-  return paginatorIntl;
-}
 
 @Component({
   selector: 'generate-descriptions',
@@ -275,7 +249,7 @@ export class GenerateDescriptionsComponent implements OnInit {
       }
 
       counter++;
-      this.openProgressSnack(`Ģenerē ${this.settings.taskNouns().sakuz} ${counter}/${runImages.length}`);
+      this.openProgressSnack(`${this.locale.locale() === 'lv' ? 'Ģenerē' : 'Generating'} ${this.settings.taskNouns().sakuz} ${counter}/${runImages.length}`);
 
       this.setImageGenerating(imageObj, true);
       const prompt = this.constructPrompt(promptTemplate, imageObj);
@@ -607,7 +581,7 @@ export class GenerateDescriptionsComponent implements OnInit {
         continue;
       }
 
-      this.openProgressSnack(`Ģenerē TEI grupu ${batchIndex + 1}/${batches.length} (${batch.length} ${batch.length === 1 ? 'bildi' : 'bildes'})`);
+      this.openProgressSnack(this.locale.locale() === 'lv' ? `Ģenerē TEI grupu ${batchIndex + 1}/${batches.length} (${batch.length} ${batch.length === 1 ? 'bildi' : 'bildes'})` : `Generating TEI batch ${batchIndex + 1}/${batches.length} (${batch.length} images)`);
 
       // mark images generating (even if table hidden, keeps state consistent)
       for (const img of batch) {
@@ -655,7 +629,7 @@ export class GenerateDescriptionsComponent implements OnInit {
           // runAiTaskBatchImages already showed a snackbar; mark the batch as error
           this.batchResults.update(batchId, {
             status: 'error',
-            error: 'Grupas pieprasīums neizdevās.',
+            error: this.locale.t('error.batch'),
           });
 
           // For stop-on-error behavior uncomment:
@@ -726,7 +700,7 @@ export class GenerateDescriptionsComponent implements OnInit {
       this.setImageGenerating(img, true);
     }
 
-    this.openProgressSnack(`Atkārtoti ģenerē TEI grupu ${batch.batchIndex} (${batch.imageIds.length} ${batch.imageIds.length === 1 ? 'bildi' : 'bildes'})`);
+    this.openProgressSnack(this.locale.locale() === 'lv' ? `Atkārtoti ģenerē TEI grupu ${batch.batchIndex} (${batch.imageIds.length} ${batch.imageIds.length === 1 ? 'bildi' : 'bildes'})` : `Regenerating TEI batch ${batch.batchIndex} (${batch.imageIds.length} images)`);
 
     const generating: Partial<BatchResult> = {
         status: 'generating',
@@ -818,7 +792,7 @@ export class GenerateDescriptionsComponent implements OnInit {
     this.batchResults.update(batchId, {
       status: 'cancelled',
       updatedAt: new Date().toISOString(),
-      error: 'Atcēla lietotājs.',
+      error: this.locale.t('error.userCancelled'),
     });
 
     // Abort the in-flight request if this batch is currently running
@@ -851,10 +825,10 @@ export class GenerateDescriptionsComponent implements OnInit {
   removeImage(imageObj: ImageData): void {
     const dialogRef = this.dialog.open(ConfirmActionDialogComponent, {
       data: {
-        title: 'Noņemt attēlu?',
-        body: 'Šo darbību nebūs iespējams atsaukt.',
-        cancelLabel: 'Atcelt',
-        confirmLabel: 'Noņemt'
+        title: this.locale.t('dialog.removeImage'),
+        body: this.locale.t('dialog.irreversible'),
+        cancelLabel: this.locale.t('common.cancel'),
+        confirmLabel: this.locale.t('common.remove')
       },
     });
 
@@ -869,10 +843,10 @@ export class GenerateDescriptionsComponent implements OnInit {
   removeAllImages(): void {
     const dialogRef = this.dialog.open(ConfirmActionDialogComponent, {
       data: {
-        title: 'Noņemt visus attēlus?',
-        body: 'Šo darbību nebūs iespējams atsaukt.',
-        cancelLabel: 'Atcelt',
-        confirmLabel: 'Noņemt'
+        title: this.locale.t('dialog.removeAll'),
+        body: this.locale.t('dialog.irreversible'),
+        cancelLabel: this.locale.t('common.cancel'),
+        confirmLabel: this.locale.t('common.remove')
       },
     });
 
@@ -911,10 +885,10 @@ export class GenerateDescriptionsComponent implements OnInit {
   deleteDescription(imageObj: ImageData): void {
     const dialogRef = this.dialog.open(ConfirmActionDialogComponent, {
       data: {
-        title: `Dzēst šo ${this.settings.taskNouns().sakuz}?`,
-        body: 'Šo rīcību nebūs iespējams atsaukt.',
-        cancelLabel: 'Atcelt',
-        confirmLabel: 'Dzēst'
+        title: this.locale.locale() === 'lv' ? `Dzēst šo ${this.settings.taskNouns().sakuz}?` : `Delete this ${this.settings.taskNouns().s}?`,
+        body: this.locale.t('dialog.irreversible'),
+        cancelLabel: this.locale.t('common.cancel'),
+        confirmLabel: this.locale.t('common.delete')
       },
     });
 
@@ -1004,7 +978,7 @@ export class GenerateDescriptionsComponent implements OnInit {
         this.locale.locale() === 'lv'
           ? 'Neizdevās eksportēt tabulu. Pārbaudiet, vai ģenerētais XML ir derīgs.'
           : 'Could not export the table. Check that the generated XML is valid.',
-        this.locale.locale() === 'lv' ? 'Aizvērt' : 'Close',
+        this.locale.t('common.close'),
         { duration: 8000 }
       );
     }
@@ -1108,7 +1082,7 @@ export class GenerateDescriptionsComponent implements OnInit {
     this.progressStopSub = undefined;
 
     this.progressSnackRef?.dismiss();
-    this.progressSnackRef = this.snackBar.open(message, 'Pārtraukt');
+    this.progressSnackRef = this.snackBar.open(message, this.locale.t('common.stop'));
 
     this.progressStopSub = this.progressSnackRef.onAction().subscribe(() => {
       this.stopFromProgressSnack();
@@ -1138,7 +1112,7 @@ export class GenerateDescriptionsComponent implements OnInit {
       this.errorSnackRef.dismiss();
     }
 
-    const ref = this.snackBar.open(message, 'Aizvērt', {
+    const ref = this.snackBar.open(message, this.locale.t('common.close'), {
       duration: undefined,
       panelClass: 'snackbar-error'
     });
@@ -1216,7 +1190,7 @@ export class GenerateDescriptionsComponent implements OnInit {
   private handleApiFailure(settings: RequestSettings, result: any, stopGeneration: boolean, imageObj?: ImageData) {
     const e = result?.error;
     if (e) {
-      const msg = `Radās kļūda no ${settings.model?.provider} API: ${e.message ?? 'nezināma kļūda'}`.trim();
+      const msg = this.locale.locale() === 'lv' ? `Radās kļūda no ${settings.model?.provider} API: ${e.message ?? this.locale.t('error.unknown')}` : `${settings.model?.provider} API error: ${e.message ?? this.locale.t('error.unknown')}`.trim();
       this.showAPIErrorMessage(msg);
       if (stopGeneration) {
         this.setGlobalGenerating(false);
@@ -1260,7 +1234,7 @@ export class GenerateDescriptionsComponent implements OnInit {
     } catch (e) {
       console.error(e);
       this.showAPIErrorMessage(
-        `Nezināma kļūda uzradās programmai sazinoties ar ${settings.model?.provider} API: ${e}`
+        this.locale.locale() === 'lv' ? `Nezināma kļūda uzradās programmai sazinoties ar ${settings.model?.provider} API: ${e}` : `An unknown error occurred while contacting the ${settings.model?.provider} API: ${e}`
       );
 
       if (stopOnError) {

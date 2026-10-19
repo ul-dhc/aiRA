@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { LocaleService } from '../i18n/locale.service';
+import { Injectable, inject } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import OpenAI from 'openai';
 import type { ResponseCreateParamsNonStreaming, ResponseInputMessageContentList } from 'openai/resources/responses/responses';
@@ -19,6 +20,7 @@ const OPENAI_FILES_API_EXPIRES_AFTER_SECONDS = 48 * 60 * 60;
   providedIn: 'root'
 })
 export class OpenAiService {
+  private readonly locale = inject(LocaleService);
   private apiKey: string = '';
   private client: OpenAI | null = null;
   private modelList: any[] = [];
@@ -83,12 +85,12 @@ export class OpenAiService {
    */
   async describeImage(settings: RequestSettings, prompt: string, base64Image: string): Promise<AiResult> {
     if (!this.client) {
-      return { text: '', error: { code: 401, message: 'OpenAI API atslēga nav iestatīa.' } };
+      return { text: '', error: { code: 401, message: this.locale.t('error.openaiKey') } };
     }
 
     // console.log('Prompt:', prompt);
     if (!prompt) {
-      return { text: '', error: { code: 400, message: 'Trūkst uzvednes.' } };
+      return { text: '', error: { code: 400, message: this.locale.t('error.prompt') } };
     }
 
     try {
@@ -115,15 +117,15 @@ export class OpenAiService {
    */
   async describeImages(settings: RequestSettings, prompt: string, base64Images: string[]): Promise<AiResult> {
     if (!this.client) {
-      return { text: '', error: { code: 401, message: 'OpenAI API atslēga nav iestatīa.' } };
+      return { text: '', error: { code: 401, message: this.locale.t('error.openaiKey') } };
     }
 
     if (!prompt) {
-      return { text: '', error: { code: 400, message: 'Trūkst uzvednes.' } };
+      return { text: '', error: { code: 400, message: this.locale.t('error.prompt') } };
     }
 
     if (!base64Images?.length) {
-      return { text: '', error: { code: 400, message: 'Nav pievienotu attēlu.' } };
+      return { text: '', error: { code: 400, message: this.locale.t('error.images') } };
     }
 
     try {
@@ -170,15 +172,15 @@ export class OpenAiService {
     const signal = options?.signal;
 
     if (!this.client) {
-      return { text: '', error: { code: 401, message: 'OpenAI API atslēga nav iestatīa.' } };
+      return { text: '', error: { code: 401, message: this.locale.t('error.openaiKey') } };
     }
 
     if (!prompt) {
-      return { text: '', error: { code: 400, message: 'Trūkst uzvednes.' } };
+      return { text: '', error: { code: 400, message: this.locale.t('error.prompt') } };
     }
 
     if (!images?.length) {
-      return { text: '', error: { code: 400, message: 'Nav pievienotu attēlu.' } };
+      return { text: '', error: { code: 400, message: this.locale.t('error.images') } };
     }
 
     try {
@@ -207,7 +209,7 @@ export class OpenAiService {
       return this.responseToAiResult(resp);
     } catch (e) {
       if (e instanceof DOMException && e.name === 'AbortError') {
-        return { text: '', error: { code: 499, message: 'Pieprasījums atcelts.' }, raw: e };
+        return { text: '', error: { code: 499, message: this.locale.t('error.cancelled') }, raw: e };
       }
       return this.toAiResultErrorOpenAi(e);
     }
@@ -218,11 +220,11 @@ export class OpenAiService {
    */
   async responsesTextTask(settings: RequestSettings, prompt: string): Promise<AiResult> {
     if (!this.client) {
-      return { text: '', error: { code: 401, message: 'OpenAI API atslēga nav iestatīa.' } };
+      return { text: '', error: { code: 401, message: this.locale.t('error.openaiKey') } };
     }
     
     if (!prompt) {
-      return { text: '', error: { code: 400, message: 'Trūkst uzvednes.' } };
+      return { text: '', error: { code: 400, message: this.locale.t('error.prompt') } };
     }
 
     const reasoningEffort: ReasoningEffort = settings.reasoningEffort ?? settings.model.parameters?.reasoningEffort ?? null;
@@ -532,7 +534,7 @@ export class OpenAiService {
     console.error('Unexpected Error:', e);
     return {
       text: '',
-      error: { code: 500, message: 'Iekšējā servera kļūda.' },
+      error: { code: 500, message: this.locale.t('error.server') },
       raw: e
     };
   }

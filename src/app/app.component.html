@@ -3,7 +3,7 @@
 <div class="content-wrapper app-shell">
   <app-header></app-header>
   <div class="page-grid">
-    <aside class="info-sidebar" aria-label="Informācija par aiRA">
+    <aside class="info-sidebar" [attr.aria-label]="locale.t('app.sidebar')">
       <section class="info-card">
         <h2><span class="info-icon">?</span>{{ locale.locale() === 'lv' ? 'Kas ir aiRA?' : 'What is aiRA?' }}</h2>
         <p>{{ locale.locale() === 'lv' ? 'Rīks rokraksta atšifrēšanai, attēlu aprakstu veidošanai un teksta iegūšanai no attēliem ar mākslīgā intelekta palīdzību.' : 'A tool for handwriting transcription, creating image descriptions, and extracting text from images with artificial intelligence.' }}</p>
@@ -25,7 +25,7 @@
           <li>{{ locale.locale() === 'lv' ? 'Ģenerē rezultātu un pārskati to' : 'Generate and review the result' }}</li>
         </ol>
       </section>
-      <section class="trust-card" aria-label="Privātums un drošība">
+      <section class="trust-card" [attr.aria-label]="locale.t('app.privacy')">
         <div><span class="info-icon"><svg lucideLockKeyhole aria-hidden="true"></svg></span><strong>{{ locale.locale() === 'lv' ? 'Privāti' : 'Private' }}</strong><small>{{ locale.locale() === 'lv' ? 'Tavi dati paliek pie tevis' : 'Your data stays with you' }}</small></div>
         <div><span class="info-icon"><svg lucideServer aria-hidden="true"></svg></span><strong>{{ locale.locale() === 'lv' ? 'Bez servera glabāšanas' : 'No server storage' }}</strong><small>{{ locale.locale() === 'lv' ? 'Nekas netiek saglabāts' : 'Nothing is stored' }}</small></div>
         <div><span class="info-icon"><svg lucideKeyRound aria-hidden="true"></svg></span><strong>{{ locale.locale() === 'lv' ? 'Tavs API atslēgas lietojums' : 'Your API key' }}</strong><small>{{ locale.locale() === 'lv' ? 'Tev ir kontrole pār API atslēgu' : 'You control your API key' }}</small></div>
@@ -74,7 +74,7 @@
         @defer (on idle) {
           <add-images (addingImages)="setAddingImages($event)"></add-images>
         } @loading (minimum 500ms) {
-          <p>Ielādē komponenti ...</p>
+          <p>{{ locale.t('app.loading') }}</p>
         } @error {
           <p>{{ 'app.deferError' | t }}</p>
         }
@@ -85,15 +85,15 @@
       </mat-step>
 
       <!-- Step 4: Generate image descriptions -->
-      <mat-step [label]="locale.locale() === 'lv' ? `Ģenerēt ${taskNoun.pakuz}` : (settings.selectedTaskType() === 'tableDigitization' ? 'Digitize tables' : 'Generate descriptions')">
-        <h2 id="generate-step-title">{{ locale.locale() === 'lv' ? 'Ģenerēt rezultātus' : (settings.selectedTaskType() === 'tableDigitization' ? 'Digitize tables' : 'Generate descriptions') }}</h2>
+      <mat-step [label]="locale.locale() === 'lv' ? `Ģenerēt ${taskNoun.pakuz}` : (settings.selectedTaskType() === 'tableDigitization' ? 'Digitize tables' : settings.selectedTaskType() === 'altText' ? 'Generate descriptions' : 'Generate transcriptions')">
+        <h2 id="generate-step-title">{{ locale.locale() === 'lv' ? 'Ģenerēt rezultātus' : (settings.selectedTaskType() === 'tableDigitization' ? 'Digitize tables' : settings.selectedTaskType() === 'altText' ? 'Generate descriptions' : 'Generate transcriptions') }}</h2>
         <!-- Defer loading the generate-descriptions component until the API key in step 2 has validated -->
         @defer (when isApiKeyFormValid) {
           <generate-descriptions></generate-descriptions>
         } @loading (minimum 500ms) {
           <p>Loading component ...</p>
         } @error {
-          <p>Radās kļūda lādējot komponenti {{ taskNoun.sakuz }} ģenerēšanai. Lūdzu, pārlādējiet lapu no jauna.</p>
+          <p>{{ locale.t('app.deferError') }}</p>
         }
         <div class="stepper-nav">
           <button mat-button color="primary" matStepperPrevious>{{ locale.t('nav.back') }}</button>
@@ -106,7 +106,7 @@
 <div class="footer-wrapper">
   <footer>
     <p>
-      Jūsu dati ir drošībā, un tie netiks izmantoti MI modeļu apmācībā.<br>
+      {{ locale.t('app.footer') }}<br>
       {{ 'app.version' | t }}: <a href="https://github.com/slsfi/abbi-ng-ai-image-descriptor/blob/main/CHANGELOG.md">{{ appVersion }}</a>.
     </p>
   </footer>
