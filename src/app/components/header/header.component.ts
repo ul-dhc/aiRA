@@ -3,6 +3,8 @@ import {
   Component,
   HostListener,
   Input,
+  Injector,
+  afterNextRender,
   computed,
   inject,
   signal
@@ -27,6 +29,8 @@ type ColorTheme = 'light' | 'dark';
 })
 export class HeaderComponent {
   private readonly document = inject(DOCUMENT);
+  private readonly injector = inject(Injector);
+  private helpTrigger: HTMLElement | null = null;
   private readonly themeStorageKey = 'aira-theme';
   private readonly textScaleStorageKey = 'aira-text-scale';
   readonly locale = inject(LocaleService);
@@ -123,9 +127,11 @@ export class HeaderComponent {
   closeInfoOverlay(): void {
     this.showInfoOverlay.set(false);
     this.document.body.style.overflow = '';
-    if (this.document.defaultView?.location.hash === '#info') {
+    if (['#info', '#info-api-key'].includes(this.document.defaultView?.location.hash ?? '')) {
       this.replaceHash(this.locale.locale());
     }
+    this.helpTrigger?.focus();
+    this.helpTrigger = null;
   }
 
   setLanguage(locale: UiLocale): void {
@@ -192,9 +198,19 @@ export class HeaderComponent {
       this.locale.setLocale(hash.slice(1) as UiLocale);
       this.showInfoOverlay.set(false);
       this.document.body.style.overflow = '';
-    } else if (hash === '#info') {
+    } else if (hash === '#info' || hash === '#info-api-key') {
+      if (hash === '#info-api-key' && !this.showInfoOverlay()) {
+        this.helpTrigger = this.document.activeElement as HTMLElement | null;
+      }
       this.showInfoOverlay.set(true);
       this.document.body.style.overflow = 'hidden';
+      if (hash === '#info-api-key') {
+        afterNextRender(() => {
+          const heading = this.document.getElementById('api-key-help');
+          heading?.focus({ preventScroll: true });
+          heading?.scrollIntoView({ block: 'start' });
+        }, { injector: this.injector });
+      }
     }
   }
 
