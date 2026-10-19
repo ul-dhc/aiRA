@@ -1,3 +1,4 @@
+import { MODEL_REVIEW_DATE } from '../../../assets/config/models';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,6 +37,7 @@ import { LocaleService } from '../../i18n/locale.service';
   styleUrl: './settings-form.component.scss'
 })
 export class SettingsFormComponent {
+  readonly modelReviewDate = MODEL_REVIEW_DATE;
   settings = inject(SettingsService);
   readonly locale = inject(LocaleService);
 

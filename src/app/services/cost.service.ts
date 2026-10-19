@@ -23,7 +23,7 @@ export class CostService {
     const inTokens = usage.inputTokens ?? 0;
     const outTokens = usage.outputTokens ?? 0;
     const inputCost: number = (inTokens / 1000000.0) * resolvePerMTokensPrice(model.inputPrice, inTokens);
-    const outputCost: number = (outTokens / 1000000.0) * resolvePerMTokensPrice(model.outputPrice, outTokens);
+    const outputCost: number = (outTokens / 1000000.0) * resolvePerMTokensPrice(model.outputPrice, inTokens);
     const total = inputCost + outputCost;
 
     this.addCost(total);

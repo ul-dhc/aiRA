@@ -2,7 +2,7 @@ import { Model } from '../../app/types/model.types'
 import { TaskTypeId } from './prompts';
 
 export type ModelProvider = 'OpenAI' | 'Google';
-export type ModelId = 'gpt-4.1' | 'gpt-5.4' | 'gemini-3.1-pro-preview' | 'gemini-3.5-flash' | 'gemini-2.5-pro' | 'gemini-2.5-flash';
+export type ModelId = 'gpt-6.1-sol' | 'gpt-6-luna' | 'gpt-6-astra' | 'gemini-3.8-flash' | 'gemini-3.5-flash-lite' | 'gpt-4.1' | 'gpt-5.4' | 'gemini-3.1-pro-preview' | 'gemini-3.5-flash' | 'gemini-2.5-pro' | 'gemini-2.5-flash';
 
 // provider = name of model creator
 // name = display name of the model
@@ -36,7 +36,102 @@ export type ModelId = 'gpt-4.1' | 'gpt-5.4' | 'gemini-3.1-pro-preview' | 'gemini
 // OpenAI Responses API reference: https://platform.openai.com/docs/api-reference/responses/create
 // Google GenAI SDK for TypeScript and JavaScript: https://googleapis.github.io/js-genai/release_docs/index.html
 
+// Documentation review, not a claim of benchmark or authenticated API testing.
+export const MODEL_REVIEW_DATE = '2026-10-19';
+
+// Google's published introductory price changes on 1 January 2027.
+export function gemini38Pricing(date = new Date()): { inputPrice: number; outputPrice: number } {
+  return date.getTime() < Date.UTC(2027, 0, 1)
+    ? { inputPrice: 0.75, outputPrice: 3.75 }
+    : { inputPrice: 1.50, outputPrice: 7.50 };
+}
+
 export const MODELS: Model[] = [
+  {
+    provider: 'OpenAI',
+    name: 'GPT-6.1 Sol',
+    id: 'gpt-6.1-sol',
+    description: "Jaunākās paaudzes modelis sarežģītiem uzdevumiem, kas līdzsvaro iespējas un izmaksas. Atbalsta attēlu ievadi un teksta izvadi.",
+    inputPrice: { tiers: [{ upToTokens: 272000, per1M: 2 }, { upToTokens: null, per1M: 4 }] },
+    outputPrice: { tiers: [{ upToTokens: 272000, per1M: 10 }, { upToTokens: null, per1M: 15.0 }] },
+    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei', 'tableDigitization'],
+    url: 'https://developers.openai.com/api/docs/models/gpt-6.1-sol',
+    parameters: {
+      imageDetail: 'high', maxImageShortsidePx: null,
+      reasoningEffort: 'low',
+      reasoningEfforts: ['low', 'medium', 'high', 'xhigh'],
+      reasoningSupportsTemperature: false
+    },
+    supportsFilesApi: true
+  },
+  {
+    provider: 'OpenAI',
+    name: 'GPT-6 Luna',
+    id: 'gpt-6-luna',
+    description: "Ekonomisks jaunākās paaudzes modelis vienkāršākiem un liela apjoma uzdevumiem. Atbalsta attēlu ievadi un teksta izvadi.",
+    inputPrice: { tiers: [{ upToTokens: 272000, per1M: 0.1 }, { upToTokens: null, per1M: 0.2 }] },
+    outputPrice: { tiers: [{ upToTokens: 272000, per1M: 0.5 }, { upToTokens: null, per1M: 0.75 }] },
+    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei', 'tableDigitization'],
+    url: 'https://developers.openai.com/api/docs/models/gpt-6-luna',
+    parameters: {
+      imageDetail: 'high', maxImageShortsidePx: null,
+      reasoningEffort: 'none',
+      reasoningEfforts: ['none', 'low', 'medium', 'high', 'xhigh'],
+      reasoningSupportsTemperature: false
+    },
+    supportsFilesApi: true
+  },
+  {
+    provider: 'OpenAI',
+    name: 'GPT-6 Astra',
+    id: 'gpt-6-astra',
+    description: "Jaudīgs jaunākās paaudzes modelis sarežģītiem uzdevumiem ar augstāku lietošanas cenu. Atbalsta attēlu ievadi un teksta izvadi.",
+    inputPrice: { tiers: [{ upToTokens: 272000, per1M: 10 }, { upToTokens: null, per1M: 20 }] },
+    outputPrice: { tiers: [{ upToTokens: 272000, per1M: 50 }, { upToTokens: null, per1M: 75.0 }] },
+    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei', 'tableDigitization'],
+    url: 'https://developers.openai.com/api/docs/models/gpt-6-astra',
+    parameters: {
+      imageDetail: 'high', maxImageShortsidePx: null,
+      reasoningEffort: 'low',
+      reasoningEfforts: ['low', 'medium', 'high', 'xhigh'],
+      reasoningSupportsTemperature: false
+    },
+    supportsFilesApi: true
+  },
+  {
+    provider: 'Google',
+    name: 'Gemini 3.8 Flash',
+    id: 'gemini-3.8-flash',
+    description: "Jaunākās paaudzes Flash modelis sarežģītiem multimodāliem uzdevumiem. Atbalsta attēlu ievadi un teksta izvadi.",
+    ...gemini38Pricing(),
+    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei', 'tableDigitization'],
+    url: 'https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash',
+    parameters: {
+      mediaResolution: 'high', maxImageShortsidePx: null,
+      thinkingLevel: 'low',
+      thinkingLevels: ['low', 'medium', 'high'],
+      reasoningSupportsTemperature: false
+    },
+    supportsFilesApi: true
+  },
+  {
+    provider: 'Google',
+    name: 'Gemini 3.5 Flash-Lite',
+    id: 'gemini-3.5-flash-lite',
+    description: "Ātrs un ekonomisks modelis dokumentu apstrādei un vienkāršai datu iegūšanai lielā apjomā. Atbalsta attēlu ievadi un teksta izvadi.",
+    inputPrice: 0.3,
+    outputPrice: 2.5,
+    supportedTaskTypes: ['altText', 'transcription', 'transcriptionBatchTei', 'tableDigitization'],
+    url: 'https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash-lite',
+    parameters: {
+      mediaResolution: 'high', maxImageShortsidePx: null,
+      thinkingLevel: 'minimal',
+      thinkingLevels: ['minimal', 'low', 'medium', 'high'],
+      reasoningSupportsTemperature: false
+    },
+    supportsFilesApi: true
+  },
+
   {
     provider: 'OpenAI',
     name: 'GPT-4.1',

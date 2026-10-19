@@ -39,7 +39,7 @@ export interface Model {
   id: ModelId;
   inputPrice: PricePerMTokens;
   outputPrice: PricePerMTokens;
-  rpm: number;
+  rpm?: number;
   supportedTaskTypes: TaskTypeId[];
   url: string;
   description?: string;

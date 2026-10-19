@@ -255,6 +255,8 @@
       </mat-form-field>
     </div>
 
+    <p class="model-description">{{ locale.t('settings.modelReview') }} {{ locale.t('settings.lastModelReview') }} {{ modelReviewDate }}.</p>
+
     @if (selectedTaskTypeValue === 'tableDigitization') {
       <div class="model-recommendations">
         <strong>{{ locale.locale() === 'lv' ? 'Modeļu ieteikumi' : 'Model recommendations' }}</strong>
@@ -377,6 +379,9 @@
         @if (model.description) {
           <p>{{ locale.modelDescription(model.id, model.description) }}</p>
         }
+        @if (model.id === 'gemini-3.8-flash') {
+          <p>{{ locale.t('settings.gemini38Price') }}</p>
+        }
         <table>
           <tbody>
             <tr>
@@ -401,7 +406,7 @@
             </tr>
             <tr>
               <th scope="row">{{ locale.t('settings.rpm') }}</th>
-              <td>{{ model.rpm }}</td>
+              <td>{{ model.rpm ?? locale.t('settings.accountLimits') }}</td>
             </tr>
             <tr>
               <th scope="row">URL:</th>
