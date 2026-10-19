@@ -91,8 +91,18 @@
       <p class="user-guidance">{{ locale.t('help.outputLanguage') }}</p>
       <div class="form-field-wrapper">
         <div class="slider-wrapper">
-          <div class="slider-label-wrapper">
-            <label id="len-slider-label" class="slider-label">{{ locale.t('settings.length') }}:</label>
+          <div class="slider-label-wrapper description-length-labels">
+            <div class="length-label">
+              <label id="len-slider-label" class="slider-label">{{ locale.t('settings.length') }}:</label>
+              <button type="button" matIconButton class="length-help-button"
+                [attr.aria-label]="locale.t('settings.lengthHelpTitle')"
+                [matTooltip]="locale.t('settings.lengthHelpTitle')"
+                [attr.aria-expanded]="showLengthHelp()"
+                aria-controls="description-length-help"
+                (click)="showLengthHelp.set(!showLengthHelp())">
+                <svg lucideInfo aria-hidden="true"></svg>
+              </button>
+            </div>
             <label class="slider-value-label">{{descLengthSlider.value}} {{ locale.locale() === 'lv' ? 'rakstzīmes' : 'characters' }}</label>
           </div>
           <mat-slider
@@ -104,11 +114,18 @@
               [matTooltip]="locale.t('settings.lengthHelp')"
           >
             <input matSliderThumb
+                  aria-labelledby="len-slider-label"
+                  aria-describedby="description-length-summary"
                   [value]="settings.selectedDescLength()"
                   (valueChange)="setDescLength($event)"
                   #descLengthSlider
             >
           </mat-slider>
+          <p id="description-length-summary" class="user-guidance length-summary">{{ locale.t('settings.lengthSummary') }}</p>
+          <div id="description-length-help" class="user-guidance length-explanation" [hidden]="!showLengthHelp()">
+            <p>{{ locale.t('settings.lengthExplanation') }}</p>
+            <p>{{ locale.t('settings.lengthExample') }}</p>
+          </div>
         </div>
       </div>
     }

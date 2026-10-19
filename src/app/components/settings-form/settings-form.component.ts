@@ -8,7 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { LucideBox, LucideClipboardList, LucideExternalLink, LucideSlidersHorizontal } from '@lucide/angular';
+import { LucideBox, LucideClipboardList, LucideExternalLink, LucideInfo, LucideSlidersHorizontal } from '@lucide/angular';
 
 import { PricePerMTokensPipe } from '../../pipes/price-per-m-tokens.pipe';
 import { SettingsService } from '../../services/settings.service';
@@ -30,6 +30,7 @@ import { LocaleService } from '../../i18n/locale.service';
     LucideBox,
     LucideClipboardList,
     LucideExternalLink,
+    LucideInfo,
     LucideSlidersHorizontal,
     PricePerMTokensPipe
   ],
@@ -38,6 +39,7 @@ import { LocaleService } from '../../i18n/locale.service';
 })
 export class SettingsFormComponent {
   readonly modelReviewDate = MODEL_REVIEW_DATE;
+  readonly showLengthHelp = signal(false);
   settings = inject(SettingsService);
   readonly locale = inject(LocaleService);
 
