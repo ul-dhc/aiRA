@@ -10,6 +10,8 @@ import { PromptVariant } from '../types/prompt.types';
 import { RequestSettings } from '../types/settings.types';
 import { isTemperatureSupportedForModel } from '../utils/model-parameters';
 
+const DEFAULT_TASK_CONFIG = TASK_TYPES_BY_ID.transcription;
+
 const BATCH_SIZE_MIN = 1;
 const BATCH_SIZE_MAX = 30;
 
@@ -19,9 +21,9 @@ const BATCH_SIZE_MAX = 30;
 export class SettingsService {
   private readonly locale = inject(LocaleService);
   // --- User-controlled state ---
-  selectedTaskType = signal<TaskTypeId>(TASK_CONFIGS[0].taskType);
-  readonly selectedVariantId = signal<string>(TASK_CONFIGS[0].variants[0].id);
-  readonly selectedModelId = signal<ModelId>(TASK_CONFIGS[0].defaultModel);
+  selectedTaskType = signal<TaskTypeId>(DEFAULT_TASK_CONFIG.taskType);
+  readonly selectedVariantId = signal<string>(DEFAULT_TASK_CONFIG.variants[0].id);
+  readonly selectedModelId = signal<ModelId>(DEFAULT_TASK_CONFIG.defaultModel);
 
   readonly batchSize = signal<number>(10);
   readonly includeFilename = signal<boolean>(true);
