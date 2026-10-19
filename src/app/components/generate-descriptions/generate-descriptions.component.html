@@ -5,6 +5,14 @@
   @if (!o.imageList?.length) {
     <p class="no-images">{{ locale.locale() === 'lv' ? 'Trūkst attēlu. Ej atpakaļ uz iepriekšējo soli un pievieno tos!' : 'No images. Go back to the previous step and add some.' }}</p>
   } @else {
+    <div class="user-guidance">
+      <p>{{ locale.t('help.reviewResults') }}</p>
+      <p>{{ locale.t('help.saveResults') }}</p>
+      <details>
+        <summary>{{ locale.locale() === 'lv' ? 'Par izmaksām' : 'About costs' }}</summary>
+        <p>{{ locale.t('help.costEstimate') }}</p>
+      </details>
+    </div>
     @if (selectedTaskType === 'transcriptionBatchTei') {
 
       <batch-plan [imageCount]="o.imageList?.length ?? 0"></batch-plan>
@@ -16,7 +24,7 @@
           >{{ locale.locale() === 'lv' ? 'Ģenerēt TEI atšifrējumu' : 'Generate TEI transcription' }} ({{ o.imageList?.length ?? 0 }})</button>
 
           <div class="cost right-aligned">
-            {{ locale.locale() === 'lv' ? 'Kopējās izmaksas' : 'Total cost' }}: ${{ this.costService.cumulativeCost() | number }}
+            {{ locale.locale() === 'lv' ? 'Aptuvenās izmaksas' : 'Estimated cost' }}: ${{ this.costService.cumulativeCost() | number }}
           </div>
         </div>
 
@@ -47,7 +55,7 @@
             (click)="generateAll()"
             [disabled]="generating || !o.imageList?.length"
           >{{ locale.locale() === 'lv' ? 'Ģenerēt visiem attēliem' : 'Generate all' }} ({{ o.imageList?.length ?? 0 }})</button>
-          <div class="cost right-aligned">{{ locale.locale() === 'lv' ? 'Kopējās izmaksas' : 'Total cost' }}: ${{ this.costService.cumulativeCost() | number }}</div>
+          <div class="cost right-aligned">{{ locale.locale() === 'lv' ? 'Aptuvenās izmaksas' : 'Estimated cost' }}: ${{ this.costService.cumulativeCost() | number }}</div>
         </div>
         <div class="buttons-row">
           @if (selectedTaskType === 'tableDigitization') {

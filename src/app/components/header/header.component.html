@@ -147,13 +147,13 @@
       </ol>
       
       <h2>Vai rīka lietošana ir bezmaksas?</h2>
-      <p>Pati aiRA ir bezmaksas. Taču aprakstu un transkripciju ģenerēšanai tiek izmantota jūsu API atslēga, un AI pakalpojumu sniedzēji par šo apjomu iekasē maksu. Parasti par attēlu tie ir daži centi vai summa, kas ir mazāka par centu, taču, strādājot ar lielu apjomu, izmaksas summējas. Pirms intensīvas lietošanas iepazīstieties ar OpenAI vai Google aktuālajiem cenrāžiem.</p>
+      <p>{{ locale.t('help.apiCost') }} {{ locale.t('help.costEstimate') }}</p>
      
       <h2>Kas notiek ar maniem attēliem un API atslēgu? Vai kaut kas tiek saglabāts?</h2>
       <p>Nekas netiek ne saglabāts, ne sūtīts mums. aiRA darbojas pilnībā jūsu pārlūkprogrammā:</p>
 
       <ul>
-        <li>jūsu API atslēga tiek saglabāta tikai jūsu pārlūkprogrammā (lokāli), lai tā nebūtu jāievada katru reizi no jauna. Mums tā nekad netiek pārsūtīta;</li>
+        <li>jūsu API atslēga glabājas tikai pašreizējās lapas sesijas atmiņā. Pēc lapas pārlādes tā jāievada no jauna. Mums tā netiek pārsūtīta;</li>
         <li>jūsu attēli tiek sūtīti tieši no jūsu pārlūkprogrammas uz OpenAI vai Google API – tie nekad nenonāk uz mūsu serveriem;</li>
         <li>mēs neveicam nekādu žurnalēšanu (logging), neievācam analītiku par jūsu attēliem un nesaglabājam jūsu rezultātu kopijas. Mēs tos neredzam.</li>
       </ul>
@@ -173,6 +173,8 @@
       <h2>Kādās valodās ir iespējams atšifrēt tekstu?</h2>
       <p>aiRA atšifrēt spēj tekstus, kuri sastāv no latīņu alfabēta, tai skaitā burtus ar diakritiskām zīmēm, piemēram, “ā”, “ģ”, “ø”.</p>
 
+      <h2>Vai darbs tiek saglabāts automātiski?</h2>
+      <p>{{ locale.t('help.saveResults') }}</p>
       <h2>Vai aiRA darbojas mobilajās ierīcēs?</h2>
       <p>Jā, tā ir adaptīva tīmekļa lietotne (<i>responsive web app</i>). Tiesa, lielāku attēlu apjomu augšupielādei un pārskatīšanai ērtāk būs izmantot lielāku ekrānu.</p>
 
@@ -236,13 +238,13 @@
       </ol>
 
       <h2>Is aiRA free to use?</h2>
-      <p>aiRA itself is free. However, descriptions and transcriptions are generated using your API key, and the AI service providers charge for this usage. Processing one image generally costs a few cents or less than one cent, but costs add up when processing large volumes. Check the current OpenAI or Google pricing before intensive use.</p>
+      <p>{{ locale.t('help.apiCost') }} {{ locale.t('help.costEstimate') }}</p>
 
       <h2>What happens to my images and API key? Is anything stored?</h2>
       <p>Nothing is stored by or sent to us. aiRA runs entirely in your browser:</p>
 
       <ul>
-        <li>your API key is stored only locally in your browser so that you do not have to enter it every time. It is never sent to us;</li>
+        <li>your API key stays only in the current page session’s memory. Enter it again after reloading the page. It is not sent to us;</li>
         <li>your images are sent directly from your browser to the OpenAI or Google API and never reach our servers;</li>
         <li>we do not log or collect analytics about your images, nor do we store copies of your results. We cannot see them.</li>
       </ul>
@@ -262,6 +264,8 @@
       <h2>Which languages can aiRA transcribe?</h2>
       <p>aiRA can transcribe text written in the Latin alphabet, including letters with diacritics such as “ā”, “ģ”, and “ø”.</p>
 
+      <h2>Is my work saved automatically?</h2>
+      <p>{{ locale.t('help.saveResults') }}</p>
       <h2>Does aiRA work on mobile devices?</h2>
       <p>Yes. It is a responsive web application. However, a larger screen is more convenient when uploading and reviewing large numbers of images.</p>
 

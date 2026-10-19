@@ -1,5 +1,13 @@
 <p class="api-key-help"><a href="#info-api-key">{{ locale.t('api.howToGetKey') }}</a></p>
 
+<div class="user-guidance">
+  <p>{{ locale.t('help.apiSession') }}</p>
+  <p>{{ locale.t('help.apiCost') }} <a [href]="settings.selectedModel().provider === 'OpenAI' ? 'https://developers.openai.com/api/docs/pricing' : 'https://ai.google.dev/gemini-api/docs/pricing'" target="_blank" rel="noopener noreferrer">{{ locale.t('help.apiPricing') }}</a>.</p>
+  @if (settings.selectedModel().provider === 'OpenAI') {
+    <p>{{ locale.t('help.apiSubscription') }}</p>
+  }
+</div>
+
 <form [formGroup]="apiKeyFormGroup">
   <mat-form-field appearance="outline">
     <mat-label>{{ settings.selectedModel().provider }} {{ locale.t('api.key') }}</mat-label>
@@ -31,3 +39,8 @@
         (filesSelected)="loadApiKeyFromFile($event)"
   ></file-input>
 </form>
+
+<details class="user-guidance">
+  <summary>{{ locale.t('help.apiTroubleTitle') }}</summary>
+  <p>{{ locale.t('help.apiTrouble') }}</p>
+</details>

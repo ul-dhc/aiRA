@@ -6,6 +6,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FileInputComponent } from '../file-input/file-input.component';
 import { ImageListService } from '../../services/image-list.service';
 import { ImageData } from '../../types/image-data.types';
+import { SettingsService } from '../../services/settings.service';
 import { LocaleService } from '../../i18n/locale.service';
 
 @Component({
@@ -22,6 +23,7 @@ import { LocaleService } from '../../i18n/locale.service';
 export class AddImagesComponent {
   imageListService = inject(ImageListService);
   readonly locale = inject(LocaleService);
+  readonly settings = inject(SettingsService);
 
   @Output() addingImages = new EventEmitter<boolean>(false);
 

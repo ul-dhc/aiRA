@@ -88,6 +88,7 @@
         </mat-form-field>
       </div>
     
+      <p class="user-guidance">{{ locale.t('help.outputLanguage') }}</p>
       <div class="form-field-wrapper">
         <div class="slider-wrapper">
           <div class="slider-label-wrapper">
@@ -131,6 +132,7 @@
     }
 
     @if (selectedTaskTypeValue === 'transcription') {
+      <p class="user-guidance">{{ locale.t('help.tei') }}</p>
       <div class="form-field-wrapper">
         <mat-slide-toggle
               [checked]="transcribeHeaders()"

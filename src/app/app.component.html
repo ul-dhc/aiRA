@@ -26,9 +26,9 @@
         </ol>
       </section>
       <section class="trust-card" [attr.aria-label]="locale.t('app.privacy')">
-        <div><span class="info-icon"><svg lucideLockKeyhole aria-hidden="true"></svg></span><strong>{{ locale.locale() === 'lv' ? 'Privāti' : 'Private' }}</strong><small>{{ locale.locale() === 'lv' ? 'Tavi dati paliek pie tevis' : 'Your data stays with you' }}</small></div>
-        <div><span class="info-icon"><svg lucideServer aria-hidden="true"></svg></span><strong>{{ locale.locale() === 'lv' ? 'Bez servera glabāšanas' : 'No server storage' }}</strong><small>{{ locale.locale() === 'lv' ? 'Nekas netiek saglabāts' : 'Nothing is stored' }}</small></div>
-        <div><span class="info-icon"><svg lucideKeyRound aria-hidden="true"></svg></span><strong>{{ locale.locale() === 'lv' ? 'Tavs API atslēgas lietojums' : 'Your API key' }}</strong><small>{{ locale.locale() === 'lv' ? 'Tev ir kontrole pār API atslēgu' : 'You control your API key' }}</small></div>
+        <div><span class="info-icon"><svg lucideLockKeyhole aria-hidden="true"></svg></span><strong>{{ locale.locale() === 'lv' ? 'Tieši pakalpojumam' : 'Direct to provider' }}</strong><small>{{ locale.t('help.privacyProvider') }}</small></div>
+        <div><span class="info-icon"><svg lucideServer aria-hidden="true"></svg></span><strong>{{ locale.locale() === 'lv' ? 'Bez aiRA arhīva' : 'No aiRA archive' }}</strong><small>{{ locale.t('help.privacyStorage') }}</small></div>
+        <div><span class="info-icon"><svg lucideKeyRound aria-hidden="true"></svg></span><strong>{{ locale.locale() === 'lv' ? 'Tava API atslēga' : 'Your API key' }}</strong><small>{{ locale.locale() === 'lv' ? 'Tev ir kontrole pār API atslēgu' : 'You control your API key' }}</small></div>
       </section>
     </aside>
 
@@ -48,6 +48,7 @@
       <!-- Step 1: Configure settings -->
       <mat-step [label]="'app.settings' | t">
         <h2>{{ 'app.settings' | t }}</h2>
+        <p class="user-guidance">{{ locale.t('help.firstRun') }}</p>
         <settings-form></settings-form>
         <div class="stepper-nav">
           <button matButton="filled" class="primary-next" color="primary" matStepperNext>{{ locale.t('nav.next') }} <svg lucideArrowRight aria-hidden="true"></svg></button>
@@ -91,7 +92,7 @@
         @defer (when isApiKeyFormValid) {
           <generate-descriptions></generate-descriptions>
         } @loading (minimum 500ms) {
-          <p>Loading component ...</p>
+          <p>{{ locale.t('app.loading') }}</p>
         } @error {
           <p>{{ locale.t('app.deferError') }}</p>
         }

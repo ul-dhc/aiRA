@@ -1032,3 +1032,28 @@ html.theme-dark {
     min-width: 4px;
   }
 }
+
+/* Short, contextual help shared by the workflow steps. */
+.user-guidance {
+  color: var(--aira-text-muted);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  margin: 0 0 1.5rem;
+  max-width: 72ch;
+  overflow-wrap: anywhere;
+
+  p {
+    margin: 0 0 0.65rem;
+  }
+
+  summary {
+    color: var(--aira-text);
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  details p,
+  &[open] > p {
+    margin-top: 0.65rem;
+  }
+}
